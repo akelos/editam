@@ -1,0 +1,101 @@
+---
+- 
+  id: 1
+  name: body
+  content: Home page body
+  locale: en
+  page_id: 1
+- 
+  id: 2
+  name: menu
+  content: site menu
+  locale: en
+  page_id: 1
+- 
+  id: 3
+  name: footer
+  content: markdown *footer*
+  filter: markdown
+  locale: en
+  page_id: 1
+- 
+  id: 4
+  name: body
+  content: About body
+  locale: en
+  page_id: 2
+- 
+  id: 5
+  name: body
+  content: Documentation body
+  locale: en
+  page_id: 3
+- 
+  id: 6
+  name: menu
+  content: |
+           documentation menu {%= pages_list :first = '/docs', :id = 'menu', :class = 'menu docs' %}
+  locale: en
+  page_id: 3
+- 
+  id: 7
+  name: body
+  content: Tutorials body
+  locale: en
+  page_id: 4
+- 
+  id: 8
+  name: body
+  content: Creating a bookstore body
+  locale: en
+  page_id: 5
+- 
+  id: 9
+  name: body
+  content: Page not found body
+  locale: en
+  page_id: 6
+- 
+  id: 10
+  name: body
+  content: Our team body
+  locale: en
+  page_id: 7
+- 
+  id: 11
+  name: body
+  content: Bermi body
+  locale: en
+  page_id: 8
+- 
+  id: 12
+  name: body
+  content: Hilario body
+  locale: en
+  page_id: 9
+- 
+  id: 13
+  name: body
+  content: Salavert body
+  locale: en
+  page_id: 10
+- 
+  id: 14
+  name: body
+  content: Contact body
+  locale: en
+  page_id: 11
+- 
+  id: 15
+  name: body
+  content: API 'body'
+  filter: smartypants
+  locale: en
+  page_id: 12
+- 
+  id: 16
+  name: body
+  filter: textile
+  content: h2. Introduction
+  locale: en
+  page_id: 13

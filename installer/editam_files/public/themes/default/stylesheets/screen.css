@@ -1,0 +1,36 @@
+@import url('/themes/default/stylesheets/blueprint.css');
+
+#branding{
+  padding-bottom:10px;
+  border-bottom:2px solid #eee;
+}
+#branding a{
+  font-size:300%;
+  color:#000;
+  text-decoration:none;
+}
+#local_navigation{
+  position:relative;
+  top:20px;
+}
+#search{
+  position:relative;
+  top:-50px;
+  margin-right:20px;
+}
+#footer{
+  text-align:right;
+  margin-top:20px;
+}
+#footer ul{
+  list-style-type:none;
+  margin:auto;
+}
+
+#footer li{
+  float:left;
+  margin:0 0 0 10px;
+}
+.accessibility{
+   display:none;
+}

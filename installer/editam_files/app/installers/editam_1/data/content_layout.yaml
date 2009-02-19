@@ -1,0 +1,68 @@
+---
+- 
+  id: 1
+  name: Default
+  content: |
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="{lang}" xml:lang="{lang}">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <link rel="accessibility" href="{base}/about_this_site/#accesibility" title="_{Accessibility details}" />
+      <title>{%= site_name %}, {%= title %}</title>
+      {%= theme_stylesheet %}
+      {%= theme_javascript %}
+    </head>
+  
+    <body>
+      <div id="container" class="{%= class_for 'container' %}">
+        <div id="header" class="{%= class_for 'header' %}">
+          <div id="branding" class="{%= class_for 'branding' %}">
+            <a tabindex="1" href="{base}" accesskey="1" title="_{Home} (_{access key}: 1)">{%= site_name %}</a>
+          </div>
+        
+          <div id="navigation" class="{%= class_for 'navigation' %}">
+            <p class="accessibility">_{Navigation} <a href="#content" accesskey="2" title="_{access key}: 2">_{skip}</a></p>
+            {%= content :part = "navigation", :inherit = true, :format_as_list = true %}
+          </div>
+        
+          <div id="local_navigation" class="{%= class_for 'local_navigation' %}">
+            {%= content :part = "local_navigation", :format_as_list = true %}
+          </div>
+        
+          <div id="search" class="{%= class_for 'search' %}">
+            <form method="post" action="{base}/search">
+              <p><label for="search_box">_{Search}</label> <input type="text" name="search" value="{q?}" id="search_box" accesskey="4" title="_{Search} (_{access key}: 4)" /> <input type="submit" value="_{Go}" name="q" id="search_button" /></p>
+            </form>
+          </div>
+        </div>
+      
+        <div id="content" class="{%= class_for 'content' %}">
+          <h1 class="{%= slug %}">{%= title %}</h1>
+          {%= content %}
+        </div>
+      
+        <div id="extended_content" class="{%= class_for 'extended_content' %}">
+          {%= part 'extended_content' %}
+        </div>
+      
+        <div id="footer" class="{%= class_for 'footer' %}">
+          <ul>
+            <li><a href="{base}/sitemap" accesskey="3" title="_{Sitemap} (_{access key}: 3)">_{Sitemap}</a></li>
+            <li><a href="{base}/about_this_site/#accesibility" accesskey="0" title="_{Accesibility} (_{access key}: 0)">_{Accesibility}</a></li>
+            <li><a href="{base}/about_this_site" title="_{About this Site}">_{About this site}</a></li>
+          </ul>
+          {%= part 'footer' %}
+        </div>
+      
+        <div id="eye_candy_1">&nbsp;</div>
+        <div id="eye_candy_2">&nbsp;</div>
+        <div id="eye_candy_3">&nbsp;</div>
+        <div id="eye_candy_4">&nbsp;</div>
+      </div>
+    </body>
+    </html>
+  content_type: text/html
+  created_by: 1
+  updated_by: 1
+

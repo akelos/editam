@@ -1,0 +1,23 @@
+
+#canvas{
+  background:none;
+  border:none;
+}
+
+#layout .login{
+ width: 520px;
+ margin:20px auto;
+}
+
+#login_dialog{
+  background-color:#fff;
+  padding:50px;
+}
+
+#site_name{
+  float:none;
+  text-align:center;
+  padding:10px;
+  color:#fff;
+}
+

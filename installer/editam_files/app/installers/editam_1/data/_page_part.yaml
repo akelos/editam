@@ -1,0 +1,27 @@
+---
+id: 1
+name: body
+content: |
+  Welcome to your new Editam powered website.
+  
+  This is default homepage that Editam CMS has created for your new site as an example.
+  
+  You can modify this page by accesing the [administration interface][1].
+  
+  [1]: {site_url}/admin
+filter: markdown
+locale: en
+page_id: 1
+-
+id: 2
+name: body
+content: |
+  Error 404
+  -----------------
+  
+  The Web page you are trying to access ({url}) is not available in our server. If you typed the address, please check the spelling.
+  If you came here through a link, please {%=snippet '404_email_link' %}
+filter: markdown
+locale: en
+page_id: 2
+

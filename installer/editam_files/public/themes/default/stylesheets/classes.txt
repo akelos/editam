@@ -1,0 +1,7 @@
+# This a list of div ids: classes used for defining the layout with 
+# the blueprint CSS Framework http://code.google.com/p/blueprintcss/
+container: container
+search: column push-0
+content: column span-20 push-0
+local_navigation: column span-3
+footer: column span-24

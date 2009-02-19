@@ -1,0 +1,17 @@
+---
+-
+    name: 404_email_link
+    description: Error page with a feedback email link.
+    content: |
+      <?php
+    
+      $referrer = empty($referrer) ? 'INSERT_HERE_THE_URL_THAT_BROUGHT_YOU_TO_THIS_PAGE' : $referrer;
+    
+      ?>
+    
+      {%= mail_to "webmaster@{host}?body=Dear Webmaster%0A%0AI realized that a link from #{referrer} pointed to the non existing URL #{url}.%0A%0AYou should take action and ask fix this by reporting/fixing the referring source.&subject=Broken link at  #{ site_name() }", 'inform the webmaster about it.', :encode = 'javascript' %}
+-
+    name: footer
+    content: <hr /><p>Powered by <a href="http://www.editam.org/">Editam</a></p>
+    description: Page Footer
+

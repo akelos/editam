@@ -1,0 +1,65 @@
+
+#menu ul{
+    height:30px;
+    font-size:95%;
+    float:right;
+    margin:-40px 0 0 0;
+    position:relative;
+}
+
+/* remove inherited styles first */
+#menu li,
+#menu li a,
+#menu li a:link,
+#menu li a:hover,
+#menu li a:visited,
+#menu li:hover,
+#menu li.active a,
+#menu li.active a:link,
+#menu li.active a:visited,
+#menu li.active a:hover,
+#menu li.active,
+#menu li.more_tabs,
+#menu li.more_tabs:hover{
+    background: none;
+    padding:0;
+    margin:0 3px 0 0;
+}
+
+#menu li{
+    height:30px;
+    float:left;
+    width:100px;
+    background-color: #888;
+    text-align:center;
+}
+
+
+
+#menu li.active,
+#menu li.active:hover{
+    background: transparent url("/images/admin/tab_background.jpg") repeat-x;
+}
+
+#menu li a,
+#menu li a:link,
+#menu li a:hover{
+    height:23px;
+    padding:0 0 0 0;    
+    color:#fff;
+    text-decoration:none;
+    white-space:nowrap;
+    line-height:30px;
+}
+
+#menu li.active a,
+#menu li.active a:link,
+#menu li.active a:visited,
+#menu li.active a:hover{
+    color:#000;
+}
+
+
+#menu li:hover a{
+    background-color: #555;
+}

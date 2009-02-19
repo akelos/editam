@@ -1,0 +1,9 @@
+#content_layout_content{
+width:100%;
+height:300px;
+}
+
+td.field{
+padding:10px 0 10px 30px;
+background:transparent url(/images/layout.png) no-repeat;
+}

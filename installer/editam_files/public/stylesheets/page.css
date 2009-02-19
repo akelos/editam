@@ -1,0 +1,208 @@
+.form p{
+ margin-bottom:5px;
+}
+
+.form label{
+ display:block;
+ margin:0 0 -15px 0;
+ padding:10px 0 0 0;
+ border-top:1px solid #eee;
+}
+
+.form input{
+ margin:0 0 5px 0;
+ width:98%;
+ padding:5px;
+}
+
+#page_title{
+ font-size:200%;
+}
+
+.page_tab a,
+.page_tab a:link,
+.page_tab a:visited,
+.page_tab a:active{
+ color:#666;
+ text-decoration:none;
+}
+.active.page_tab a{
+ color:#000;
+}
+
+
+.part_options{
+ margin:4px 0 4px 0;
+}
+
+textarea.content{
+ margin-top:11px;
+}
+
+.tab_page .part_options label,
+.page_options label{
+ float:left;
+ padding:0;
+ border:none;
+}
+
+.tab_page .part_options select{
+ margin:0 20px 0 10px;
+}
+
+
+.tab_page .part_options .action{
+ float:right;
+ margin:-35px 0 0 0;
+}
+
+.page_options p{
+margin:10px;
+float:left;
+}
+.page_options label{
+margin:2px 5px 0 0;
+font-size:90%;
+font-weight:bold;
+}
+#operations{
+clear:left;
+padding:10px;
+}
+#operations .primary{
+font-size:120%;
+font-weight:bold;
+}
+#operations .action{
+margin-left:15px;
+}
+
+h1.page.header{
+background:transparent url('/images/page_icon.png') no-repeat;
+margin:-70px 0 0 0;
+padding:15px 0 35px 85px;
+}
+
+#url_for_page{
+text-align:right;
+font-size:80%;
+color:#ccc;
+margin:7px 0 -15px 0;
+}
+#page_slug_preview,
+#site_url,
+#parent_slug{
+color:#666;
+}
+#page_slug_preview{
+font-weight:bold;
+}
+
+
+
+h2.page_title{
+ font-style:oblique;
+ font-weight:bold;
+}
+
+#delete{
+text-align:right;
+}
+
+span.page_title.page_missing,
+span.page_title.page_missing a{
+ color:#999;
+ font-style:oblique;
+}
+
+
+span.page_title a,
+span.page_title a:link,
+span.page_title a:visited,
+span.page_title a:active{
+ text-decoration:none;
+ color:#000;
+ padding:2px 4px 2px 4px;
+}
+
+
+span.page_behaviour{
+ font-size:80%;
+ color:#999;
+ font-style:oblique;
+ margin-right:10px;
+}
+
+
+li span.page_status{
+font-size:63%;
+color:#fff;
+background-color:#ff0000;
+padding:1px 3px 1px 3px;
+margin:0 0 0 10px;
+}
+
+span.page_status.draft{
+background-color:#ff8000;
+}
+
+span.page_status.reviewed{
+background-color:#008040;
+}
+
+span.page_status.hidden{
+background-color:#999999;
+}
+
+span.page_status.published{
+display:none;
+}
+
+
+
+a.draft,
+a:link.draft,
+a:visited.draft,
+a:active.draft{
+ color:#ff8000;
+}
+
+
+a.reviewed,
+a:link.reviewed,
+a:visited.reviewed,
+a:active.reviewed{
+ color:#008040;
+}
+
+li.hidden a,
+li.hidden a:link,
+li.hidden a:visited,
+li.hidden a:active{
+ color:#999999;
+}
+
+li.hidden a:hover,
+li.draft a:hover,
+li.reviewed a:hover{
+ color:#fff;
+}
+
+span.page_title a:hover{
+ color:#000099;
+}
+
+
+#parent_page_heading strong{
+ font-weight:bold
+}
+
+#parent_page_heading span{
+ font-size:70%;
+}
+
+#parent_page_heading strong:hover{
+ background-color:#ffffcc;
+}
+
+

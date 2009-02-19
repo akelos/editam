@@ -1,0 +1,162 @@
+---
+/: 
+  id: 1
+  title: Home Page
+  slug: /
+  breadcrumb: Home Page
+  layout_id: 1
+  status: published
+  created_by: 1
+  locale: en
+  parent_id: 
+  published_at: 2000-01-25 16:00:00
+  lft: 1
+  rgt: 26
+  is_virtual: false
+about: 
+  id: 2
+  title: About
+  slug: about
+  breadcrumb: About
+  status: published
+  created_by: 1
+  locale: en
+  parent_id: 1
+  lft: 2
+  rgt: 13
+  is_virtual: false
+docs: 
+  id: 3
+  title: Documentation
+  slug: docs
+  breadcrumb: Documentation
+  status: published
+  created_by: 1
+  layout_id: 4
+  locale: en
+  parent_id: 1
+  lft: 14
+  rgt: 23
+  is_virtual: false
+tutorials: 
+  id: 4
+  title: Tutorials
+  slug: tutorials
+  breadcrumb: Tutorials
+  status: published
+  created_by: 1
+  locale: en
+  parent_id: 3
+  lft: 17
+  rgt: 22
+  is_virtual: false
+creating-a-bookstore: 
+  id: 5
+  title: Creating a bookstore
+  slug: creating-a-bookstore
+  breadcrumb: Creating a bookstore
+  status: draft
+  created_by: 1
+  locale: en
+  parent_id: 4
+  lft: 18
+  rgt: 21
+  is_virtual: false
+- 
+  id: 6
+  title: Page not found
+  slug: 404
+  breadcrumb: Page not found
+  status: published
+  behaviour: page_missing
+  created_by: 1
+  locale: en
+  parent_id: 1
+  lft: 24
+  rgt: 25
+  is_virtual: true
+our-team: 
+  id: 7
+  title: Our team
+  slug: our-team
+  breadcrumb: Our team
+  status: hidden
+  created_by: 1
+  locale: en
+  parent_id: 2
+  lft: 5
+  rgt: 12
+  is_virtual: false
+bermi: 
+  id: 8
+  title: Bermi
+  slug: bermi
+  breadcrumb: Bermi
+  status: reviewed
+  created_by: 1
+  locale: en
+  parent_id: 7
+  lft: 6
+  rgt: 7
+  is_virtual: false
+hilario: 
+  id: 9
+  title: Hilario
+  slug: hilario
+  breadcrumb: Hilario
+  status: published
+  created_by: 1
+  locale: en
+  parent_id: 7
+  lft: 8
+  rgt: 9
+  is_virtual: false
+salavert: 
+  id: 10
+  title: Salavert
+  slug: salavert
+  breadcrumb: Salavert
+  status: published
+  created_by: 1
+  locale: en
+  parent_id: 7
+  lft: 10
+  rgt: 11
+  is_virtual: false
+contact: 
+  id: 11
+  title: Contact
+  slug: contact
+  breadcrumb: Contact
+  status: published
+  created_by: 1
+  locale: en
+  parent_id: 2
+  lft: 3
+  rgt: 4
+  is_virtual: false
+api: 
+  id: 12
+  title: API
+  slug: api
+  breadcrumb: API
+  status: published
+  created_by: 1
+  locale: en
+  parent_id: 3
+  lft: 15
+  rgt: 16
+  is_virtual: false
+introduction: 
+  id: 13
+  title: Introduction
+  slug: introduction
+  breadcrumb: Introduction
+  status: published
+  created_by: 1
+  locale: en
+  parent_id: 5
+  lft: 19
+  rgt: 20
+  is_virtual: false
+

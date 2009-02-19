@@ -1,0 +1,29 @@
+---
+    id: 1
+    title: Homepage
+    slug: /
+    breadcrumb: Home
+    layout_id: 1
+    status: published
+    created_by: 1
+    updated_by: 
+    locale: en
+    lft: 1
+    rgt: 4
+    is_virtual: false
+-
+    id: 2
+    title: Page not found 404
+    slug: 404
+    breadcrumb: Page not found 404
+    behaviour: page_missing
+    layout_id: 1
+    status: published
+    created_by: 1
+    updated_by: 
+    locale: en
+    parent_id: 1
+    lft: 2
+    rgt: 3
+    is_virtual: true
+

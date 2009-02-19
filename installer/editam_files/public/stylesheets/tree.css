@@ -1,0 +1,101 @@
+#tree a.expand,#tree a.collapse{
+ text-indent:30px;
+ width:18px;
+ height:15px;
+ display:block;
+ float:left;
+ margin:0 0 0 -48px;
+ overflow:hidden;
+}
+#tree a.expand{
+ background:transparent url('/images/expand.png') no-repeat;
+}
+#tree a.collapse{
+ background:transparent url('/images/collapse.png') no-repeat;
+}
+
+#tree a.spinner{
+ background:transparent url('/images/spinner.gif') no-repeat;
+}
+
+#tree .parent ul{
+ margin:0 0 0 18px;
+}
+
+#tree li{
+ padding:8px 0 8px 26px;
+ background:transparent url('/images/page.png') no-repeat;
+}
+
+#tree li.virtual{
+ background:transparent url('/images/virtual-page.png') no-repeat;
+}
+
+#tree ul{
+ padding:8px 0 8px 0;
+}
+
+#tree li.insert_child{
+ border:2px solid red;
+}
+
+
+#tree li .action{
+ display:none;
+}
+
+#tree li.page_node:hover > .action{
+ display:inline
+}
+
+
+#tree .action.edit,
+#tree .action.delete,
+#tree .action.add{
+ padding:0 0 2px 14px;
+ margin:0 6px 0 0;
+}
+#tree .action.edit{
+ padding:0 0 2px 20px;
+ background:transparent url('/images/edit.png') no-repeat;
+}
+
+#tree .action.delete{
+ background:transparent url('/images/minus.png') no-repeat;
+}
+#tree .action.add{
+ background:transparent url('/images/plus.png') no-repeat;
+}
+
+#tree .action.edit:hover,
+#tree .action.delete:hover,
+#tree .action.add:hover{
+ background-color:#ff0000;
+}
+
+#tree a.action.view,
+#tree a.action.view:link,
+#tree a.action.view:active,
+#tree a.action.view:visited{
+ color:#999;
+ text-decoration:none;
+ padding:0 5px;
+ display:inline;
+}
+
+#tree a.action.view:hover{
+ background-color:#00a;
+ color:#fff;
+}
+
+#tree li span.page_handler{
+ width:20px;
+ height:20px;
+ float:left;
+ cursor:move;
+ margin-left:-24px;
+}
+
+#tree.deleting li span.page_handler{
+ cursor:default;
+}

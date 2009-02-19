@@ -1,0 +1,140 @@
+---
+- 
+  id: 1
+  name: Normal
+  content: |
+    
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+      <title>{%= content :part = "site_name" %}, {%= content :part = "title" %}</title>
+      <link rel="stylesheet" href="stylesheets/default.css" type="text/css" media="screen, projection" />
+    </head>
+    
+    <body class='base_template'>
+      <div id="heading">
+        {%= snippet "header" %} 
+        {%= breadcrumb %}
+      </div>
+    
+      <div id="content">
+        <h1>{%= content :part = "title" %}</h1> 
+        {%= content %}
+      </div>
+    
+      <div id="menu">
+        {%= content :part = "menu", :inherit = true %}
+      </div>
+    
+      <div id="footer">
+        {%= snippet "footer" %}
+      </div>
+    </body>
+    </html>
+  content_type: text/html
+  locale: en
+  created_at: 2007-04-27 13:19:13
+  updated_at: 2007-04-27 13:19:13
+  created_by: 1
+  updated_by: 1
+- 
+  id: 2
+  name: Feed
+  content: |
+    feed
+    <%= content %>
+    
+  content_type: text/xml
+  locale: en
+  created_at: 2007-04-27 13:19:13
+  updated_at: 2007-04-27 13:19:13
+  created_by: 1
+  updated_by: 1
+- 
+  id: 3
+  name: Spanish
+  content: |
+    
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+      <title>{%= content :part = "site_name" %}, {%= content :part = "title" %}</title>
+      <link rel="stylesheet" href="stylesheets/default.css" type="text/css" media="screen, projection" />
+    </head>
+    
+    <body class='base_spanish_template'>
+      <div id="heading">
+        {%= snippet "header" %} 
+        {%= breadcrumb %}
+      </div>
+    
+      <div id="content">
+        <h1>{%= content :part = "title" %}</h1> 
+        {%= content %}
+      </div>
+    
+      <div id="menu">
+        {%= content :part = "menu", :inherit = true %}
+      </div>
+    
+      <div id="footer">
+        {%= snippet "footer" %}
+      </div>
+    </body>
+    </html>
+  content_type: text/html
+  locale: es
+  created_at: 2007-04-27 13:19:13
+  updated_at: 2007-04-27 13:19:13
+  created_by: 1
+  updated_by: 1
+- 
+  id: 4
+  name: Docs
+  content: |
+    
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+      <title>Docs, {%= content :part = "title" %}</title>
+      <link rel="stylesheet" href="stylesheets/default.css" type="text/css" media="screen, projection" />
+    </head>
+    
+    <body class='docs_template'>
+      <div id="heading">
+        {%= snippet "header" %} 
+        {%= breadcrumb %}
+      </div>
+    
+      <div id="content">
+        <h1>{%= content :part = "title" %}</h1> 
+        {%= content %}
+      </div>
+    
+      <div id="menu">
+        {%= content :part = "menu", :inherit = true %}
+      </div>
+    
+      <div id="footer">
+        {%= snippet "footer" %}
+      </div>
+    </body>
+    </html>
+  content_type: text/html
+  locale: en
+  created_at: 2007-04-27 13:19:13
+  updated_at: 2007-04-27 13:19:13
+  created_by: 1
+  updated_by: 1
