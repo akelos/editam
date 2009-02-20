@@ -33,7 +33,7 @@
 // Notices must display the words "Powered by Editam".                    |
 // +----------------------------------------------------------------------+
 
-class EditamInstaller extends AkInstaller
+class EditamPluginInstaller extends AkInstaller
 {
     function up_1()
     {

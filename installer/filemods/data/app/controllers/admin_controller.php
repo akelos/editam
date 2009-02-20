@@ -166,7 +166,7 @@
             if(!empty(\$controller_hooks)){
                 sort(\$controller_hooks);
                 foreach (\$controller_hooks as \$controller_hook){
-                    eval(' ?>'.file_get_contents(\$hook_dir.DS.\$controller_hook).'<\?php ');
+                    eval(' ?>'.file_get_contents(\$hook_dir.DS.\$controller_hook).'<?php ');
                 }
             }
         }

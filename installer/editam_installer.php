@@ -12,7 +12,7 @@ class EditamInstaller extends AkInstaller
         empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
         $this->copyEditamFiles();
         echo "\nWe need some details for setting up the Editam.\n\n ";
-        $this->modifyFiles(); exit;
+        $this->modifyFiles();
         $this->relativizeStylesheetPaths();
         $this->suggestSiteDetails();
         $this->runMigration();
@@ -38,7 +38,7 @@ class EditamInstaller extends AkInstaller
             $path = str_replace(AK_EDITAM_PLUGIN_FILES_DIR, AK_BASE_DIR, $base_path.DS.$node);
             if(is_file($path)){
                 $message = Ak::t('File %file exists.', array('%file'=>$path));
-                $user_response = AkInstaller::promptUserVar($message."\n d (overwrite mine), i (keep mine), a (abort), O (overwrite all), K (keep all)", 'i');
+                $user_response = AkInstaller::promptUserVar($message."\n d (overwrite mine), i (keep mine), a (abort), O (overwrite all), K (keep all)", array('default'=>'i'));
                 if($user_response == 'i'){
                     unset($directory_structure[$k]);
                 }    elseif($user_response == 'O'){
@@ -73,6 +73,7 @@ class EditamInstaller extends AkInstaller
     {
         include_once(AK_APP_INSTALLERS_DIR.DS.'editam_plugin_installer.php');
         $Installer =& new EditamPluginInstaller();
+        $Installer->site_details = $this->site_details;
 
         echo "Running the editam plugin migration\n";
         $Installer->install();
@@ -189,17 +190,20 @@ class EditamInstaller extends AkInstaller
         $preffix = '/'.trim($this->promptUserVar('Editam url preffix',  array('default'=>'/editam/')), "\t /").'/';
         $path = AK_CONFIG_DIR.DS.'routes.php';
         
-        $inserted_content = "<?php \n\n \$Map->connect('$preffix:controller/:action/:id', array('controller' => 'page', 'action' => 'listing', 'module' => 'editam'));\n
+        $inserted_content = "<?php \n\n     \$Map->connect('".$preffix.":controller/:action/:id', array('controller' => 'page', 'action' => 'listing', 'module' => 'editam'));\n
         \$Map->connect('/error/404', array('controller' => 'site', 'action' => 'not_found', 'module' => 'editam'));\n
     	\$Map->connect('/error/500', array('controller' => 'site', 'action' => 'error', 'module' => 'editam'));\n
     	\$Map->connect('/*url', array('controller' => 'site', 'action' => 'show_page', 'module' => 'editam'));\n";
         
         $route_contents = Ak::file_get_contents($path);
-        
+        if(strpos($route_contents,"\$Map->connect('".$preffix.":controller/:action/:id'")!==false){
+        	return; // assuming already modified
+        }
+        	
         $route_contents = str_replace('<?php',$inserted_content,$route_contents);
     	$replaced_content = array(
     		"replace_root" => "/\\\$Map\-\>connect\(\'\/\'\,[\w|\d|(\s\(\)\=\>\'\"\,\/)]+;/",
-    		"replace_admin_index" => "/\\\$Map-\>connect\('\/[\w]*\/:[\w]*\/:[\w]*\/:[\w]*',[\w|\d|(\s\(\)\=\>\'\"\,\/)]+;/"
+    		"replace_admin_index" => "/\\\$Map-\>connect\('\/:[\w]*\/:[\w]*\/:[\w]*',[\w|\d|(\s\(\)\=\>\'\"\,\/)]+;/"
     	);
     	
     	/*
@@ -244,16 +248,20 @@ class EditamInstaller extends AkInstaller
 		require_once($path);
 		$contents = Ak::file_get_contents($source_file);
 		if(empty($search_replace)) return;
+		$modified = false;
 		foreach($search_replace as $replace_data){
 			if(preg_match($replace_data['detect_modified'],$contents) == 1){
 				continue; // skip already modified lines
 			}
             $contents = preg_replace($replace_data['searched'],$replace_data['replaced'],$contents);
+            $modified = true;
 		}
-		 
-		Ak::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
+		
+		if($modified){ 
+			Ak::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
+			echo "Modifiying file ".AK_BASE_DIR.DS.$source_file."\n";
+		}
     }
-
 }
 
 ?>

@@ -28,14 +28,14 @@
         }elseif(\$Editags->hasErrors()){
 
             \$errors = \$this->t(' syntax error').
-            \"<ul><li>\".join(\"</li>\n<li>\",\$Editags->Parser->errors).\"</li></ul>\";
+            \"<ul><li>\".join(\"</li>\\n<li>\",\$Editags->Parser->errors).\"</li></ul>\";
             \$this->addError(\$column, \$errors);
             return false;
             
         }elseif(!\$can_have_php){
 
             \$errors = \$this->t('%model security error', array('%model'=> \$this->getModelName())).
-            \"<ul><li>\".join(\"</li>\n<li>\",\$this->PhpSanitizer->getErrors()).\"</li></ul><hr />
+            \"<ul><li>\".join(\"</li>\\n<li>\",\$this->PhpSanitizer->getErrors()).\"</li></ul><hr />
                 <h3>\".\$this->t('Compiled %model', array('%model'=> \$this->getModelName())).\"</h3>
                 <pre>\".htmlentities(\$this->_editags_php).'</pre><hr />';
             \$this->addError(\$column, \$errors);
