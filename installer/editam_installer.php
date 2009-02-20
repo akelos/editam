@@ -180,51 +180,7 @@ class EditamInstaller extends AkInstaller
         return $ApplicationOwnerRole->users[0];
     }
     
-    function modifyFiles(){
-		$this->modifyRoutes();  
-		$this->_modifyFiles();	
-    }
-    
-	function modifyRoutes()
-    {
-        $preffix = '/'.trim($this->promptUserVar('Editam url preffix',  array('default'=>'/editam/')), "\t /").'/';
-        $path = AK_CONFIG_DIR.DS.'routes.php';
-        
-        $inserted_content = "<?php \n\n     \$Map->connect('".$preffix.":controller/:action/:id', array('controller' => 'page', 'action' => 'listing', 'module' => 'editam'));\n
-        \$Map->connect('/error/404', array('controller' => 'site', 'action' => 'not_found', 'module' => 'editam'));\n
-    	\$Map->connect('/error/500', array('controller' => 'site', 'action' => 'error', 'module' => 'editam'));\n
-    	\$Map->connect('/*url', array('controller' => 'site', 'action' => 'show_page', 'module' => 'editam'));\n";
-        
-        $route_contents = Ak::file_get_contents($path);
-        if(strpos($route_contents,"\$Map->connect('".$preffix.":controller/:action/:id'")!==false){
-        	return; // assuming already modified
-        }
-        	
-        $route_contents = str_replace('<?php',$inserted_content,$route_contents);
-    	$replaced_content = array(
-    		"replace_root" => "/\\\$Map\-\>connect\(\'\/\'\,[\w|\d|(\s\(\)\=\>\'\"\,\/)]+;/",
-    		"replace_admin_index" => "/\\\$Map-\>connect\('\/:[\w]*\/:[\w]*\/:[\w]*',[\w|\d|(\s\(\)\=\>\'\"\,\/)]+;/"
-    	);
-    	
-    	/*
-    	 * @todo: fix routing for /:controller/:action/:id
-		 */
-    	
-    	$replace_value = array(
-    		"replace_root" => "\$Map->connect('/', array('controller' => 'site', 'action' => 'show_page', 'url' => '/', 'module' => 'editam'));",
-    		"replace_admin_index" => "\$Map->connect('/:controller/:action/:id', array('controller' => 'page', 'action' => 'index'));"
-    	);
-    	
-    	$route_contents = preg_replace(
-    		$replaced_content,
-    		$replace_value,
-    		$route_contents
-    	);
-    	
-        Ak::file_put_contents($path, $route_contents);
-    }
-    
-    function _modifyFiles($base_path = null){
+    function modifyFiles($base_path = null){
     	$base_path = empty($base_path)?dirname(__FILE__).DS.'filemods'.DS.'data' : $base_path;
     	$str_idx = strlen(dirname(__FILE__).DS.'filemods'.DS.'data'.DS);
     	$directory_structure = Ak::dir($base_path);
@@ -237,7 +193,7 @@ class EditamInstaller extends AkInstaller
     			foreach ($node as $dir=>$items){
                     $path = $base_path.DS.$dir;
 	                if(is_dir($path)){
-						$this->_modifyFiles($path);
+						$this->modifyFiles($path);
 	                }
     			}
     		}
@@ -249,6 +205,14 @@ class EditamInstaller extends AkInstaller
 		$contents = Ak::file_get_contents($source_file);
 		if(empty($search_replace)) return;
 		$modified = false;
+    	if(strpos($source_file,AK_CONFIG_DIR.DS.'routes.php')!==false){
+    		$preffix = '/'.trim($this->promptUserVar('Editam url preffix',  array('default'=>'/editam/')), "\t /").'/';
+    		foreach($search_replace as $k => $replace_data){
+    			foreach($replace_data as $l => $data){
+					$search_replace[$k][$l] = str_replace("%prefix%",$preffix,$data);
+    			}
+    		}
+		}
 		foreach($search_replace as $replace_data){
 			if(preg_match($replace_data['detect_modified'],$contents) == 1){
 				continue; // skip already modified lines
@@ -257,9 +221,9 @@ class EditamInstaller extends AkInstaller
             $modified = true;
 		}
 		
-		if($modified){ 
-			Ak::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
+		if($modified){
 			echo "Modifiying file ".AK_BASE_DIR.DS.$source_file."\n";
+			Ak::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
 		}
     }
 }
