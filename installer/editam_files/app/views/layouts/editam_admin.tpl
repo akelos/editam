@@ -49,6 +49,8 @@
     ?>
     <link href="{site_url}/stylesheets/editam.css?theme=#f70" media="screen" rel="Stylesheet" type="text/css" />
     
+    <%= stylesheet_link_tag "#{module_name}/module.css", :media=>'print,screen' %>
+    
     <%= stylesheet_for_current_controller %>
     
     {content_for_head_after_styles?}

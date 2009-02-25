@@ -32,15 +32,14 @@ class Makelos
     		exit;
     	}
     	
-    	// modify priority files
-    	$Installer =& $this->_getInstaller();
-    	$Installer->files = Ak::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
-    	empty($Installer->options['force']) ? $Installer->checkForCollisions($Installer->files) : null;
-    	$Installer->copyEditamFiles();
-    	$Installer->modifyFiles();
-    	
-    	echo "Makelos Real is running;";
-        system('/usr/bin/env php '.dirname(__FILE__).DS.'makelos_real.php install');
+        $Installer =& $this->_getInstaller();
+        $Installer->install();
+    }
+
+    function uninstall()
+    {
+        $Installer =& $this->_getInstaller();
+        $Installer->uninstall();
     }
 
     function &_getInstaller()
@@ -118,5 +117,6 @@ class Makelos
 $Makelos = new Makelos();
 $Makelos->connectToDatabase(@$database_settings);
 $Makelos->$task(@$argv);
+
 
 ?>

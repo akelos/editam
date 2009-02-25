@@ -1,0 +1,31 @@
+h1{
+   font-size:180% !important; 
+}
+.listing th {
+    font-size:85% !important;
+}
+.listing td {
+    font-size:75% !important;
+}
+
+div.form input{
+    margin: 20px 0 5px;
+}
+
+div.form textarea{
+    margin: 20px 0 5px;
+}
+
+#content_menu{
+	font-size:75% !important;
+	width: 140px;
+}
+
+div.content{
+	margin-left:140px;
+}
+
+input.primary{
+    margin: 0 0 10px;
+    padding: 3px 6px;
+}

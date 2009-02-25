@@ -1,6 +1,6 @@
 <?php
 
-define('AK_EDITAM_PLUGIN_FILES_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'editam_files');
+defined('AK_EDITAM_PLUGIN_FILES_DIR') ? null : define('AK_EDITAM_PLUGIN_FILES_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'editam_files');
 
 class EditamInstaller extends AkInstaller
 {
@@ -8,11 +8,7 @@ class EditamInstaller extends AkInstaller
 	
     function up_1()
     {
-        $this->files = Ak::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
-        empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
-        $this->copyEditamFiles();
         echo "\nWe need some details for setting up the Editam.\n\n ";
-        $this->modifyFiles();
         $this->relativizeStylesheetPaths();
         $this->suggestSiteDetails();
         $this->runMigration();
