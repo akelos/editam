@@ -37,6 +37,10 @@ class Editam_EditamUpdateController extends EditamController
 {
     var $admin_only = true;
 
+    function listing(){
+        $this->redirectToAction('index');
+    }
+    
     function index ()
     {
         $this->flash_now['editam_update_pending'] = '';
