@@ -37,10 +37,11 @@ class Makelos
     	$Installer->files = Ak::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
     	empty($Installer->options['force']) ? $Installer->checkForCollisions($Installer->files) : null;
     	$Installer->copyEditamFiles();
+    	$Installer->upgradeFiles();
     	$Installer->modifyFiles();
     	
     	echo "Makelos Real is running;";
-        system('/usr/bin/env php '.dirname(__FILE__).DS.'makelos_real.php install');
+        passthru('/usr/bin/env php '.dirname(__FILE__).DS.'makelos_real.php install');
     }
 
     function &_getInstaller()

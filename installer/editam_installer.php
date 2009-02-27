@@ -1,6 +1,10 @@
 <?php
 
 defined('AK_EDITAM_PLUGIN_FILES_DIR') ? null : define('AK_EDITAM_PLUGIN_FILES_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'editam_files');
+define('AK_EDITAM_PLUGIN_MODIFY_DATA_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'filemods'.DS.'data');
+define('AK_EDITAM_PLUGIN_UPGRADE_DATA_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'fileupgrade'.DS.'data');
+define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD', AK_TMP_DIR.DS.'editam'.DS.'installer'.DS.'backup_files'.DS.'modified');
+define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG', AK_TMP_DIR.DS.'editam'.DS.'installer'.DS.'backup_files'.DS.'upgraded');
 
 class EditamInstaller extends AkInstaller
 {
@@ -119,7 +123,7 @@ class EditamInstaller extends AkInstaller
             }
         }
     }
-
+    
     function _makeDir($path)
     {
         $dir = str_replace(AK_EDITAM_PLUGIN_FILES_DIR, AK_BASE_DIR,$path);
@@ -128,6 +132,13 @@ class EditamInstaller extends AkInstaller
         }
     }
 
+    function _removeFile($path, $source_base_dir = null, $destination_base_dir = null){
+        if(!empty($backup_path)){
+        	copy($path,$backup_path);
+        }
+        unlink($path);
+    }
+    
     function _copyFile($path)
     {
         $destination_file = str_replace(AK_EDITAM_PLUGIN_FILES_DIR, AK_BASE_DIR,$path);
@@ -176,24 +187,29 @@ class EditamInstaller extends AkInstaller
         return $ApplicationOwnerRole->users[0];
     }
     
-    function modifyFiles($base_path = null){
-    	$base_path = empty($base_path)?dirname(__FILE__).DS.'filemods'.DS.'data' : $base_path;
-    	$str_idx = strlen(dirname(__FILE__).DS.'filemods'.DS.'data'.DS);
-    	$directory_structure = Ak::dir($base_path);
-    	foreach($directory_structure as $k => $node){
-    		$path = $base_path.DS.$node;
-    		if(is_file($path)){
-    			$source_file = AK_BASE_DIR.DS.substr($path,$str_idx);
-	    		$this->_searchAndReplaceFile($path,$source_file);
-    		}elseif(is_array($node)){
-    			foreach ($node as $dir=>$items){
+    function _modifyFiles($directory_structure, $base_path = null){
+        foreach($directory_structure as $k => $node){
+            $path = $base_path.DS.$node;
+            if(is_file($path)){
+                $source_file = AK_BASE_DIR.DS.substr($path,$this->tmp_str_idx);
+                $this->_backupFile($source_file);
+                $this->_searchAndReplaceFile($path,$source_file);
+            }elseif(is_array($node)){
+                foreach ($node as $dir=>$items){
                     $path = $base_path.DS.$dir;
-	                if(is_dir($path)){
-						$this->modifyFiles($path);
-	                }
-    			}
-    		}
-    	}
+                    if(is_dir($path)){
+                        $this->_modifyFiles($items,$path);
+                    }
+                }
+            }
+        }
+    }
+    
+    function modifyFiles($base_path = null){
+    	$base_path = empty($base_path)?AK_EDITAM_PLUGIN_MODIFY_DATA_DIR : $base_path;
+    	$this->tmp_str_idx = strlen($base_path.DS);
+    	$directory_structure = Ak::dir($base_path);
+    	$this->_modifyFiles($directory_structure, $base_path);
     }
     
     function _searchAndReplaceFile($path,$source_file){
@@ -222,6 +238,91 @@ class EditamInstaller extends AkInstaller
 			Ak::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
 		}
     }
+    
+    function _upgradeFiles($directory_structure,$base_path = null){
+        foreach($directory_structure as $k => $node){
+            $path = $base_path.DS.$node;
+            if(is_file($path)){
+                $old_file = AK_BASE_DIR.DS.substr($path,$this->tmp_str_idx);
+                if(!file_exists($path) || !file_exists($old_file)){
+                    continue;
+                }
+                if(md5_file($path) == md5_file($old_file)){
+                    echo "Skipping upgrade file ".AK_BASE_DIR.DS.$source_file.". Already upgraded.\n";
+                    continue;
+                }
+                echo "Upgrading file ".AK_BASE_DIR.DS.$source_file."\n";
+                
+                $this->_backupFile($old_file,false);
+                unlink($old_file);
+                copy($path,$old_file);
+            }elseif(is_array($node)){
+                foreach ($node as $dir=>$items){
+                    $path = $base_path.DS.$dir;
+                    if(is_dir($path)){
+                        $this->_upgradeFiles($items,$path);
+                    }
+                }
+            }
+        }
+    }
+    
+    function upgradeFiles($base_path = null){
+        $base_path = empty($base_path)?AK_EDITAM_PLUGIN_UPGRADE_DATA_DIR : $base_path;
+        $this->tmp_str_idx = strlen($base_path.DS);
+        $directory_structure = Ak::dir($base_path);
+        $this->_upgradeFiles($directory_structure,$base_path);
+    }
+    
+    function removeFile($path){
+    	if(is_file($path)){
+    		unlink($path);
+    	}
+    }
+    
+    function _backupFile($path,$is_modified = true){
+    	if(!file_exists($path)){ return; }
+    	$destination_file = str_replace(AK_BASE_DIR,$backup_dir,$path);
+    	if(file_exists($destination_file) && md5_file($path)!=md5_file($destination_file)){
+    		return;
+    	}
+    	$backup_dir = ($is_modified===true)?AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD:AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG;
+        $dirs = explode(DS,$destination_file);
+        $max_depth = count($dirs)-1;
+        $backup_file_path = '';
+        for($i=0; $i<$max_depth; $i++){
+        	$backup_file_path .= $dirs[$i];
+        	if(!empty($dirs[$i]) && !is_dir($backup_file_path)){
+                mkdir($backup_file_path);
+            }
+            $backup_file_path .= DS;
+        }
+        $backup_file_path .= $dirs[$i];
+        
+        copy($path,$backup_file_path);
+        $source_file_mode =  fileperms($path);
+        $target_file_mode =  fileperms($backup_file_path);
+        if($source_file_mode != $target_file_mode){
+            chmod($backup_file_path,$source_file_mode);
+        }
+    }
+    
+    function restoreFiles(){
+    	/*
+    	 * @todo : implement this method ! 
+         */
+    	
+    	// restore modified
+    	
+    	// restore upgraded
+    }
+    
+    function _restoreFiles($is_modified = true){
+    	/*
+         * @todo : implement this method ! 
+         */
+    }
+    
 }
 
 ?>
