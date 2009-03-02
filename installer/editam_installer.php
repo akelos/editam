@@ -132,22 +132,10 @@ class EditamInstaller extends AkInstaller
         }
     }
 
-    function _removeFile($path, $source_base_dir = null, $destination_base_dir = null){
-        if(!empty($backup_path)){
-        	copy($path,$backup_path);
-        }
-        unlink($path);
-    }
-    
     function _copyFile($path)
     {
         $destination_file = str_replace(AK_EDITAM_PLUGIN_FILES_DIR, AK_BASE_DIR,$path);
-        copy($path, $destination_file);
-        $source_file_mode =  fileperms($path);
-        $target_file_mode =  fileperms($destination_file);
-        if($source_file_mode != $target_file_mode){
-            chmod($destination_file,$source_file_mode);
-        }
+        $this->_copyFileWithPermission($path,$destination_file);
     }
     
     function suggestSiteDetails(){
@@ -254,13 +242,7 @@ class EditamInstaller extends AkInstaller
                 echo "Upgrading file ".$old_file."\n";
                 
                 $this->_backupFile($old_file,false);
-                unlink($old_file);
-                copy($path,$old_file);
-		        $source_file_mode =  fileperms($path);
-		        $target_file_mode =  fileperms($old_file);
-		        if($source_file_mode != $target_file_mode){
-		            chmod($old_file,$source_file_mode);
-		        }
+                $this->_replaceFile($path,$old_file);
             }elseif(is_array($node)){
                 foreach ($node as $dir=>$items){
                     $path = $base_path.DS.$dir;
@@ -277,12 +259,6 @@ class EditamInstaller extends AkInstaller
         $this->tmp_str_idx = strlen($base_path.DS);
         $directory_structure = Ak::dir($base_path, array('recurse'=> true));
         $this->_upgradeFiles($directory_structure,$base_path);
-    }
-    
-    function removeFile($path){
-    	if(is_file($path)){
-    		unlink($path);
-    	}
     }
     
     function _backupFile($path,$is_modified = true){
@@ -303,29 +279,47 @@ class EditamInstaller extends AkInstaller
             $backup_file_path .= DS;
         }
         $backup_file_path .= $dirs[$i];
-        
-        copy($path,$backup_file_path);
-        $source_file_mode =  fileperms($path);
-        $target_file_mode =  fileperms($backup_file_path);
-        if($source_file_mode != $target_file_mode){
-            chmod($backup_file_path,$source_file_mode);
-        }
+        $this->_copyFileWithPermission($path,$backup_file_path);
     }
     
     function restoreFiles(){
-    	/*
-    	 * @todo : implement this method ! 
-         */
-    	
-    	// restore modified
-    	
-    	// restore upgraded
+    	$backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR,AK_EDITAM_PLUGIN_UPGRADE_DATA_DIR);
+    	foreach($backup_paths as $backup_path){
+	        $this->tmp_str_idx = strlen($backup_path.DS);
+	        $directory_structure = Ak::dir($backup_path, array('recurse'=> true));
+	    	$this->_restoreFiles($directory_structure,$backup_path);
+    	}
     }
     
-    function _restoreFiles($is_modified = true){
-    	/*
-         * @todo : implement this method ! 
-         */
+    function _restoreFiles($directory_structure,$base_path = null){
+    	foreach($directory_structure as $k => $node){
+            $path = $base_path.DS.$node;
+            if(is_file($path)){
+                $restored_file = AK_BASE_DIR.DS.substr($path,$this->tmp_str_idx);
+                $this->_replaceFile($path,$restored_file);
+            }elseif(is_array($node)){
+                foreach ($node as $dir=>$items){
+                    $path = $base_path.DS.$dir;
+                    if(is_dir($path)){
+                        $this->_modifyFiles($items,$path);
+                    }
+                }
+            }
+        }
+    }
+    
+    function _copyFileWithPermission($src,$dst){
+        copy($src,$dst);
+        $source_file_mode =  fileperms($src);
+        $target_file_mode =  fileperms($dst);
+        if($source_file_mode != $target_file_mode){
+        	chmod($dst,$source_file_mode);
+        }
+    }
+    
+    function _replaceFile($new,$replaced){
+    	unlink($replaced);
+    	$this->_copyFileWithPermission($new,$replaced);
     }
     
 }
