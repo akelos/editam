@@ -208,7 +208,7 @@ class EditamInstaller extends AkInstaller
     function modifyFiles($base_path = null){
     	$base_path = empty($base_path)?AK_EDITAM_PLUGIN_MODIFY_DATA_DIR : $base_path;
     	$this->tmp_str_idx = strlen($base_path.DS);
-    	$directory_structure = Ak::dir($base_path);
+    	$directory_structure = Ak::dir($base_path, array('recurse'=> true));
     	$this->_modifyFiles($directory_structure, $base_path);
     }
     
@@ -251,11 +251,16 @@ class EditamInstaller extends AkInstaller
                     echo "Skipping upgrade file ".AK_BASE_DIR.DS.$source_file.". Already upgraded.\n";
                     continue;
                 }
-                echo "Upgrading file ".AK_BASE_DIR.DS.$source_file."\n";
+                echo "Upgrading file ".$old_file."\n";
                 
                 $this->_backupFile($old_file,false);
                 unlink($old_file);
                 copy($path,$old_file);
+		        $source_file_mode =  fileperms($path);
+		        $target_file_mode =  fileperms($old_file);
+		        if($source_file_mode != $target_file_mode){
+		            chmod($old_file,$source_file_mode);
+		        }
             }elseif(is_array($node)){
                 foreach ($node as $dir=>$items){
                     $path = $base_path.DS.$dir;
@@ -270,7 +275,7 @@ class EditamInstaller extends AkInstaller
     function upgradeFiles($base_path = null){
         $base_path = empty($base_path)?AK_EDITAM_PLUGIN_UPGRADE_DATA_DIR : $base_path;
         $this->tmp_str_idx = strlen($base_path.DS);
-        $directory_structure = Ak::dir($base_path);
+        $directory_structure = Ak::dir($base_path, array('recurse'=> true));
         $this->_upgradeFiles($directory_structure,$base_path);
     }
     
@@ -282,11 +287,11 @@ class EditamInstaller extends AkInstaller
     
     function _backupFile($path,$is_modified = true){
     	if(!file_exists($path)){ return; }
+    	$backup_dir = ($is_modified===true)?AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD:AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG;
     	$destination_file = str_replace(AK_BASE_DIR,$backup_dir,$path);
     	if(file_exists($destination_file) && md5_file($path)!=md5_file($destination_file)){
     		return;
     	}
-    	$backup_dir = ($is_modified===true)?AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD:AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG;
         $dirs = explode(DS,$destination_file);
         $max_depth = count($dirs)-1;
         $backup_file_path = '';
