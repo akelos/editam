@@ -42,13 +42,7 @@
     <hidden>
     Including the theme color as a parameter of the CSS avoids browser catching of the CSS when switching colors
     </hidden>
-    <?
-		/*
-		 * @todo : replace #f70 with <%= settings_for 'core','editam_admin_color' %>
-		 */
-    ?>
-    <link href="{site_url}/stylesheets/editam.css?theme=#f70" media="screen" rel="Stylesheet" type="text/css" />
-    
+    <link href="{site_url}/stylesheets/editam.css?theme=<%= settings_for 'core','editam_admin_color' %>" media="screen" rel="Stylesheet" type="text/css" />
     <%= stylesheet_link_tag "#{module_name}/module.css", :media=>'print,screen' %>
     
     <%= stylesheet_for_current_controller %>

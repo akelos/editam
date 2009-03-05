@@ -192,7 +192,7 @@ class EditamPluginInstaller extends AkInstaller
                  return;
              }
              $this->installProfiles(1, array('base_system','sample_website'));
-//             $this->createCMSRoles();
+             $this->createCMSRoles();
     }
 
     function down_1()
@@ -207,15 +207,14 @@ class EditamPluginInstaller extends AkInstaller
     	
     	$Role =& new Role();
     	$Administrator =& $Role->findFirstBy('name','Administrator');
-    	$RegisteredUser =& $Role->findFirstBy('name','Registered user');
+    	$Administrator->addChildrenRole('Contributor');
+    	
+    	$Role->create(array('name' => 'Visitor'));
 		
         $Extension =& new Extension();
         $this->AdminPages =& $Extension->create(array('name'=>'Admin::Pages','is_core'=>true, 'is_enabled' => true));
         $this->AdminLayouts =& $Extension->create(array('name'=>'Admin::Layouts','is_core'=>true, 'is_enabled' => true));
         $this->AdminSnippets =& $Extension->create(array('name'=>'Admin::Snippets','is_core'=>true, 'is_enabled' => true));
-        
-        $this->AdminMenuTabs =& $Extension->findFirstBy('name','Admin Menu Tabs');
-        $Administrator->addPermission(array('name'=>'CMS (page controller, listing action)', 'extension' => $this->AdminMenuTabs));
     }
 
     function installProfiles($version, $profiles)

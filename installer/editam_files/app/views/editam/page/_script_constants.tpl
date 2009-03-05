@@ -22,7 +22,7 @@ var PAGE_MOVE_NODE = '<%= url_for :controller => 'page', :action => 'move' %>';
 var PAGE_CONVERT_CONTENT = '<%= url_for :controller => 'page', :action => 'convert_content' %>';
 var PAGE_SWITCH_BEHAVIOUR = '<%= url_for :controller => 'page', :action => 'switch_behaviour', :id => Page.id %>';
 var PAGE_IS_VIRTUAL = {?Page.is_virtual}true{else}false{end};
-
+var USER_ID = {CurrentUser.id};
 var LANG = '{lang}';
 var BASE_URL = '{site_url}';
 

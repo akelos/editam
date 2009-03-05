@@ -47,16 +47,6 @@ class Editam_PreferencesController extends EditamController
 
     function setup()
     {
-    	/*
-    	 * @todo : replace $this->credentials->is_admin 
-		*/
-//        if(empty($this->credentials->is_admin)){
-//            $this->flash['error'] = $this->t('You can\'t manage this site preferences unless '.
-//            'you have administration rights. Please contact this site admin if you '.
-//            'where suposed to be able to perform selected action.');
-//            $this->redirectTo(array('controller'=>'page'));
-//        }
-
         $this->menu_options['Updates'] = array('id' => 'updates', 'url'=>array('controller'=>'editam_update'));
         $this->menu_options['Preferences'] = array('id' => 'preferences', 'url'=>array('controller'=>'preferences','action'=>'setup'));
 

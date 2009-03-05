@@ -124,6 +124,7 @@ class Editam_PageController extends EditamController
             return ;
         }
         $this->params['page']['parent_id'] = $parent_id;
+        $this->_getReadyForPageForm();
         $this->renderAction('add');
     }
 
