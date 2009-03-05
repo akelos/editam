@@ -111,8 +111,6 @@ class Editam_PageController extends EditamController
 
     function add()
     {
-        $this->_save();
-        $this->_getReadyForPageForm();
     }
 
     function add_child()
@@ -125,6 +123,7 @@ class Editam_PageController extends EditamController
         }
         $this->params['page']['parent_id'] = $parent_id;
         $this->_getReadyForPageForm();
+        $this->_save();
         $this->renderAction('add');
     }
 
