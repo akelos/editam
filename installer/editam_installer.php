@@ -27,7 +27,7 @@ class EditamInstaller extends AkInstaller
 	        
 	        $this->suggestSiteDetails();
         
-            passthru('/usr/bin/env php '.AK_BASE_DIR.DS.'script'.DS.'plugin install '.$this->repository);
+            passthru('/usr/bin/env php '.AK_BASE_DIR.DS.'script'.DS.'plugin install --force '.$this->repository);
             system('touch '.AK_TMP_DIR.DS.'editam_installed.flag');
         }else{
         	$this->runMigration();
