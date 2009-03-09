@@ -3,19 +3,25 @@
 <%= stylesheet_link_tag 'tab_canvas' %>
 <? $capture_helper->end (); ?>
 
-<div id="tasks" class="tasks">
-  <ul>
-    <li><%= link_to _('Back to existing Pages list'), :action => 'listing', :id => Page.id %></li>
-  </ul> 
+<div id="content_menu">
+    <ul class="menu">
+        <li class="active"><%= link_to _('Editing Page'), :action => 'edit', :id => Page.id %></li>
+        {?Page.parent_id}
+        <li><%= link_to _('Delete Page'), :action => 'destroy', :id => Page.id %></li>
+        {end}
+        <li class="primary"><%= link_to _('Back to existing Pages list'), :action => 'listing' %></li>
+        
+    </ul>
+    <p class="information">_{.}</p>
 </div>
-  
-    
+
+<div class="content">
 {?ParentPage}
     
     <%= start_form_tag {:action =>'edit', :id => Page.id }, :id => 'page_form' %>
     <div class="form">
     <div id="parent_page_heading" onmouseover="$('parent_actions').show();" onmouseout="$('parent_actions').hide();">
-    <h2>_{Editing Page below <strong>%ParentPage.breadcrumb</strong>} <span id="parent_actions" style="display:none"><%= admin_page_links ParentPage %></span></h2>
+    <h1>_{Editing Page below <strong>%ParentPage.breadcrumb</strong>} <span id="parent_actions" style="display:none"><%= admin_page_links ParentPage %></span></h1>
     
     </div>
     <%= hidden_field 'page', 'parent_id' %>
@@ -45,11 +51,11 @@
   <div id="operations">
     <%= save_button %> _{or} <%= save_and_continue_button %> <%= cancel_link %>
   </div>
-  
+
   {!is_homepage}
   <div id="delete">
   <%= link_to_destroy Page %>
   </div>
   {end}
-  
   </form>
+</div>

@@ -44,6 +44,11 @@ class Editam_PageController extends EditamController
     );
     var $controller_selected_tab = 'Pages';
     
+    function __construct(){
+    	parent::__construct();
+    	$this->editam_public_site_url_suffix = AK_EDITAM_PUBLIC_SITE_URL_SUFFIX;
+    }
+    
     function index()
     {
         $this->redirectToAction('listing');
@@ -111,6 +116,8 @@ class Editam_PageController extends EditamController
 
     function add()
     {
+        $this->_save();
+        $this->_getReadyForPageForm();
     }
 
     function add_child()
@@ -175,12 +182,8 @@ class Editam_PageController extends EditamController
                 if(empty($this->params['locale'])){
                     $this->Page->set('locale',Ak::lang());
                 }
-                
-                /*
-                 * @todo : replace $this->credentials->get('id')
-                 */
 
-                $this->Page->created_by = 1; //$this->credentials->get('id');
+                $this->Page->created_by = $this->CurrentUser->get('id');
                 $this->Page->_controller =& $this;
                 $method = $is_new_page ? 'saveWithParts' : 'updateWithParts';
                 if($this->Page->{$method}($this->params['part'], empty($this->ParentPage) ? null : $this->ParentPage->getId())){

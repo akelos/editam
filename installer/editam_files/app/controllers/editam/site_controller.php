@@ -65,6 +65,14 @@ class Editam_SiteController extends EditamController
             $this->render(array('template'=>'not_found','status' => 404));
         }
     }
+    
+    function not_found(){
+    	$this->render(array('template'=>'not_found','status' => 404));
+    }
+    
+    function error(){
+        $this->render(array('template'=>'error500','status' => 500));
+    }
 
 }
 

@@ -7,10 +7,10 @@ class EditamController extends ApplicationController
 {
     var $app_models = array('user','role','permission','extension');
     var $protect_all_actions = true;
-    var $layout = 'editam_admin';
+    var $layout = 'admin';
     var $app_helpers = 'admin,layout,editags';
 
-    var $menu_options = array(
+    var $_admin_menu_options = array(
     'Dashboard'   => array('id' => 'dashboard', 'url'=>array('controller'=>'dashboard', 'module' => 'admin'), 'link_options'=>array(
             'accesskey'=>'h',
             'title' => 'general status and information'
@@ -23,17 +23,9 @@ class EditamController extends ApplicationController
             'accesskey' => 'p',
             'title' => 'manage Editam CMS'
     ))
-    ); 
-	
-	
-	/*array(
-    'Pages'   => array('id' => 'page', 'url'=>array('controller'=>'page','action'=>'listing')),
-    //'Assets'   => array('id' => 'assets', 'url'=>array('controller'=>'file','action'=>'listing')),
-    'Layouts'  => array('id' => 'content_layout', 'url'=>array('controller'=>'content_layout','action'=>'listing')),
-    'Snippets'   => array('id' => 'snippet', 'url'=>array('controller'=>'snippet','action'=>'listing')),
-    //'Extensions'   => array('id' => 'extensions', 'url'=>array('controller'=>'extensions'), 'admin_only' => true),
-    'Users'     => array('id' => 'user', 'url'=>array('controller'=>'users', 'module' => 'admin'), 'admin_only' => true ),
-    );*/
+    );
+    
+    var $admin_menu_options = array();
 	
 	function __construct()
     {
@@ -48,7 +40,6 @@ class EditamController extends ApplicationController
         $this->beforeFilter('_loadSettings');
         $this->beforeFilter(array('_instantiateCredentials'=>array('except'=>array('show_page'))));
         $this->beforeFilter(array('_disableLinkPrefetching'=>array('except'=>array('show_page'))));
-//        $this->beforeFilter(array('_authenticate'=>array('except'=>array('authenticate', 'show_page'))));
         $this->beforeFilter(array('_initAdminOptions'=>array('except'=>array('show_page'))));
 
         $this->_engageHooks();

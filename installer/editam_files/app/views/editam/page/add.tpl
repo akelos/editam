@@ -7,10 +7,14 @@
       <%= start_form_tag {:action =>'add'}, :id => 'page_form' %>
     
       <div class="form">
-        <h2>_{Creating the Home Page}</h2>
+        <h1>_{Creating the Home Page}</h1>
 {else}
-    <div id="tasks" class="tasks">
-      <ul>
+
+<div id="content_menu">
+    <ul class="menu">
+        <li class="active">
+            <%= link_to _('Creating Page'), {:controller => 'page' , :action => 'add_child', :parent_id => ParentPage.id} %>
+        </li>
         <li>
         {?ParentPage}
         <%= link_to _('Back to existing Pages list'), :action => 'listing', :id => ParentPage.id %>
@@ -18,9 +22,11 @@
         <%= link_to _('Back to existing Pages list'), :action => 'listing' %>
         {end}
         </li>
-      </ul> 
-    </div>
-      
+      </ul>
+
+    <p class="information">_{.}</p>
+</div>
+<div class="content">
       {?ParentPage}
       
         <%= start_form_tag {:action =>'add_child', :parent_id => ParentPage.id }, :id => 'page_form' %>
@@ -61,3 +67,6 @@
   </div>
 
   </form>
+<? if(empty($this->is_homepage)): ?>
+</div>
+<? endif; ?>

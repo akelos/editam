@@ -236,7 +236,7 @@ class EditamInstaller extends AkInstaller
                     continue;
                 }
                 if(md5_file($path) == md5_file($old_file)){
-                    echo "Skipping upgrade file ".AK_BASE_DIR.DS.$source_file.". Already upgraded.\n";
+                    echo "Skipping upgrade file ".AK_BASE_DIR.DS.$old_file.". Already upgraded.\n";
                     continue;
                 }
                 echo "Upgrading file ".$old_file."\n";

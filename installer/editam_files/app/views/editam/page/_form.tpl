@@ -12,7 +12,7 @@
     <p id="url_for_page" {!Page.id}style="display:none;"{end}>
     _{Will publish to} 
     <span id="current_page_url">
-    <span id="site_url">{site_url}</span><span id="parent_slug">{?ParentPage}<%= text_inherited_slug ParentPage %>{end}</span><span id="page_slug_preview" class="page_slug_preview">{!ParentPage}<?=$page->slug=='/'?'':'/'?>{end}{page.slug?}</span> </span> 
+    <span id="site_url">{site_url}<? echo DS ?>{editam_public_site_url_suffix}</span><span id="parent_slug">{?ParentPage}<%= text_inherited_slug ParentPage %>{end}</span><span id="page_slug_preview" class="page_slug_preview">{!ParentPage}<?=$page->slug=='/'?'':'/'?>{end}{page.slug?}</span> </span> 
     <a href="#" class="action" id="show_page_link" style="display:none">_{(show page)}</a>
     </p>
 

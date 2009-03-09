@@ -11,5 +11,5 @@ var PAGE_PART_ADDED = '_{Added page part}';
 var PAGE_PART_DELETE_CONFIRM = '_{Are you sure you want to delete the page part named}';
 var PAGE_PART_FILTER_CAPTION = '_{Filter}';
 
-var USER_ID = <?=$credentials->get('id')?>;
+var USER_ID = {CurrentUser.id};
 var LANG = '{lang}';

@@ -1,10 +1,13 @@
-<div id="tasks" class="tasks">
-  <ul>
-    <li><%= link_to _('Create new Layout'), :action => 'add' %></li>
-  </ul> 
+<div id="content_menu">
+    <ul class="menu">
+        <li class="primary"><%= link_to _('Create new Layout'), :action => 'add' %></li>
+        <li class="active"><%= link_to _('Listing Layouts'), :action => 'listing' %></li>
+    </ul>
+    <p class="information">_{.}</p>
 </div>
-    
-<h2>_{Listing available Layouts}</h2>
+
+<div class="content">
+<h1>_{Listing available Layouts}</h1>
 <p class="information">
 _{Use layouts to apply a visual look to a Web page. Layouts can contain special tags to include page content and other elements such as the header or footer.}
 </p>
@@ -38,4 +41,4 @@ _{Use layouts to apply a visual look to a Web page. Layouts can contain special 
         {content_layout_pages.links?}
         </div>
     {end}
-
+</div>

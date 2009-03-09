@@ -3,19 +3,24 @@
 <%= stylesheet_link_tag 'tree' %>
 <? $capture_helper->end (); ?>
 
-<div id="tasks" class="tasks">
-  <ul>
-    <li><%= link_to _("Show the <b>#{Page.breadcrumb}</b> page"), {:action => 'show', :id => Page.id}, :target => 'blank' %></li>
-    <li><%= link_to _("Edit <b>#{Page.breadcrumb}</b>"), {:action => 'edit', :id => Page.id} %></li>
-    <li><%= link_to _('Back page listing'), :action => 'listing', :id => Page.id %></li>
-  </ul> 
+<div id="content_menu">
+    <ul class="menu">
+	    <li class="primary"><%= link_to _('Edit Page'), {:action => 'edit', :id => Page.id} %></li>
+	    {?Page.parent_id}
+        <li class="active"><%= link_to _('Deleting Page'), :action => 'destroy', :id => Page.id %></li>
+        {end}
+	    <li><%= link_to _('Show available Page'), :action => 'listing', :id => Page.id %></li>
+    </ul>
+    <p class="information">_{.}</p>
 </div>
-  
-<h2><? if($Page->nested_set->countChildren() > 0) : ?>
+
+<div class="content">
+<h1>_{Deleting Page}</h1>
+<p class="warning"><? if($Page->nested_set->countChildren() > 0) : ?>
  _{Are you sure you want to <span class="warn">definitely delete</span> the page <strong>"%Page.title"</strong> and all of the pages below it?}
  <? else: ?>
  _{Are you sure you want to <span class="warn">definitely delete</span> the page <strong>"%Page.title"</strong>?}
- <? endif; ?></h2>
+ <? endif; ?></p>
  
 <%= start_form_tag :action => 'destroy', :id => page.id %>
 <div id="tree" class="deleting">
@@ -25,3 +30,4 @@
 <%= confirm_delete %> _{or} <%= cancel_link %>
 </div>
 </form>
+</div>

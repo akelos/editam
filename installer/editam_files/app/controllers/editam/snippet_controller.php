@@ -37,7 +37,7 @@ class Editam_SnippetController extends EditamController
 {
 //    var $app_helpers = 'editags,layout';
     
-    var $selected_tab = 'CMS';
+    var $admin_selected_tab = 'CMS';
     
     var $controller_menu_options = array(
     'Pages'   => array('id' => 'page', 'url'=>array('controller'=>'page', 'action'=>'listing', 'module'=>'editam')),

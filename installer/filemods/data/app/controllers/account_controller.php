@@ -6,11 +6,6 @@
     			"replaced" => "$1require_once(AK_MODELS_DIR.DS.'editam.php');\n\n"
     		),
     		array(
-    			"searched" => "/(var\s*\\\$models\s*=\s*array[\(\)\'\w\,]*;)/",
-    			"detect_modified" => "/var\s*\\\$layout\s*=\s*\'editam_login\';/",
-    			"replaced" => "$1\n    var \$layout = 'editam_login';"
-    		),
-    		array(
     			"searched" => "/(function\s*__construct\(\)\s*\{\s*\\\$[\w\-\>\s\:\(\)\'\=]*;\s*)/",
     			"detect_modified" => "/\\\$this-\>site_url[\w\s\W]*show_page'\){4};/",
     			"replaced" => "$1\n        \$this->site_url = \$this->base = rtrim(AK_URL,'/');

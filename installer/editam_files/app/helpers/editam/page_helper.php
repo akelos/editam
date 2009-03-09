@@ -194,6 +194,9 @@ class PageHelper extends AkActionViewHelper
     function admin_page_links($Page)
     {
         $url_text = $Page->is_virtual ? '' : $Page->getInheritedSlug(false, false);
+        if(!empty($this->_controller->editam_public_site_url_suffix)){
+        	$url_text= DS.$this->_controller->editam_public_site_url_suffix.$url_text;
+        }
         $url = $this->_controller->site_url.str_replace('//','/', (EDITAM_IS_MULTILINGUAL?'/'.$Page->locale.'/':'').$url_text);
         return 
         // View link

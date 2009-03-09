@@ -6,19 +6,13 @@
     			"replaced" => "$1require_once(AK_MODELS_DIR.DS.'editam.php');\n\n"
     		),
     		array(
-    			"searched" => "/(var\s*\\\$_admin_menu_options)/",
-    			"detect_modified" => "/var\s*\\\$layout\s*=\s*'editam_admin';\s*var\s*\\\$app_helpers\s*=\s*'layout,editags';/",
-    			"replaced" => "var \$layout = 'editam_admin';
-    var \$app_helpers = 'layout,editags';\n\n    $1"
-    		),
-    		array(
-    			"searched" => "/('Manage Users'[\w\s\W]*manage user settings'\s*\){2})/",
+    			"searched" => "/(var\W*\\\$_admin_menu_options[\w\s\(\)\=\>',]*\)\s*\))(\s*\);)/",
     			"detect_modified" => "/'CMS'[\w\s\W]*manage Editam CMS'\s*\){2}\s*/",
     			"replaced" => "$1,
     'CMS'   => array('id' => 'page', 'url'=>array('controller'=>'page', 'module' => 'editam'), 'link_options'=>array(
             'accesskey' => 'p',
             'title' => 'manage Editam CMS'
-    ))"
+    ))$2"
     		),
     		array(
     			"searched" => "/('Dashboard'[\W|\w]{20,100}'dashboard')/",
@@ -29,11 +23,6 @@
     			"searched" => "/('Manage Users'[\W|\w]{20,100}'users')/",
     			"detect_modified" => "/'Manage Users'[\W|\w]{20,100}'users',\W'module'\W*admin'\W/",
     			"replaced" => "$1, 'module' => 'admin'"
-    		),
-    		array(
-    			"searched" => "/(var \\\$admin_menu_options = array\(\);)/",
-    			"detect_modified" => "/var \\\$menu_options = array\(\);/",
-    			"replaced" => "var \$menu_options = array();"
     		),
     		array(
     			"searched" => "/(function\W*__construct\(\)\s*\{\s*)/",

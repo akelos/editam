@@ -1,11 +1,13 @@
 <%= render :partial => 'script_constants' %>
-
-<div id="tasks" class="tasks">
-  <ul>
-    <li><%= link_to _('Back to existing Snippets list'), :action => 'listing' %></li>
-  </ul> 
+<div id="content_menu">
+    <ul class="menu">
+        <li class="active"><%= link_to _('Creating Snippet'), :action => 'add' %></li>
+        <li class="primary"<%= link_to _('Show available Snippet'), :action => 'listing' %></li>
+    </ul>
+    <p class="information">_{.}</p>
 </div>
-  
+
+<div class="content"> 
     <%= start_form_tag {:action =>'add'}, :id => 'snippet_form' %>
     <div class="form">
     <h2>_{Creating Snippet}</h2>
@@ -19,3 +21,4 @@
   </div>
   
   </form>
+</div>

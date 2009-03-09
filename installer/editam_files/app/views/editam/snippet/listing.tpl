@@ -1,11 +1,13 @@
-
-<div id="tasks" class="tasks">
-  <ul>
-    <li><%= link_to _('Create new Snippet'), :action => 'add' %></li>
-  </ul> 
+<div id="content_menu">
+    <ul class="menu">
+        <li><%= link_to _('Create new Snippet'), :action => 'add' %></li>
+        <li class="active"><%= link_to _('Listing Snippet'), :action => 'listing' %></li>
+    </ul>
+    <p class="information">_{.}</p>
 </div>
-    
-<h2>_{Listing available Snippets}</h2>
+
+<div class="content">
+<h1>_{Listing available Snippets}</h1>
 <p class="information">
 _{Snippets are generally small pieces of content which are included in other pages or layouts.}
 </p>
@@ -40,4 +42,4 @@ _{Snippets are generally small pieces of content which are included in other pag
         {snippet_pages.links?}
         </div>
     {end}
-
+</div>

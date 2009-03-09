@@ -1,14 +1,19 @@
 <%= render :partial => 'script_constants' %>
 
-<div id="tasks" class="tasks">
-  <ul>
-    <li><%= link_to _('Back to existing Layouts list'), :action => 'listing' %></li>
-  </ul> 
+<div id="content_menu">
+    <ul class="menu">
+        <li><%= link_to _('Create new Layout'), :action => 'add' %></li>
+        <li class="active"><%= link_to _('Editing Layout'), :action => 'edit', :id => ContentLayout.id %></li>
+        <li><%= link_to _('Delete Layout'), :action => 'destroy', :id => ContentLayout.id %></li>
+        <li class="primary"><%= link_to _('Show available Layout'), :action => 'listing' %></li>
+    </ul>
+    <p class="information">_{.}</p>
 </div>
-  
+
+<div class="content">
     <%= start_form_tag {:action =>'edit', :id => ContentLayout.id}, :id => 'content_layout_form' %>
     <div class="form">
-    <h2>_{Editing Layout}</h2>
+    <h1>_{Editing Layout}</h1>
 
     <%= render :partial => 'form' %>
    
@@ -23,3 +28,4 @@
   </div>
   
   </form>
+</div>

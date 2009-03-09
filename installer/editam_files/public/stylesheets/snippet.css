@@ -1,14 +1,14 @@
-#snippet_description{
-width:100%;
-height:50px;
+#snippet_description {
+	height: 50px;
+	width:80%;
 }
 
-#snippet_content{
-width:100%;
-height:300px;
+#snippet_content {
+	height: 300px;
+	width:80%;
 }
 
-td.field{
-padding:10px 0 10px 30px;
-background:transparent url(/images/snippet.png) no-repeat;
+td.field {
+	padding: 10px 0 10px 30px;
+	background: transparent url(/images/snippet.png) no-repeat;
 }

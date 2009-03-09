@@ -1,4 +1,4 @@
-<h2>_{Page Error}</h2>
+<h1>_{Page Error}</h1>
 
 <p>_{Could not find the Homepage for you site. 
 This homepage is created automatically by Editam 

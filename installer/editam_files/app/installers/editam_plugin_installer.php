@@ -208,13 +208,7 @@ class EditamPluginInstaller extends AkInstaller
     	$Role =& new Role();
     	$Administrator =& $Role->findFirstBy('name','Administrator');
     	$Administrator->addChildrenRole('Contributor');
-    	
-    	$Role->create(array('name' => 'Visitor'));
-		
-        $Extension =& new Extension();
-        $this->AdminPages =& $Extension->create(array('name'=>'Admin::Pages','is_core'=>true, 'is_enabled' => true));
-        $this->AdminLayouts =& $Extension->create(array('name'=>'Admin::Layouts','is_core'=>true, 'is_enabled' => true));
-        $this->AdminSnippets =& $Extension->create(array('name'=>'Admin::Snippets','is_core'=>true, 'is_enabled' => true));
+    	$Administrator->addChildrenRole('Visitor');
     }
 
     function installProfiles($version, $profiles)
