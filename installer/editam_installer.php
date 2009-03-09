@@ -9,6 +9,7 @@ define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG', AK_TMP_DIR.DS.'editam'.DS.'instal
 class EditamInstaller extends AkInstaller
 {
 	var $site_details = array();
+	var $repository = 'http://svn.editam.com/branches/benny/plugin/editam';
 	
     function up_1()
     {
@@ -16,17 +17,22 @@ class EditamInstaller extends AkInstaller
             exit;
         }
         
-        echo "\nWe need some details for setting up the Editam.\n\n ";
-        $this->files = Ak::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
-        empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
-        $this->copyEditamFiles();
-        $this->upgradeFiles();
-        $this->modifyFiles();
+        if(!file_exists(AK_TMP_DIR.DS.'editam_installed.flag')){
+        	echo "\nWe need some details for setting up the Editam.\n\n ";
+	        $this->files = Ak::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
+	        empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
+	        $this->copyEditamFiles();
+	        $this->upgradeFiles();
+	        $this->modifyFiles();
+	        
+	        $this->suggestSiteDetails();
         
-        $this->relativizeStylesheetPaths();
-        $this->suggestSiteDetails();
-
-        $this->runMigration();
+            passthru('/usr/bin/env php '.AK_BASE_DIR.DS.'script'.DS.'plugin install '.$this->repository);
+            system('touch '.AK_TMP_DIR.DS.'editam_installed.flag');
+        }else{
+        	$this->runMigration();
+        	unlink(AK_TMP_DIR.DS.'editam_installed.flag');
+        }
         echo "\n\nInstallation completed\n";
     }
 
@@ -88,28 +94,6 @@ class EditamInstaller extends AkInstaller
 
         echo "Running the editam plugin migration\n";
         $Installer->install();
-    }
-    function relativizeStylesheetPaths()
-    {
-//        $url_suffix = AkInstaller::promptUserVar(
-//        'The editam plugin comes with some fancy CSS background images.
-//
-//Your aplication might be accesible at /myapp, 
-//and your images folder might be at /myapp/public
-//
-//Insert the relative path where your images folder is
-//so you don\'t need to manually edit the CSS files', array('default'=>'/'));
-//        
-//        $url_suffix =  trim(preg_replace('/\/?images\/editam\/?$/','',$url_suffix),'/');
-//        
-//        if(!empty($url_suffix)){
-//            $stylesheets = array('editam/admin','admin/menu');
-//            foreach ($stylesheets as $stylesheet) {
-//                $filename = AK_PUBLIC_DIR.DS.'stylesheets'.DS.$stylesheet.'.css';
-//                $relativized_css = preg_replace("/url\((\'|\")?\/images/","url($1/$url_suffix/images", @Ak::file_get_contents($filename));
-//                !empty($relativized_css) && @Ak::file_put_contents($filename, $relativized_css);
-//            }
-//        }
     }
     
     function _copyFiles($directory_structure, $base_path = AK_EDITAM_PLUGIN_FILES_DIR)
