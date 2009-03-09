@@ -12,9 +12,20 @@ class EditamInstaller extends AkInstaller
 	
     function up_1()
     {
+        if(!$this->_dependenciesSatisfied()){
+            exit;
+        }
+        
         echo "\nWe need some details for setting up the Editam.\n\n ";
+        $this->files = Ak::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
+        empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
+        $this->copyEditamFiles();
+        $this->upgradeFiles();
+        $this->modifyFiles();
+        
         $this->relativizeStylesheetPaths();
         $this->suggestSiteDetails();
+
         $this->runMigration();
         echo "\n\nInstallation completed\n";
     }
@@ -205,14 +216,6 @@ class EditamInstaller extends AkInstaller
 		$contents = Ak::file_get_contents($source_file);
 		if(empty($search_replace)) return;
 		$modified = false;
-    	if(strpos($source_file,AK_CONFIG_DIR.DS.'routes.php')!==false){
-    		$preffix = '/'.trim($this->promptUserVar('Editam url preffix',  array('default'=>'/editam/')), "\t /").'/';
-    		foreach($search_replace as $k => $replace_data){
-    			foreach($replace_data as $l => $data){
-					$search_replace[$k][$l] = str_replace("%prefix%",$preffix,$data);
-    			}
-    		}
-		}
 		foreach($search_replace as $replace_data){
 			if(preg_match($replace_data['detect_modified'],$contents) == 1){
 				continue; // skip already modified lines
@@ -320,6 +323,17 @@ class EditamInstaller extends AkInstaller
     function _replaceFile($new,$replaced){
     	unlink($replaced);
     	$this->_copyFileWithPermission($new,$replaced);
+    }
+    
+    function _dependenciesSatisfied(){
+        // check for admin plugin
+        $result = true;
+        if(!file_exists(AK_BASE_DIR.DS.'app'.DS.'controllers'.DS.'admin')){
+            echo "\nEditam need admin_plugin to be installed first.\nYou can add admin_plugin by running './script/plugin install admin'\n";
+            $result = false;
+        }
+        
+        return $result;
     }
     
 }
