@@ -9,7 +9,6 @@ define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG', AK_TMP_DIR.DS.'editam'.DS.'instal
 class EditamInstaller extends AkInstaller
 {
 	var $site_details = array();
-	var $repository = 'http://svn.editam.com/branches/benny/plugin/editam';
 	
     function up_1()
     {
@@ -24,12 +23,12 @@ class EditamInstaller extends AkInstaller
 	        $this->copyEditamFiles();
 	        $this->upgradeFiles();
 	        $this->modifyFiles();
-	        
-	        $this->suggestSiteDetails();
-        
-            passthru('/usr/bin/env php '.AK_BASE_DIR.DS.'script'.DS.'plugin install --force '.$this->repository);
-            system('touch '.AK_TMP_DIR.DS.'editam_installed.flag');
+            
+	        passthru('/usr/bin/env php '.AK_BASE_DIR.DS.'script'.DS.'plugin install --force '.AK_PLUGINS_DIR.DS.'editam');
+            $f = fopen(AK_TMP_DIR.DS.'editam_installed.flag','w');
+            fclose($f);
         }else{
+        	$this->suggestSiteDetails();
         	$this->runMigration();
         	unlink(AK_TMP_DIR.DS.'editam_installed.flag');
         }
