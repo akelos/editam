@@ -21,7 +21,6 @@ class EditamInstaller extends AkInstaller
 	        $this->files = Ak::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
 	        empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
 	        $this->copyEditamFiles();
-	        $this->upgradeFiles();
 	        $this->modifyFiles();
             
 	        $f = fopen(AK_TMP_DIR.DS.'editam_installed.flag','w');
@@ -211,40 +210,6 @@ class EditamInstaller extends AkInstaller
 			echo "Modifiying file ".AK_BASE_DIR.DS.$source_file."\n";
 			Ak::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
 		}
-    }
-    
-    function _upgradeFiles($directory_structure,$base_path = null){
-        foreach($directory_structure as $k => $node){
-            $path = $base_path.DS.$node;
-            if(is_file($path)){
-                $old_file = AK_BASE_DIR.DS.substr($path,$this->tmp_str_idx);
-                if(!file_exists($path) || !file_exists($old_file)){
-                    continue;
-                }
-                if(md5_file($path) == md5_file($old_file)){
-                    echo "Skipping upgrade file ".AK_BASE_DIR.DS.$old_file.". Already upgraded.\n";
-                    continue;
-                }
-                echo "Upgrading file ".$old_file."\n";
-                
-                $this->_backupFile($old_file,false);
-                $this->_replaceFile($path,$old_file);
-            }elseif(is_array($node)){
-                foreach ($node as $dir=>$items){
-                    $path = $base_path.DS.$dir;
-                    if(is_dir($path)){
-                        $this->_upgradeFiles($items,$path);
-                    }
-                }
-            }
-        }
-    }
-    
-    function upgradeFiles($base_path = null){
-        $base_path = empty($base_path)?AK_EDITAM_PLUGIN_UPGRADE_DATA_DIR : $base_path;
-        $this->tmp_str_idx = strlen($base_path.DS);
-        $directory_structure = Ak::dir($base_path, array('recurse'=> true));
-        $this->_upgradeFiles($directory_structure,$base_path);
     }
     
     function _backupFile($path,$is_modified = true){
