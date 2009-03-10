@@ -2,9 +2,7 @@
 
 defined('AK_EDITAM_PLUGIN_FILES_DIR') ? null : define('AK_EDITAM_PLUGIN_FILES_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'editam_files');
 define('AK_EDITAM_PLUGIN_MODIFY_DATA_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'filemods'.DS.'data');
-define('AK_EDITAM_PLUGIN_UPGRADE_DATA_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'fileupgrade'.DS.'data');
 define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD', AK_TMP_DIR.DS.'editam'.DS.'installer'.DS.'backup_files'.DS.'modified');
-define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG', AK_TMP_DIR.DS.'editam'.DS.'installer'.DS.'backup_files'.DS.'upgraded');
 
 class EditamInstaller extends AkInstaller
 {
@@ -234,7 +232,7 @@ class EditamInstaller extends AkInstaller
     }
     
     function restoreFiles(){
-    	$backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR,AK_EDITAM_PLUGIN_UPGRADE_DATA_DIR);
+    	$backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR);
     	foreach($backup_paths as $backup_path){
 	        $this->tmp_str_idx = strlen($backup_path.DS);
 	        $directory_structure = Ak::dir($backup_path, array('recurse'=> true));
