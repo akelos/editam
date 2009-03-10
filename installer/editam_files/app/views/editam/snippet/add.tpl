@@ -10,7 +10,7 @@
 <div class="content"> 
     <%= start_form_tag {:action =>'add'}, :id => 'snippet_form' %>
     <div class="form">
-    <h2>_{Creating Snippet}</h2>
+    <h1>_{Creating Snippet}</h1>
 
     <%= render :partial => 'form' %>
    
