@@ -33,6 +33,9 @@
 // Notices must display the words "Powered by Editam".                    |
 // +----------------------------------------------------------------------+
 
+defined('AK_EDITAM_PLUGIN_MODIFY_DATA_DIR') ? null :define('AK_EDITAM_PLUGIN_MODIFY_DATA_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'filemods'.DS.'data');
+defined('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD') ? null : define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD', AK_TMP_DIR.DS.'editam'.DS.'installer'.DS.'backup_files'.DS.'modified');
+
 class EditamPluginInstaller extends AkInstaller
 {
     function up_1()
@@ -200,6 +203,8 @@ class EditamPluginInstaller extends AkInstaller
         $this->dropTables('content_layouts,page_parts,pages,snippets,translations,translators,
             translator_capabilities,files,site_preferences,user_preferences,system_messages,
             file_types,tags,editam_updates');
+        $this->removeCMSRoles();
+        $this->restoreFiles();
     }
     
     function createCMSRoles(){
@@ -209,6 +214,16 @@ class EditamPluginInstaller extends AkInstaller
     	$Administrator =& $Role->findFirstBy('name','Administrator');
     	$Administrator->addChildrenRole('Contributor');
     	$Administrator->addChildrenRole('Visitor');
+    }
+    
+    function removeCMSRoles(){
+    	Ak::import('User', 'Role', 'Permission', 'Extension');
+        
+        $Role =& new Role();
+        $CMSRole =& $Role->findFirstBy('name','Contributor');
+        $CMSRole->destroy();
+        $CMSRole =& $Role->findFirstBy('name','Visitor');
+        $CMSRole->destroy();
     }
 
     function installProfiles($version, $profiles)
@@ -268,6 +283,32 @@ class EditamPluginInstaller extends AkInstaller
             }
         }
 
+    }
+    
+    function restoreFiles(){
+        $backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR);
+        foreach($backup_paths as $backup_path){
+            $this->tmp_str_idx = strlen($backup_path.DS);
+            $directory_structure = Ak::dir($backup_path, array('recurse'=> true));
+            $this->_restoreFiles($directory_structure,$backup_path);
+        }
+    }
+    
+    function _restoreFiles($directory_structure,$base_path = null){
+        foreach($directory_structure as $k => $node){
+            $path = $base_path.DS.$node;
+            if(is_file($path)){
+                $restored_file = AK_BASE_DIR.DS.substr($path,$this->tmp_str_idx);
+                $this->_replaceFile($path,$restored_file);
+            }elseif(is_array($node)){
+                foreach ($node as $dir=>$items){
+                    $path = $base_path.DS.$dir;
+                    if(is_dir($path)){
+                        $this->_modifyFiles($items,$path);
+                    }
+                }
+            }
+        }
     }
 }
 
