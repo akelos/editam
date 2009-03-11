@@ -304,11 +304,25 @@ class EditamPluginInstaller extends AkInstaller
                 foreach ($node as $dir=>$items){
                     $path = $base_path.DS.$dir;
                     if(is_dir($path)){
-                        $this->_modifyFiles($items,$path);
+                        $this->_restoreFiles($items,$path);
                     }
                 }
             }
         }
+    }
+    
+    function _copyFileWithPermission($src,$dst){
+        copy($src,$dst);
+        $source_file_mode =  fileperms($src);
+        $target_file_mode =  fileperms($dst);
+        if($source_file_mode != $target_file_mode){
+            chmod($dst,$source_file_mode);
+        }
+    }
+    
+    function _replaceFile($new,$replaced){
+        unlink($replaced);
+        $this->_copyFileWithPermission($new,$replaced);
     }
 }
 
