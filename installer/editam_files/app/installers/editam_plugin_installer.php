@@ -208,16 +208,16 @@ class EditamPluginInstaller extends AkInstaller
     }
     
     function createCMSRoles(){
-    	Ak::import('User', 'Role', 'Permission', 'Extension');
-    	
-    	$Role =& new Role();
-    	$Administrator =& $Role->findFirstBy('name','Administrator');
-    	$Administrator->addChildrenRole('Contributor');
-    	$Administrator->addChildrenRole('Visitor');
+        Ak::import('User', 'Role', 'Permission', 'Extension');
+        
+        $Role =& new Role();
+        $Administrator =& $Role->findFirstBy('name','Administrator');
+        $Administrator->addChildrenRole('Contributor');
+        $Administrator->addChildrenRole('Visitor');
     }
     
     function removeCMSRoles(){
-    	Ak::import('User', 'Role', 'Permission', 'Extension');
+        Ak::import('User', 'Role', 'Permission', 'Extension');
         
         $Role =& new Role();
         $CMSRole =& $Role->findFirstBy('name','Contributor');
@@ -298,8 +298,9 @@ class EditamPluginInstaller extends AkInstaller
         foreach($directory_structure as $k => $node){
             $path = $base_path.DS.$node;
             if(is_file($path)){
-                $restored_file = AK_BASE_DIR.DS.substr($path,$this->tmp_str_idx);
-                $this->_replaceFile($path,$restored_file);
+                $current_file = AK_BASE_DIR.DS.substr($path,$this->tmp_str_idx);
+                $backup_file = AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD.DS.substr($path,$this->tmp_str_idx);
+                $this->_replaceFile($backup_file,$current_file);
             }elseif(is_array($node)){
                 foreach ($node as $dir=>$items){
                     $path = $base_path.DS.$dir;
