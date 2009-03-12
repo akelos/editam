@@ -1,11 +1,11 @@
 <?=$active_record_helper->error_messages_for('page');?>
 
-<p>
+<fieldset>
     <label class="required" for="page_title">
     {?is_homepage}_{Website Title}{else}_{Page Title}{end}
-    </label><br />
+    </label>
     <?=$active_record_helper->input('page', 'title', array('id'=>'page_title', 'tabindex' => '1'))?>
-</p>
+</fieldset>
 
 {!is_homepage}
     
@@ -36,19 +36,19 @@
     {?is_homepage}
         <%=hidden_field_tag 'page[slug]', '/' %>
     {else}
-    <p>
-        <label class="required" for="page_slug">_{Slug (URL short title)}</label><br />
+    <fieldset>
+        <label class="required" for="page_slug">_{Slug (URL short title)}</label>
         <?=$active_record_helper->input('page', 'slug', array('tabindex' => '3', 'id'=>'page_slug',
         'onkeypress'=>'Page.frozen_slug = true;Page.frozen_slug_preview = false;setTimeout("Page.updateSlug($(\'page_slug\').value.toSlug());", 1000);',
         'onblur'=>'this.value = this.value.toSlug();',
         ))?>
-    </p>    
+    </fieldset>    
     {end}
     
-    <p>
-        <label class="required" for="page_breadcrumb">_{Breadcrumb}</label><br />
+    <fieldset>
+        <label class="required" for="page_breadcrumb">_{Breadcrumb}</label>
         <?=$active_record_helper->input('page', 'breadcrumb', array('tabindex' => '4', 'id'=>'page_breadcrumb','onkeypress'=>'Page.frozen_breadcrumb = true;'))?>
-    </p>
+    </fieldset>
 </div>
 
 <p id="hide_extra_fields" style="display:none;"><%= link_to _('Hide extra page options'), {}, :onclick => "return Page.lessOptions();",  :onkeypress => "return Page.lessOptions();", :class => 'action' %></p>
