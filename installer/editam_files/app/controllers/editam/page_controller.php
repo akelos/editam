@@ -116,8 +116,6 @@ class Editam_PageController extends EditamController
 
     function add()
     {
-        $this->_save();
-        $this->_getReadyForPageForm();
     }
 
     function add_child()

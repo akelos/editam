@@ -78,6 +78,8 @@ class Page extends ActiveRecord
     function saveWithParts($parts = array(), $position = null)
     {
         $this->transactionStart();
+        $this->parts = array();
+        $this->part->load();
         foreach ($parts as $part){
             $this->part->create($part);
         }
