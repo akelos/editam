@@ -39,6 +39,16 @@ class Editam_PreferencesController extends EditamController
     var $admin_only = true;
     
     var $app_helpers = 'admin,layout,editags,preferences';
+    
+    var $admin_selected_tab = 'CMS';
+    
+    var $controller_menu_options = array(
+    'Pages'   => array('id' => 'page', 'url'=>array('controller'=>'page', 'action'=>'listing', 'module'=>'editam')),
+    'Layouts'   => array('id' => 'content_layout', 'url'=>array('controller'=>'content_layout', 'module'=>'editam')),
+    'Snippets'   => array('id' => 'snippet', 'url'=>array('controller'=>'snippet', 'action'=>'manage', 'module'=>'editam')),
+    'Preferences'   => array('id' => 'preferences', 'url'=>array('controller'=>'preferences', 'action'=>'setup', 'module'=>'editam'))
+    );
+    var $controller_selected_tab = 'Preferences';
 
     function index()
     {

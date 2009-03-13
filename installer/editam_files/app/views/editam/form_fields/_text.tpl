@@ -8,6 +8,7 @@ if (isset($params['site_preference'][$Preference->id]['value'])) {
     $value = $Preference->value;
 }
 ?>
-<label for="site_preference-{Preference.id}"><%= translate Preference.title %></label><br />
-<input type="text" name="preferences[{Preference.id}]" 
-id="site_preference-{Preference.id}" value="{value}" />
+<fieldset>
+	<label for="site_preference-{Preference.id}"><%= translate Preference.title %></label>
+	<input type="text" name="preferences[{Preference.id}]" id="site_preference-{Preference.id}" value="{value}" />
+</fieldset>

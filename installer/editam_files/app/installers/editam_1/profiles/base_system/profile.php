@@ -126,21 +126,6 @@ class BaseSystemProfile
         $Preference->save();
 
         $Preference = new SitePreference(array(
-        'name'=>'editam_admin_color',
-        'title'=>'Editam admin color',
-        'value' => '#068',
-        'is_editable' => true,
-        'is_core' => true));
-        $Preference->save();
-
-        $Preference = new SitePreference(array(
-        'name'=>'logo',
-        'title'=>'Editam admin Logo',
-        'is_editable' => true,
-        'is_core' => true));
-        $Preference->save();
-
-        $Preference = new SitePreference(array(
         'name'=>'default_controller',
         'title'=>'Default controller',
         'value' => 'page',

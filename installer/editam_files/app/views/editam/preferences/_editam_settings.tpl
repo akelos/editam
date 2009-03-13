@@ -5,7 +5,7 @@
     :enctype => 'multipart/form-data' %>
     
     {?SitePreferences}
-        <h2>_{Site preferences}</h2>
+        <h1>_{Site preferences}</h1>
         <div id="site_preferences" class="form">
             {loop SitePreferences}
                 <%= render_preference SitePreference %>

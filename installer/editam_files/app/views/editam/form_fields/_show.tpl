@@ -6,4 +6,7 @@ if (!empty($params['site_preference'][$Preference->id]['value'])) {
 }
 ?>
 
-<p class="show"><strong class="label"><%= translate Preference.title %>:</strong> {value?}</p>
+<fieldset>
+    <label><%= translate Preference.title %>:</label>
+    {value?}
+</fieldset>
