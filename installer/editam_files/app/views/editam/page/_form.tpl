@@ -20,8 +20,8 @@
 
     <p id="url_for_page" {!Page.id}style="display:none;"{end}>
     _{Will publish to} 
-    <span id="site_url">{site_url}{?is_multilingual}/{Page.locale?}{end}</span> 
-    <a href="{site_url}{?is_multilingual}/{Page.locale?}{end}" class="action" id="show_page_link">_{(show page)}</a>
+    <span id="site_url">{site_url}{?is_multilingual}/{Page.locale?}{end}<?= DS ?>{editam_public_site_url_suffix}</span> 
+    <a href="{site_url}{?is_multilingual}/{Page.locale?}{end}<?= DS ?>{editam_public_site_url_suffix}" class="action" id="show_page_link">_{(show page)}</a>
     </p>
     
 {end}
