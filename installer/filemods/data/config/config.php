@@ -3,7 +3,7 @@
             array(
                 "searched" => "/(\?\>)/",
                 "detect_modified" => "/AK_EDITAM_PUBLIC_SITE_URL_SUFFIX/",
-                "replaced" => "\ndefine('AK_EDITAM_PUBLIC_SITE_URL_SUFFIX','editam-site');\n$1"
+                "replaced" => "\ndefine('AK_EDITAM_PUBLIC_SITE_URL_SUFFIX','cms');\n$1"
             )
     );
 ?>
