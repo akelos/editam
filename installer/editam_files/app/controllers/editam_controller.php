@@ -303,11 +303,9 @@ class EditamController extends ApplicationController
      */
     public function _checkForUpdates()
     {
-        Ak::import('EditamUpdate');
         $Update = new EditamUpdate();
         $this->credentials->set('has_checked_for_updates', true);
         if($message = $Update->getUpdateMessageIfNewVersionIsAvailable()){
-            Ak::import('SystemMessage');
             $SystemMessage = new SystemMessage();
             $SystemMessage->registerMessageForAdmins(array(
             'value' => $message,
@@ -324,7 +322,6 @@ class EditamController extends ApplicationController
      */
     public function _loadSystemMessages()
     {
-        Ak::import('SystemMessage');
         $SystemMessage = new SystemMessage();
         $SystemMessage->addMessagesToController($this);
     }
@@ -334,7 +331,6 @@ class EditamController extends ApplicationController
      */
     function authenticate()
     {
-        Ak::import('sentinel');
         $Sentinel = new Sentinel();
         $Sentinel->init($this);
         return $Sentinel->authenticate();
