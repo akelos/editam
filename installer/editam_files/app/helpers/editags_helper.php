@@ -87,7 +87,7 @@ class EditagsHelper extends AkActionViewHelper
     /**
      * Stylesheets include tags will be retrieved from the stylesheets folder at current theme.
      * 
-     * By default Editam looks for a theme_name.css file. If that file is found, ONLY thet stylesheet will
+     * By default Editam looks for a theme_name.css file. If that file is found, ONLY the stylesheet will
      * be included. If the theme_name.css file does not exist it will look for including existing stylesheets
      * that match a WC3 media type (http://www.w3.org/TR/REC-CSS2/media.html) like:
      * all.css, aural.css, braille.css, embossed.css, handheld.css, print.css, 
@@ -210,7 +210,7 @@ class EditagsHelper extends AkActionViewHelper
     public function _registerEditagsHelperFuntions($available_helpers = array())
     {
         $available_helpers = empty($available_helpers) ? $this->_getEditagsHelperMethods() : $available_helpers;
-        defined('EDITAM_AVALABLE_HELPERS') ? null : define('EDITAM_AVALABLE_HELPERS', serialize($available_helpers));
+        defined('EDITAM_AVAILABLE_HELPERS') ? null : define('EDITAM_AVAILABLE_HELPERS', serialize($available_helpers));
     }
 
     public function _computePublicPath()

@@ -153,8 +153,8 @@ class EditamPluginInstaller extends AkInstaller
              value text,
              message_key,
              user_id,
-             has_been_readed,
-             can_be_hidded bool default 1,
+             has_been_read,
+             can_be_hidden bool default 1,
              created_at,
              seconds_to_expire integer default 0
              '
@@ -242,7 +242,7 @@ class EditamPluginInstaller extends AkInstaller
             $Element->save();
             if($Element->hasErrors()){
                 echo "<p>There was an error while adding a new ".$Element->getModelName().'</p>';
-                echo "<p>Please <a href='http://trac.editam.com/newticket'>notify the Editam team</a> about this issue providing the message bellow</p>";
+                echo "<p>Please <a href='https://github.com/akelos/editam/issues'>notify the Editam team</a> about this issue providing the message bellow</p>";
                 echo "<pre>".print_r($Element->getErrors(),true)."</pre>";
             }
         }

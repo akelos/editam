@@ -88,7 +88,7 @@ class Editam_LoginController extends EditamController
     {
         if (!empty($_SESSION['__credentials']['id'])) {
             $this->flash_options = array('seconds_to_close'=>5);
-            $this->flash['message'] = $this->t('<b>%name</b> you\'re already authentified', array('%name'=>$_SESSION['__credentials']['name']));
+            $this->flash['message'] = $this->t('<b>%name</b> you\'re already authenticated', array('%name'=>$_SESSION['__credentials']['name']));
             $this->redirectTo(array('controller'=> 'site'));
         }
     }

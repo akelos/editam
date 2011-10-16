@@ -101,7 +101,7 @@ class EditamController extends ApplicationController
     }
 
     /**
-     * Avoids link prefectching
+     * Avoids link pre-fectching
      * 
      * Google is essentially clicking every link on the page - including 
      * links like “delete this” or “cancel that.” And to make matters worse, 
@@ -158,7 +158,7 @@ class EditamController extends ApplicationController
      * 
      * Controller hooks are located at includes/editam/controllers/hooks/CONTROLLER_NAME/500_extension_name-optional_text.php
      * 
-     * Controller hooks are evaled into their target controller constructor. This allows a high degree of
+     * Controller hooks are evaluated into their target controller constructor. This allows a high degree of
      * flexibility.
      * 
      * Example:
@@ -235,12 +235,12 @@ class EditamController extends ApplicationController
      *     500_my_extension_name-step_1.tpl where 
      * 
      *  * 500 is the priority
-     *  * my_extension_name is the tecnical name for your extension
+     *  * my_extension_name is the technical name for your extension
      *  * -step_1 is OPTIONAL, you can place anything after the dash if you need to add several hooks for
      *     the same view.
      *  * .tpl the extension
      * 
-     * For post-view-hooks, simply add your hooks into an "after" forlder intead of "before"
+     * For post-view-hooks, simply add your hooks into an "after" folder instead of "before"
      */
     public function render($options = null, $status = 200)
     {
@@ -310,7 +310,7 @@ class EditamController extends ApplicationController
             $SystemMessage->registerMessageForAdmins(array(
             'value' => $message,
             'message_key' => 'editam_update_pending',
-            'can_be_hidded' => true,
+            'can_be_hidden' => true,
             'seconds_to_expire' => 432000 // 5 days
             ));
         }

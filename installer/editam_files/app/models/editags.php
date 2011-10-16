@@ -66,8 +66,8 @@ class EditagsParser extends AkSintagsParser
     {
         if(empty($this->available_helpers)){
             $helpers = array();
-            if(defined('EDITAM_AVALABLE_HELPERS')){
-                $this->available_helpers = unserialize(EDITAM_AVALABLE_HELPERS);;
+            if(defined('EDITAM_AVAILABLE_HELPERS')){
+                $this->available_helpers = unserialize(EDITAM_AVAILABLE_HELPERS);;
             }
         }
         return $this->available_helpers;

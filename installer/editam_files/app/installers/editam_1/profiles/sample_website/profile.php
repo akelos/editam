@@ -74,7 +74,7 @@ Editam is available open-source under the GPL3 license."
 
 <ul class="sidebar_menu">
     <li><a title="Administrate your site" href="{base}/admin">Administrate your site</a></li>
-    <li><a title="Development Site" href="http://trac.editam.com">Editam development site</a></li>
+    <li><a title="Development Site" href="https://github.com/akelos/editam">Editam on Github</a></li>
 </ul>'
             ));
             
@@ -82,7 +82,7 @@ Editam is available open-source under the GPL3 license."
         $Page->part->create(array(
             'name' => 'footer', 
             'content' => 
-                'Powered by <a href="http://www.editam.com">Editam</a>.'
+                'Powered by <a href="https://github.com/akelos/editam">Editam</a>.'
             ));
             
         $Page->save();
@@ -90,4 +90,3 @@ Editam is available open-source under the GPL3 license."
 
 }
 
-?>

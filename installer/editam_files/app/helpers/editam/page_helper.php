@@ -63,7 +63,6 @@ class PageHelper extends AkActionViewHelper
         return $Page->getInheritedSlug();
     }
 
-
     public function reverse_nested_list($Pages, $display_links = true)
     {
         return $this->_get_nested_menu($this->_build_reverse_nested_array($Pages), $display_links);
@@ -193,4 +192,3 @@ class PageHelper extends AkActionViewHelper
     }
 }
 
-?>

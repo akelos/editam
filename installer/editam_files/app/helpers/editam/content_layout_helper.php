@@ -44,4 +44,3 @@ class ContentLayoutHelper extends AkActionViewHelper
     }
 }
 
-?>

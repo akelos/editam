@@ -45,4 +45,3 @@ class LayoutHelper extends AkActionViewHelper
 
 }
 
-?>

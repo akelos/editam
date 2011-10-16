@@ -28,7 +28,7 @@
         //parent.$('file_form').innerHTML += '<input type="hidden" value="<?=$javascript_helper->escape_javascript(print_r($file->contents['type'][0], true))?>" id="<?=$javascript_helper->escape_javascript(print_r($file->contents['tmp_name'][0], true))?>" name="<?=$javascript_helper->escape_javascript(print_r($file->contents['tmp_name'][0], true))?>" />';
     }
     else{
-        setTimeout("alert('Fichero invalido');",500);
+        setTimeout("alert('Invalid file');",500);
     }
     
     

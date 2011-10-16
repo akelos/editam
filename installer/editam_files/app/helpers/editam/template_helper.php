@@ -35,4 +35,3 @@ class TemplateHelper extends AkActionViewHelper
     }
 }
 
-?>

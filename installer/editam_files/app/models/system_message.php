@@ -50,7 +50,7 @@ class SystemMessage extends ActiveRecord
     
     public function getDontShowAgainLink()
     {
-        if($this->get('can_be_hidded')){
+        if($this->get('can_be_hidden')){
             $url = Ak::toUrl(array('controller'=>'system_message', 'action' => 'dont_show_again', 'id'=>$this->getId(), 'url' => AK_CURRENT_URL));
             $onclick = defined('AVOID_USING_AJAX_ON_SYSTEM_MESSAGES') ? '' : " onclick=\"new Ajax.Request(this.href, {onSuccess:function(request){if($('flash').childNodes.length == 1){new Effect.Fade('flash');}else{new Effect.Fade('flash_editam_update_pending')}}});return false;\"";
         return ' <a href="'.$url.'" class="information alternative"'.$onclick.'>('.$this->t('Dont show again').')</a>';

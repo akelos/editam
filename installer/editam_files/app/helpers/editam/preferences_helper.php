@@ -51,7 +51,7 @@ class PreferencesHelper extends AkActionViewHelper
         }elseif (!$Preference->is_editable){
             return '';
         }
-        $this->_controller->Preference =& $Preference;
+        $this->_controller->Preference = $Preference;
         return $this->_controller->render(array('partial'=>'../form_fields/'.(empty($field_view) ? 'text' : $field_view)));
     }
     
@@ -60,4 +60,3 @@ class PreferencesHelper extends AkActionViewHelper
     }
 }
 
-?>

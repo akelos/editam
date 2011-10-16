@@ -39,4 +39,3 @@ class FileHelper extends AkActionViewHelper
     }
 }
 
-?>

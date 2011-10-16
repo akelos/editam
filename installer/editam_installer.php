@@ -204,7 +204,7 @@ class EditamInstaller extends AkInstaller
         }
         
         if($modified){
-            echo "Modifiying file ".AK_BASE_DIR.DS.$source_file."\n";
+            echo "Modifying file ".AK_BASE_DIR.DS.$source_file."\n";
             AkFileSystem::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
         }
     }

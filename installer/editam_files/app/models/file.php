@@ -4,8 +4,6 @@
 
 class File extends ActiveRecord
 {
-    // public $has_many = 'tags';
-    //public $belongs_to = array('file_type','user');
     public $atcs_as = 'tree';
     public $upload_using_ftp = AK_UPLOAD_FILES_USING_FTP;
 

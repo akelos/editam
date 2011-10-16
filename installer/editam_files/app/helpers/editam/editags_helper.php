@@ -210,7 +210,7 @@ class EditagsHelper extends AkActionViewHelper
     public function _registerEditagsHelperFuntions($available_helpers = array())
     {
         $available_helpers = empty($available_helpers) ? $this->_getEditagsHelperMethods() : $available_helpers;
-        defined('EDITAM_AVALABLE_HELPERS') ? null : define('EDITAM_AVALABLE_HELPERS', serialize($available_helpers));
+        defined('EDITAM_AVAILABLE_HELPERS') ? null : define('EDITAM_AVAILABLE_HELPERS', serialize($available_helpers));
     }
 
     public function _computePublicPath()
