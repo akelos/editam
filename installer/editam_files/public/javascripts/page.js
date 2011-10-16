@@ -261,24 +261,24 @@ var Page = {
     
     
 
-    switchBehaviour: function(event){
-        Page.enableBehaviour(Event.element(event))
+    switchBehavior: function(event){
+        Page.enableBehavior(Event.element(event))
     },
     
     
-    enableBehaviour: function(item){
+    enableBehavior: function(item){
         var from = item.lastValue || '';
         var to = item.value || '';
         if(from != to){
             item.disable();
-            flash(PAGE_SWITCHING_BEHAVIOUR);
-            new Ajax.Updater('behaviour_options', PAGE_SWITCH_BEHAVIOUR, {
+            flash(PAGE_SWITCHING_BEHAVIOR);
+            new Ajax.Updater('behavior_options', PAGE_SWITCH_BEHAVIOR, {
                 asynchronous:true,
                 evalScripts: true,
                 parameters:{ 'to':to,'from':from },
                 onFailure:function(request){
                     item.enable();
-                    flash(PAGE_CANT_CHANGE_BEHAVIOUR, 6);
+                    flash(PAGE_CANT_CHANGE_BEHAVIOR, 6);
                 },
                 onSuccess:function(request){
                     item.enable();
@@ -455,8 +455,8 @@ var OnloadPage = {
             Event.observe(item, 'change', Page.switchFilter, true);
         });
 
-        Page.enableBehaviour($('page_behaviour'));
-        Event.observe($('page_behaviour'), 'change', Page.switchBehaviour, true);
+        Page.enableBehavior($('page_behavior'));
+        Event.observe($('page_behavior'), 'change', Page.switchBehavior, true);
 
         TabControl('tab_control', {
             current:

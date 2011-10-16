@@ -5,9 +5,9 @@
     $selected_roles = array();
     
     if (!empty($preference_values)) {
-    	foreach ($preference_values as $preference_id) {
-    		$selected_roles[$preference_id] = true;
-    	}
+        foreach ($preference_values as $preference_id) {
+            $selected_roles[$preference_id] = true;
+        }
     }
     ?>
     {loop Roles}

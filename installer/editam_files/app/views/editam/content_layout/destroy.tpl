@@ -17,12 +17,12 @@
 <%= start_form_tag :action => 'destroy', :id => ContentLayout.id %>
 
 <dl>
-	<dt>_{Name}:</dt>
-	<dd>{ContentLayout.name}</dd>
-	{?ContentLayout.content_type}
-	<dt>_{Content Type}:</dt>
-	<dd>{ContentLayout.content_type}</dd>
-	{end}
+    <dt>_{Name}:</dt>
+    <dd>{ContentLayout.name}</dd>
+    {?ContentLayout.content_type}
+    <dt>_{Content Type}:</dt>
+    <dd>{ContentLayout.content_type}</dd>
+    {end}
 </dl>
 
 <div id="operations">

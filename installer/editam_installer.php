@@ -6,43 +6,43 @@ define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD', AK_TMP_DIR.DS.'editam'.DS.'instal
 
 class EditamInstaller extends AkInstaller
 {
-	var $site_details = array();
-	
-    function up_1()
+    public $site_details = array();
+    
+    public function up_1()
     {
         if(!$this->_dependenciesSatisfied()){
             exit;
         }
         
         if(!file_exists(AK_TMP_DIR.DS.'editam_installed.flag')){
-        	echo "\nWe need some details for setting up the Editam.\n\n ";
-	        $this->files = AkFileSystem::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
-	        empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
-	        $this->copyEditamFiles();
-	        $this->modifyFiles();
+            echo "\nWe need some details for setting up the Editam.\n\n ";
+            $this->files = AkFileSystem::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
+            empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
+            $this->copyEditamFiles();
+            $this->modifyFiles();
             
-	        $f = fopen(AK_TMP_DIR.DS.'editam_installed.flag','w');
+            $f = fopen(AK_TMP_DIR.DS.'editam_installed.flag','w');
             fclose($f);
-	        passthru('/usr/bin/env php '.AK_BASE_DIR.DS.'script'.DS.'plugin install --force '.AK_PLUGINS_DIR.DS.'editam');
+            passthru('/usr/bin/env php '.AK_BASE_DIR.DS.'script'.DS.'plugin install --force '.AK_PLUGINS_DIR.DS.'editam');
         }else{
-        	$this->suggestSiteDetails();
-        	$this->runMigration();
-        	unlink(AK_TMP_DIR.DS.'editam_installed.flag');
+            $this->suggestSiteDetails();
+            $this->runMigration();
+            unlink(AK_TMP_DIR.DS.'editam_installed.flag');
         }
         echo "\n\nInstallation completed\n";
     }
 
-    function down_1()
+    public function down_1()
     {
         include_once(AK_APP_INSTALLERS_DIR.DS.'editam_plugin_installer.php');
-        $Installer =& new EditamPluginInstaller();
+        $Installer = new EditamPluginInstaller();
 
         echo "Uninstalling the editam plugin migration\n";
         $Installer->uninstall();
     }
 
 
-    function checkForCollisions(&$directory_structure, $base_path = AK_EDITAM_PLUGIN_FILES_DIR)
+    public function checkForCollisions(&$directory_structure, $base_path = AK_EDITAM_PLUGIN_FILES_DIR)
     {
         foreach ($directory_structure as $k=>$node){
             if(!empty($this->skip_all)){
@@ -77,22 +77,22 @@ class EditamInstaller extends AkInstaller
         }
     }
 
-    function copyEditamFiles()
+    public function copyEditamFiles()
     {
         $this->_copyFiles($this->files);
     }
 
-    function runMigration()
+    public function runMigration()
     {
         include_once(AK_APP_INSTALLERS_DIR.DS.'editam_plugin_installer.php');
-        $Installer =& new EditamPluginInstaller();
+        $Installer = new EditamPluginInstaller();
         $Installer->site_details = $this->site_details;
 
         echo "Running the editam plugin migration\n";
         $Installer->install();
     }
     
-    function _copyFiles($directory_structure, $base_path = AK_EDITAM_PLUGIN_FILES_DIR)
+    public function _copyFiles($directory_structure, $base_path = AK_EDITAM_PLUGIN_FILES_DIR)
     {
         foreach ($directory_structure as $k=>$node){
             $path = $base_path.DS.$node;
@@ -115,7 +115,7 @@ class EditamInstaller extends AkInstaller
         }
     }
     
-    function _makeDir($path)
+    public function _makeDir($path)
     {
         $dir = str_replace(AK_EDITAM_PLUGIN_FILES_DIR, AK_BASE_DIR,$path);
         if(!is_dir($dir)){
@@ -123,50 +123,50 @@ class EditamInstaller extends AkInstaller
         }
     }
 
-    function _copyFile($path)
+    public function _copyFile($path)
     {
         $destination_file = str_replace(AK_EDITAM_PLUGIN_FILES_DIR, AK_BASE_DIR,$path);
         $this->_copyFileWithPermission($path,$destination_file);
     }
     
-    function suggestSiteDetails(){
-    	Ak::import('User', 'Role', 'Permission', 'Extension');
-    	
-    	$ApplicationOwner = $this->getApplicationOwner();
-    	
-    	$this->site_details['site_name'] = AkInstaller::promptUserVar("\n Site Name", array('default' => $this->getApplicationName()));
-		$this->site_details['administrator_login'] = $ApplicationOwner->get('login');    	
-    	$this->site_details['administrator_email'] = AkInstaller::promptUserVar(" Administrator Email", array('default' => $ApplicationOwner->get('login').'@'.AK_HOST));
+    public function suggestSiteDetails(){
+        Ak::import('User', 'Role', 'Permission', 'Extension');
+        
+        $ApplicationOwner = $this->getApplicationOwner();
+        
+        $this->site_details['site_name'] = AkInstaller::promptUserVar("\n Site Name", array('default' => $this->getApplicationName()));
+        $this->site_details['administrator_login'] = $ApplicationOwner->get('login');        
+        $this->site_details['administrator_email'] = AkInstaller::promptUserVar(" Administrator Email", array('default' => $ApplicationOwner->get('login').'@'.AK_HOST));
     }
     
-	function getApplicationName()
+    function getApplicationName()
     {
         if(!isset($this->application_name)){
             $this->setApplicationName($this->guessApplicationName());
         }
         return $this->application_name;
     }
-	
-    function setApplicationName($application_name)
+    
+    public function setApplicationName($application_name)
     {
         $this->application_name = $application_name;
     }
     
-	function guessApplicationName()
+    function guessApplicationName()
     {
         $application_name = empty($application_name) ? substr(AK_BASE_DIR, strrpos(AK_BASE_DIR, DS)+1) : $application_name;
         return empty($application_name) ? 'editam' : $application_name;
     }
     
-	function getApplicationOwner()
+    function getApplicationOwner()
     {
-    	$Role =& new Role();
+        $Role = new Role();
         $ApplicationOwnerRole = $Role->findFirstBy('name','Application owner');
         $ApplicationOwnerRole->user->load();
         return $ApplicationOwnerRole->users[0];
     }
     
-    function _modifyFiles($directory_structure, $base_path = null){
+    public function _modifyFiles($directory_structure, $base_path = null){
         foreach($directory_structure as $k => $node){
             $path = $base_path.DS.$node;
             if(is_file($path)){
@@ -184,45 +184,45 @@ class EditamInstaller extends AkInstaller
         }
     }
     
-    function modifyFiles($base_path = null){
-    	$base_path = empty($base_path)?AK_EDITAM_PLUGIN_MODIFY_DATA_DIR : $base_path;
-    	$this->tmp_str_idx = strlen($base_path.DS);
-    	$directory_structure = AkFileSystem::dir($base_path, array('recurse'=> true));
-    	$this->_modifyFiles($directory_structure, $base_path);
+    public function modifyFiles($base_path = null){
+        $base_path = empty($base_path)?AK_EDITAM_PLUGIN_MODIFY_DATA_DIR : $base_path;
+        $this->tmp_str_idx = strlen($base_path.DS);
+        $directory_structure = AkFileSystem::dir($base_path, array('recurse'=> true));
+        $this->_modifyFiles($directory_structure, $base_path);
     }
     
-    function _searchAndReplaceFile($path,$source_file){
-		require_once($path);
-		$contents = AkFileSystem::file_get_contents($source_file);
-		if(empty($search_replace)) return;
-		$modified = false;
-		foreach($search_replace as $replace_data){
-			if(preg_match($replace_data['detect_modified'],$contents) == 1){
-				continue; // skip already modified lines
-			}
+    public function _searchAndReplaceFile($path,$source_file){
+        require_once($path);
+        $contents = AkFileSystem::file_get_contents($source_file);
+        if(empty($search_replace)) return;
+        $modified = false;
+        foreach($search_replace as $replace_data){
+            if(preg_match($replace_data['detect_modified'],$contents) == 1){
+                continue; // skip already modified lines
+            }
             $contents = preg_replace($replace_data['searched'],$replace_data['replaced'],$contents);
             $modified = true;
-		}
-		
-		if($modified){
-			echo "Modifiying file ".AK_BASE_DIR.DS.$source_file."\n";
-			AkFileSystem::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
-		}
+        }
+        
+        if($modified){
+            echo "Modifiying file ".AK_BASE_DIR.DS.$source_file."\n";
+            AkFileSystem::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
+        }
     }
     
-    function _backupFile($path,$is_modified = true){
-    	if(!file_exists($path)){ return; }
-    	$backup_dir = ($is_modified===true)?AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD:AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG;
-    	$destination_file = str_replace(AK_BASE_DIR,$backup_dir,$path);
-    	if(file_exists($destination_file) && md5_file($path)!=md5_file($destination_file)){
-    		return;
-    	}
+    public function _backupFile($path,$is_modified = true){
+        if(!file_exists($path)){ return; }
+        $backup_dir = ($is_modified===true)?AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD:AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_UPG;
+        $destination_file = str_replace(AK_BASE_DIR,$backup_dir,$path);
+        if(file_exists($destination_file) && md5_file($path)!=md5_file($destination_file)){
+            return;
+        }
         $dirs = explode(DS,$destination_file);
         $max_depth = count($dirs)-1;
         $backup_file_path = '';
         for($i=0; $i<$max_depth; $i++){
-        	$backup_file_path .= $dirs[$i];
-        	if(!empty($dirs[$i]) && !is_dir($backup_file_path)){
+            $backup_file_path .= $dirs[$i];
+            if(!empty($dirs[$i]) && !is_dir($backup_file_path)){
                 mkdir($backup_file_path);
             }
             $backup_file_path .= DS;
@@ -231,17 +231,17 @@ class EditamInstaller extends AkInstaller
         $this->_copyFileWithPermission($path,$backup_file_path);
     }
     
-    function restoreFiles(){
-    	$backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR);
-    	foreach($backup_paths as $backup_path){
-	        $this->tmp_str_idx = strlen($backup_path.DS);
-	        $directory_structure = AkFileSystem::dir($backup_path, array('recurse'=> true));
-	    	$this->_restoreFiles($directory_structure,$backup_path);
-    	}
+    public function restoreFiles(){
+        $backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR);
+        foreach($backup_paths as $backup_path){
+            $this->tmp_str_idx = strlen($backup_path.DS);
+            $directory_structure = AkFileSystem::dir($backup_path, array('recurse'=> true));
+            $this->_restoreFiles($directory_structure,$backup_path);
+        }
     }
     
-    function _restoreFiles($directory_structure,$base_path = null){
-    	foreach($directory_structure as $k => $node){
+    public function _restoreFiles($directory_structure,$base_path = null){
+        foreach($directory_structure as $k => $node){
             $path = $base_path.DS.$node;
             if(is_file($path)){
                 $restored_file = AK_BASE_DIR.DS.substr($path,$this->tmp_str_idx);
@@ -257,21 +257,21 @@ class EditamInstaller extends AkInstaller
         }
     }
     
-    function _copyFileWithPermission($src,$dst){
+    public function _copyFileWithPermission($src,$dst){
         copy($src,$dst);
         $source_file_mode =  fileperms($src);
         $target_file_mode =  fileperms($dst);
         if($source_file_mode != $target_file_mode){
-        	chmod($dst,$source_file_mode);
+            chmod($dst,$source_file_mode);
         }
     }
     
-    function _replaceFile($new,$replaced){
-    	unlink($replaced);
-    	$this->_copyFileWithPermission($new,$replaced);
+    public function _replaceFile($new,$replaced){
+        unlink($replaced);
+        $this->_copyFileWithPermission($new,$replaced);
     }
     
-    function _dependenciesSatisfied(){
+    public function _dependenciesSatisfied(){
         // check for admin plugin
         $result = true;
         if(!file_exists(AK_BASE_DIR.DS.'app'.DS.'controllers'.DS.'admin')){
@@ -281,7 +281,5 @@ class EditamInstaller extends AkInstaller
         
         return $result;
     }
-    
 }
 
-?>

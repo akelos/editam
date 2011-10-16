@@ -1,6 +1,6 @@
 <p id="form_destination_email_block">
     <label style="margin:0" for="form_destination_email">Deliver this form to:</label>
-    <input type="text" id="form_destination_email" name="form_destination_email" value="<?=$FormBehaviour->getDestinationEmail()?>" />
+    <input type="text" id="form_destination_email" name="form_destination_email" value="<?=$FormBehavior->getDestinationEmail()?>" />
 </p>
 
 

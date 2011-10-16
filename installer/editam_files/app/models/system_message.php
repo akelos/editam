@@ -1,54 +1,23 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
+# Author Bermi Ferrer - MIT LICENSE
 
 class SystemMessage extends ActiveRecord
 {
-    var $belongs_to = 'user';
+    public $belongs_to = 'user';
 
-    function validate()
+    public function validate()
     {
         $this->validatesPresenceOf('value');
     }
 
-    function beforeSaveOnCreate()
+    public function beforeSaveOnCreate()
     {
         empty($this->message_key) ? $this->set('message_key', Ak::uuid()) : null;
         return true;
     }
 
-    function addMessagesToController(&$Controller)
+    public function addMessagesToController(&$Controller)
     {
         if($UserMessages = $this->findAllBy('user_id AND has_been_readed', $Controller->credentials->id, 0, array('order'=>'created_at DESC'))){
 
@@ -60,7 +29,7 @@ class SystemMessage extends ActiveRecord
         }
     }
 
-    function hasExpired()
+    public function hasExpired()
     {
         if(!empty($this->seconds_to_expire)){
             $created_at_ts = Ak::getTimestamp($this->get('created_at'));
@@ -73,13 +42,13 @@ class SystemMessage extends ActiveRecord
         return false;
     }
 
-    function addToController(&$Controller)
+    public function addToController(&$Controller)
     {
         $Controller->flash_now[$this->get('message_key')] = $this->get('value').' '.
         $this->getDontShowAgainLink();
     }
     
-    function getDontShowAgainLink()
+    public function getDontShowAgainLink()
     {
         if($this->get('can_be_hidded')){
             $url = Ak::toUrl(array('controller'=>'system_message', 'action' => 'dont_show_again', 'id'=>$this->getId(), 'url' => AK_CURRENT_URL));
@@ -89,16 +58,15 @@ class SystemMessage extends ActiveRecord
 
     }
 
-    function registerMessageForAdmins($attributes = array())
+    public function registerMessageForAdmins($attributes = array())
     {
-        Ak::import('user');
-        $User =& new User();
+        $User = new User();
         $this->transactionStart();
-        if($Admins =& $User->findAllBy('is_admin AND is_enabled', true, true, array('include'=>'system_messages'))){
+        if($Admins = $User->findAllBy('is_admin AND is_enabled', true, true, array('include'=>'system_messages'))){
             foreach (array_keys($Admins) as $k) {
                 if(empty($attributes['allow_repeated']) && 
                 !$this->isUserAwareOfMessage($Admins[$k], @$attributes['message_key'])){
-                    $Message =& new SystemMessage(array_merge(array('user_id'=>$Admins[$k]->id), $attributes));
+                    $Message = new SystemMessage(array_merge(array('user_id'=>$Admins[$k]->id), $attributes));
                     $Message->save();
                     if($Message->hasErrors()){
                         $this->addErrorToBase($Message->getFullErrorMessages());
@@ -113,16 +81,16 @@ class SystemMessage extends ActiveRecord
         return !$this->hasErrors();
     }
 
-    function unregisterMessageForAdmins()
+    public function unregisterMessageForAdmins()
     {
-        if($Messages =& $this->findAllBy('message_key', $this->message_key)){
+        if($Messages = $this->findAllBy('message_key', $this->message_key)){
             foreach (array_keys($Messages) as $k) {
                 $Messages[$k]->destroy();
             }
         }
     }
 
-    function isUserAwareOfMessage(&$User, $message_key)
+    public function isUserAwareOfMessage(&$User, $message_key)
     {
         if(!empty($User->system_messages)){
             foreach (array_keys($User->system_messages) as $k){
@@ -131,9 +99,6 @@ class SystemMessage extends ActiveRecord
                 }
             }
         }
-
         return false;
     }
 }
-
-?>

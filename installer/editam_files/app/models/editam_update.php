@@ -1,48 +1,17 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
+# Author Bermi Ferrer - MIT LICENSE
 
 defined('EDITAM_UPDATE_TYPE') ? null : define('EDITAM_UPDATE_TYPE', 'stable');
 
 class EditamUpdate extends ActiveRecord
 {
-    var $cache_update_files = true;
-    var $_update_conflicts = array();
-    var $_skipped_files = array();
-    var $modifications = array();
+    public $cache_update_files = true;
+    public $_update_conflicts = array();
+    public $_skipped_files = array();
+    public $modifications = array();
 
-    function getUpdateMessageIfNewVersionIsAvailable($options = array())
+    public function getUpdateMessageIfNewVersionIsAvailable($options = array())
     {
         $details = $this->getUpdateDetails($options);
         if(!empty($details)){
@@ -53,7 +22,7 @@ class EditamUpdate extends ActiveRecord
         false;
     }
 
-    function getUpdateDetailsIfAvailable($options = array())
+    public function getUpdateDetailsIfAvailable($options = array())
     {
         $details = $this->getUpdateDetails($options);
         if(!empty($details)){
@@ -68,14 +37,14 @@ class EditamUpdate extends ActiveRecord
         return false;
     }
 
-    function handleAvailableUpdate($update_details)
+    public function handleAvailableUpdate($update_details)
     {
         $update_details['update'] = unserialize($update_details['update']);
         $this->canPerformCleanUpdate($update_details['update']);
         return $update_details;
     }
 
-    function canPerformCleanUpdate($update_files_and_directories)
+    public function canPerformCleanUpdate($update_files_and_directories)
     {
         $result = true;
         foreach ($update_files_and_directories as $file_or_directory){
@@ -86,12 +55,12 @@ class EditamUpdate extends ActiveRecord
         return $result && empty($this->_update_conflicts);
     }
 
-    function hasConflicts($file_or_directory)
+    public function hasConflicts($file_or_directory)
     {
         return $this->_isFile($file_or_directory) ? $this->fileHasConflicts($file_or_directory) : $this->directoryHasConflicts($file_or_directory);
     }
 
-    function fileHasConflicts($file_details)
+    public function fileHasConflicts($file_details)
     {
         $file_exists = file_exists(AK_BASE_DIR.DS.$file_details['path']);
         $file_checksum = $file_exists ? md5_file(AK_BASE_DIR.DS.$file_details['path']) : false;
@@ -113,32 +82,32 @@ class EditamUpdate extends ActiveRecord
         return false;
     }
 
-    function directoryHasConflicts($directory_details)
+    public function directoryHasConflicts($directory_details)
     {
         return false;
     }
 
-    function addConflict($file_or_directory_details, $error_message)
+    public function addConflict($file_or_directory_details, $error_message)
     {
         $this->_update_conflicts[$error_message][$file_or_directory_details['path']] = $file_or_directory_details['path'];
     }
 
-    function getConflicts()
+    public function getConflicts()
     {
         return $this->_update_conflicts;
     }
 
-    function _isFile($file_details)
+    public function _isFile($file_details)
     {
         return !empty($file_details['path']) && (!empty($file_details['to_checksum']) || !empty($file_details['from_checksum']));
     }
 
-    function getCurrentVersion()
+    public function getCurrentVersion()
     {
         return file_exists(AK_APP_DIR.DS.'version.txt') ? AkFileSystem::file_get_contents(AK_APP_DIR.DS.'version.txt') : false;
     }
 
-    function getUpdateDetails($options = array())
+    public function getUpdateDetails($options = array())
     {
         if($params = $this->getUpdateUrlParams($options)){
             $default_timeout = @ini_get('default_socket_timeout');
@@ -154,12 +123,12 @@ class EditamUpdate extends ActiveRecord
         return empty($update_details) ? false : $update_details;
     }
     
-    function getFullUpdate($options = array())
+    public function getFullUpdate($options = array())
     {
         return $this->getUpdateDetails(array_merge(array('include_file_contents'=>1), $options));
     }
 
-    function getUpdateUrlParams($options)
+    public function getUpdateUrlParams($options)
     {
         if($version = $this->getCurrentVersion()){
             ak_compat('http_build_query');
@@ -179,14 +148,14 @@ class EditamUpdate extends ActiveRecord
         }
     }
 
-    function setConflictResolutions($resolutions)
+    public function setConflictResolutions($resolutions)
     {
         foreach ((array)$resolutions as $file=>$keep){
             $keep == 1 ? array_push($this->_skipped_files, $file) : null;
         }
     }
 
-    function update($from, $to)
+    public function update($from, $to)
     {
         $success = true;
         if(!strstr($from,'-')|| !strstr($to,'-')){
@@ -238,15 +207,14 @@ class EditamUpdate extends ActiveRecord
         return true;
     }
 
-    function _canUpdateFile($file_path)
+    public function _canUpdateFile($file_path)
     {
         return !in_array($file_path, $this->_skipped_files);
     }
 
-    function runMigration($version)
+    public function runMigration($version)
     {
 
     }
 }
 
-?>

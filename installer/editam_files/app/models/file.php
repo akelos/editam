@@ -1,46 +1,15 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
+# Author Bermi Ferrer - MIT LICENSE
 
 class File extends ActiveRecord
 {
-    // var $has_many = 'tags';
-    //var $belongs_to = array('file_type','user');
-    var $atcs_as = 'tree';
-    var $upload_using_ftp = AK_UPLOAD_FILES_USING_FTP;
+    // public $has_many = 'tags';
+    //public $belongs_to = array('file_type','user');
+    public $atcs_as = 'tree';
+    public $upload_using_ftp = AK_UPLOAD_FILES_USING_FTP;
 
-    function beforeValidationOnCreate()
+    public function beforeValidationOnCreate()
     {
         if(empty($this->uploaded_file_path) || !is_file($this->uploaded_file_path)){
             $this->addErrorToBase($this->t('An error occoured when uploading the file to the server.'));
@@ -50,7 +19,7 @@ class File extends ActiveRecord
         return true;
     }
 
-    function afterCreate()
+    public function afterCreate()
     {
         if(!$this->moveFile(array('ftp'=>$this->upload_using_ftp))){
             $this->addErrorToBase($this->t('An error occoured when uploading the file to the server.'));
@@ -60,7 +29,7 @@ class File extends ActiveRecord
         return true;
     }
 
-    function setAttributes($attributes)
+    public function setAttributes($attributes)
     {
         if(!empty($attributes['tmp_name'])){
             $this->setUploadedFilePath($attributes['tmp_name']);
@@ -89,12 +58,12 @@ class File extends ActiveRecord
         return parent::setAttributes($attributes);
     }
 
-    function setUploadedFilePath($uploaded_file_path)
+    public function setUploadedFilePath($uploaded_file_path)
     {
         $this->uploaded_file_path = $uploaded_file_path;
     }
 
-    function moveFile($options = array())
+    public function moveFile($options = array())
     {
         if (file_exists($this->uploaded_file_path)) {
             $content = file_get_contents($this->uploaded_file_path );
@@ -104,29 +73,29 @@ class File extends ActiveRecord
                     return true;
                 }elseif (!$path){
                     $this->addErrorToBase($this->t('You need to set a valid path for the file.
-            	     This is usually produced by the fact that you provide an unsaved Model to the file.'));
+                     This is usually produced by the fact that you provide an unsaved Model to the file.'));
                 }
             }
         }
         return false;
     }
 
-    function getFilePath($type = 'file')
+    public function getFilePath($type = 'file')
     {
         return $this->_getLocation($type);
     }
 
-    function getExtension($file_name = null)
+    public function getExtension($file_name = null)
     {
         return empty($file_name) ? array_pop(pathinfo($this->getFilePath())) : array_pop(pathinfo($file_name));
     }
 
-    function getUrl()
+    public function getUrl()
     {
         return $this->_getLocation('/');
     }
 
-    function _getLocation($type = 'file')
+    public function _getLocation($type = 'file')
     {
         if(strtolower($type) == 'image'){
             return AK_PUBLIC_DIR.DS.'images'.DS.AkInflector::underscore($this->Model->getModelName()).DS.$this->Model->getId().DS.$this->get('name');
@@ -149,5 +118,3 @@ class File extends ActiveRecord
         return $base_location.$separator.AkInflector::underscore($this->getModelName()).$separator.$file_url;
     }
 }
-
-?>

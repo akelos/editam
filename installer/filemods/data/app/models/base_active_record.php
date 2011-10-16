@@ -12,8 +12,7 @@
     public function validatesEditagsField(\$column = 'content', \$can_have_php = true)
     {
         \$Editags = new Editags();
-        
-        require_once(AK_HELPERS_DIR.DS.'editags_helper.php');
+
         \$Editags->Parser->available_helpers = EditagsHelper::_getEditagsHelperMethods();
 
         \$this->_editags_php = \$Editags->toPhp(\$this->get(\$column), \$can_have_php);

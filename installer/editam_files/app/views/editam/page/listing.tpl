@@ -12,8 +12,8 @@
 </div>
 
 <div class="content">    
-	<h1>_{Listing available pages}</h1>
-	<div id="tree">
-	   <%= reverse_nested_list Pages %>
-	</div>
+    <h1>_{Listing available pages}</h1>
+    <div id="tree">
+       <%= reverse_nested_list Pages %>
+    </div>
 </div>

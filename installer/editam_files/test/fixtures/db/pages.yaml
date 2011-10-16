@@ -68,7 +68,7 @@ creating-a-bookstore:
   slug: 404
   breadcrumb: Page not found
   status: published
-  behaviour: page_missing
+  behavior: page_missing
   created_by: 1
   locale: en
   parent_id: 1

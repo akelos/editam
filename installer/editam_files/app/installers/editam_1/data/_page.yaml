@@ -16,7 +16,7 @@
     title: Page not found 404
     slug: 404
     breadcrumb: Page not found 404
-    behaviour: page_missing
+    behavior: page_missing
     layout_id: 1
     status: published
     created_by: 1

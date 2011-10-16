@@ -21,8 +21,8 @@
     }
     // ]]>
     </script>
-	<style type="text/css" media="screen">
-    	 ul.color_selection li{
+    <style type="text/css" media="screen">
+         ul.color_selection li{
          float:left;
          height:20px;
          width:20px;
@@ -36,7 +36,7 @@
         ul.color_selection li.selected{
          border: 2px solid #f00;
         }
-	</style>
+    </style>
 <? $capture_helper->end(); ?>
 
 <input id="theme_color" value="{Preference.value}" type="hidden" name="preferences[{Preference.id}]"/>

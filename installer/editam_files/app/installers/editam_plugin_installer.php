@@ -1,44 +1,13 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
+# Author Bermi Ferrer - MIT LICENSE
 
 defined('AK_EDITAM_PLUGIN_MODIFY_DATA_DIR') ? null :define('AK_EDITAM_PLUGIN_MODIFY_DATA_DIR', AK_APP_PLUGINS_DIR.DS.'editam'.DS.'installer'.DS.'filemods'.DS.'data');
 defined('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD') ? null : define('AK_EDITAM_PLUGIN_FILE_BACKUP_DIR_MOD', AK_TMP_DIR.DS.'editam'.DS.'installer'.DS.'backup_files'.DS.'modified');
 
 class EditamPluginInstaller extends AkInstaller
 {
-    function up_1()
+    public function up_1()
     {
         $this->createTable('content_layouts',
         'id,
@@ -66,7 +35,7 @@ class EditamPluginInstaller extends AkInstaller
             breadcrumb,
             layout_id,
             status string(12) default \'published\' index,
-            behaviour,
+            behavior,
             created_at,
             updated_at,
             published_at,
@@ -198,7 +167,7 @@ class EditamPluginInstaller extends AkInstaller
              $this->createCMSRoles();
     }
 
-    function down_1()
+    public function down_1()
     {
         $this->dropTables('content_layouts,page_parts,pages,snippets,translations,translators,
             translator_capabilities,files,site_preferences,user_preferences,system_messages,
@@ -207,37 +176,37 @@ class EditamPluginInstaller extends AkInstaller
         $this->restoreFiles();
     }
     
-    function createCMSRoles(){
+    public function createCMSRoles(){
         Ak::import('User', 'Role', 'Permission', 'Extension');
         
-        $Role =& new Role();
-        $Administrator =& $Role->findFirstBy('name','Administrator');
+        $Role = new Role();
+        $Administrator = $Role->findFirstBy('name','Administrator');
         $Administrator->addChildrenRole('Contributor');
         $Administrator->addChildrenRole('Visitor');
     }
     
-    function removeCMSRoles(){
+    public function removeCMSRoles(){
         Ak::import('User', 'Role', 'Permission', 'Extension');
         
-        $Role =& new Role();
-        $CMSRole =& $Role->findFirstBy('name','Contributor');
+        $Role = new Role();
+        $CMSRole = $Role->findFirstBy('name','Contributor');
         $CMSRole->destroy();
-        $CMSRole =& $Role->findFirstBy('name','Visitor');
+        $CMSRole = $Role->findFirstBy('name','Visitor');
         $CMSRole->destroy();
     }
 
-    function installProfiles($version, $profiles)
+    public function installProfiles($version, $profiles)
     {
         $this->_installOrUninstallProfile('install', $version, $profiles);
     }
 
 
-    function uninstallProfiles($version, $profiles)
+    public function uninstallProfiles($version, $profiles)
     {
         $this->_installOrUninstallProfile('uninstall', $version, $profiles);
     }
 
-    function _installOrUninstallProfile($install_or_uninstall = 'install', $version, $profiles)
+    public function _installOrUninstallProfile($install_or_uninstall = 'install', $version, $profiles)
     {
         foreach($profiles as $profile){
             $profile_file = AK_APP_DIR.DS.'installers'.DS.'editam_'.$version.DS.'profiles'.DS.$profile.DS.'profile.php';
@@ -246,14 +215,14 @@ class EditamPluginInstaller extends AkInstaller
                 $profile_class_name = AkInflector::camelize($profile).'Profile';
                 if(class_exists($profile_class_name)){
                     $Profile = new $profile_class_name();
-                    $Profile->Installer =& $this;
+                    $Profile->Installer = $this;
                     $install_or_uninstall == 'uninstall' ? $Profile->uninstall() : $Profile->install();
                 }
             }
         }
     }
 
-    function installDataFiles($version)
+    public function installDataFiles($version)
     {
         $files = AkFileSystem::dir(AK_APP_DIR.DS.'installers'.DS.'editam_'.$version.DS.'data');
         sort($files);
@@ -269,7 +238,7 @@ class EditamPluginInstaller extends AkInstaller
         }
     }
 
-    function addBatchRecords($model, $record_details)
+    public function addBatchRecords($model, $record_details)
     {
         Ak::import($model);
         foreach($record_details as $record_detail){
@@ -285,7 +254,7 @@ class EditamPluginInstaller extends AkInstaller
 
     }
     
-    function restoreFiles(){
+    public function restoreFiles(){
         $backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR);
         foreach($backup_paths as $backup_path){
             $this->tmp_str_idx = strlen($backup_path.DS);
@@ -294,7 +263,7 @@ class EditamPluginInstaller extends AkInstaller
         }
     }
     
-    function _restoreFiles($directory_structure,$base_path = null){
+    public function _restoreFiles($directory_structure,$base_path = null){
         foreach($directory_structure as $k => $node){
             $path = $base_path.DS.$node;
             if(is_file($path)){
@@ -312,7 +281,7 @@ class EditamPluginInstaller extends AkInstaller
         }
     }
     
-    function _copyFileWithPermission($src,$dst){
+    public function _copyFileWithPermission($src,$dst){
         copy($src,$dst);
         $source_file_mode =  fileperms($src);
         $target_file_mode =  fileperms($dst);
@@ -321,10 +290,8 @@ class EditamPluginInstaller extends AkInstaller
         }
     }
     
-    function _replaceFile($new,$replaced){
+    public function _replaceFile($new,$replaced){
         unlink($replaced);
         $this->_copyFileWithPermission($new,$replaced);
     }
 }
-
-?>

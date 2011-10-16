@@ -1,47 +1,16 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
+# Author Bermi Ferrer - MIT LICENSE
 
 class CorePreferences
 {
 
-    function _getValidEditamAdminColors()
+    public function _getValidEditamAdminColors()
     {
         return array('#000','#333','#202','#805','#f07','#f70','#700','#830','#432','#f06040','#07f','#068','#024','#050');
     }
 
-    function setEditamAdminColor(&$Preference, $value)
+    public function setEditamAdminColor(&$Preference, $value)
     {
         $Preference->value = $value;
         $Preference->validatesInclusionOf('value', $this->_getValidEditamAdminColors());
@@ -55,7 +24,7 @@ class CorePreferences
         }
     }
 
-    function setSiteLanguages(&$Preference, $value)
+    public function setSiteLanguages(&$Preference, $value)
     {
         $Preference->value = $value;
         $Preference->validatesPresenceOf('value');
@@ -86,35 +55,34 @@ class CorePreferences
         }
     }
 
-    function setAdministratorEmail(&$Preference, $value)
+    public function setAdministratorEmail(&$Preference, $value)
     {
         $Preference->value = $value;
         !empty($Preference->value) ? $Preference->validatesFormatOf('value', AK_EMAIL_REGULAR_EXPRESSION, Ak::t('Invalid email address', null, 'site_preference')) : null;
     }
 
-    function getEditamAdminColorFormView(&$Preference)
+    public function getEditamAdminColorFormView(&$Preference)
     {
         return 'core/color_selection';
     }
 
-    function getEditamAdminColor(&$Preference)
+    public function getEditamAdminColor(&$Preference)
     {
         return empty($Preference->value) ? '#805' : $Preference->value;
     }
 
 
-    function getLogoFormView(&$Preference)
+    public function getLogoFormView(&$Preference)
     {
         return 'core/logo_selection';
     }
 
-    function setLogo(&$Preference, $value)
+    public function setLogo(&$Preference, $value)
     {
         if (empty($value['error'])) {
             $this->_removeLogo($Preference);
             if(is_array($value)){
-                require_once(AK_MODELS_DIR.DS.'image.php');
-                $Image =& new Image();
+                $Image = new Image();
 
                 if ($image_name = $Image->upload($value, array(
                 'name' => 'logo',
@@ -130,13 +98,13 @@ class CorePreferences
         }
     }
 
-    function _getLogoUploadPath()
+    public function _getLogoUploadPath()
     {
         return '/images/editam';
     }
 
 
-    function _hasLogo(&$Preference)
+    public function _hasLogo(&$Preference)
     {
         if (!empty($Preference->value) && file_exists(AK_PUBLIC_DIR.$this->_getLogoUploadPath().DS.$Preference->value)) {
             return true;
@@ -144,7 +112,7 @@ class CorePreferences
         return false;
     }
 
-    function _removeLogo(&$Preference)
+    public function _removeLogo(&$Preference)
     {
         if (!$this->_hasLogo($Preference)) {
             return true;
@@ -152,12 +120,12 @@ class CorePreferences
         return (@AkFileSystem::file_delete(AK_PUBLIC_DIR.$this->_getLogoUploadPath().DS.Ak::sanitize_include($Preference->value))) ? true : false;
     }
 
-    function getNewUserRolesFormView(&$Preference)
+    public function getNewUserRolesFormView(&$Preference)
     {
         return 'core/role_selection';
     }
 
-    function setNewUserRoles(&$Preference, $values)
+    public function setNewUserRoles(&$Preference, $values)
     {
         $Preference->value = '';
 
@@ -167,21 +135,19 @@ class CorePreferences
     }
 
 
-    function getEditamVersionFormView(&$Preference)
+    public function getEditamVersionFormView(&$Preference)
     {
         return 'show';
     }
 
     // Theme
-    function getThemeFormView(&$Preference)
+    public function getThemeFormView(&$Preference)
     {
         return 'core/theme_selection';
     }
 
-    function getTimeZoneFormView(&$Preferences)
+    public function getTimeZoneFormView(&$Preferences)
     {
         return 'core/time_zone';
     }
 }
-
-?>

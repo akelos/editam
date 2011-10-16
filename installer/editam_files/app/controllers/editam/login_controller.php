@@ -1,49 +1,18 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
+# Author Bermi Ferrer - MIT LICENSE
 
 class Editam_LoginController extends EditamController
 {
-    var $models = 'user';
-    var $layout = 'editam_login';
+    public $models = 'user';
+    public $layout = 'editam_login';
 
-    function index()
+    public function index()
     {
         $this->redirectToAction('authenticate');
     }
 
-    function authenticate()
+    public function authenticate()
     {
         $this->_checkIfAlreadyLogedIn();
         $this->_validateCookies();
@@ -71,7 +40,7 @@ class Editam_LoginController extends EditamController
         }
     }
 
-    function log_out()
+    public function log_out()
     {
         $this->credentials->revokeCredentials();
         $this->flash_options = array('seconds_to_close'=>5);
@@ -80,7 +49,7 @@ class Editam_LoginController extends EditamController
         $this->redirectTo(array('controller' => 'login','action'=>'authenticate'));
     }
 
-    function account_recovery()
+    public function account_recovery()
     {
         $this->_checkIfAlreadyLogedIn();
         if ($this->Request->isPost()) {
@@ -90,7 +59,7 @@ class Editam_LoginController extends EditamController
                 $this->flash['message'] = $this->t('Please fill at least one field');
                 $this->redirectTo(array('controller'=>'login', 'action' => 'user'));
 
-            }elseif ($User =& $this->User->findFirstBy('login OR email', @$this->params['user']['login'], @$this->params['user']['email'])){
+            }elseif ($User = $this->User->findFirstBy('login OR email', @$this->params['user']['login'], @$this->params['user']['email'])){
 
                 if (!empty($User->email) && Credentials::sendAccountRecoveryMail($User)) {
                     $this->flash['message'] = $this->t('We\'ve sent you the instructions to restore your account to your email address');
@@ -107,7 +76,7 @@ class Editam_LoginController extends EditamController
         }
     }
 
-    function _validateCookies()
+    public function _validateCookies()
     {
         if(!empty($this->params['validate_cookies'])){
             $this->layout = false;
@@ -115,7 +84,7 @@ class Editam_LoginController extends EditamController
         }
     }
 
-    function _checkIfAlreadyLogedIn()
+    public function _checkIfAlreadyLogedIn()
     {
         if (!empty($_SESSION['__credentials']['id'])) {
             $this->flash_options = array('seconds_to_close'=>5);
@@ -125,5 +94,3 @@ class Editam_LoginController extends EditamController
     }
 
 }
-
-?>

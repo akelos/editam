@@ -1,62 +1,27 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
-
-require(AK_APP_DIR.DS.'behaviours'.DS.'base_behaviour.php');
-
-Ak::import('PagePart,ContentLayout,User');
+# Author Bermi Ferrer - MIT LICENSE
 
 class Page extends ActiveRecord
 {
-    var $_Behaviour;
+    public $_Behavior;
 
-    var $has_many = array(
+    public $has_many = array(
     'parts'=>array(
     'dependent' => 'destroy',
     'class_name' => 'PagePart',
     'handler_name' => 'part'
     ));
 
-    var $belongs_to = array(
+    public $belongs_to = array(
     'layout' => array('class_name' => 'ContentLayout', 'primary_key_name' => 'layout_id'),
     'author' => array('class_name' => 'User', 'foreign_key' => 'created_by'),
     'editor' => array('class_name' => 'User', 'foreign_key' => 'updated_by')
     );
 
-    var $acts_as = array('nested_set' => array('order' => 'virtual DESC, title ASC','scope' => "locale = ?"));
+    public $acts_as = array('nested_set' => array('order' => 'virtual DESC, title ASC','scope' => "locale = ?"));
 
-    function getLocale()
+    public function getLocale()
     {
         $default_lang = Ak::lang();
         $lang = !isset($this->_original_locale) || empty($this->locale) ? $default_lang : $this->locale;
@@ -65,17 +30,17 @@ class Page extends ActiveRecord
         return $locale;
     }
 
-    function forceSetLocale($locale)
+    public function forceSetLocale($locale)
     {
         $this->_forced_locale = $locale;
     }
 
-    function isHomepage()
+    public function isHomepage()
     {
         return !$this->isNewRecord() && $this->nested_set->isRoot();
     }
 
-    function saveWithParts($parts = array(), $position = null)
+    public function saveWithParts($parts = array(), $position = null)
     {
         $this->transactionStart();
         $this->parts = array();
@@ -97,7 +62,7 @@ class Page extends ActiveRecord
         return $success;
     }
 
-    function updateWithParts($parts = array(), $position = null)
+    public function updateWithParts($parts = array(), $position = null)
     {
         $this->part->load();
         //$this->layout->load();
@@ -136,12 +101,12 @@ class Page extends ActiveRecord
     }
 
 
-    function beforeSave()
+    public function beforeSave()
     {
         if(!empty($this->_controller)){
-            $this->initiateBehaviour($this->_controller);
+            $this->initiateBehavior($this->_controller);
         }else{
-            $this->loadBehaviour();
+            $this->loadBehavior();
         }
         
         $this->_updatePublishedAt();
@@ -149,20 +114,20 @@ class Page extends ActiveRecord
         return true;
     }
 
-    function beforeSaveOnCreate()
+    public function beforeSaveOnCreate()
     {
         $this->_updateLocale();
         return true;
     }
 
 
-    function validate()
+    public function validate()
     {
         $this->validatesPresenceOf(array('title','slug','breadcrumb','status','created_by'));
 
         $this->_validateSlug();
 
-        $this->validatesInclusionOf('behaviour',array_keys($this->getAvailableBehaviours()), 'inclusion', true);
+        $this->validatesInclusionOf('behavior',array_keys($this->getAvailableBehaviors()), 'inclusion', true);
         $this->validatesInclusionOf('status',array_keys($this->getAvailableStatuses()));
 
         $this->validatesInclusionOf('locale', Ak::langs());
@@ -172,7 +137,7 @@ class Page extends ActiveRecord
         }
     }
 
-    function _validateSlug($parent_id = null)
+    public function _validateSlug($parent_id = null)
     {
         $original_parent_id = $this->parent_id;
         $this->parent_id = !empty($parent_id) ? $parent_id : $this->parent_id;
@@ -186,35 +151,35 @@ class Page extends ActiveRecord
         $this->parent_id = $original_parent_id;
     }
 
-    function validateOnCreate()
+    public function validateOnCreate()
     {
         $this->validatesAssociated('parts');
     }
 
-    function isPublished()
+    public function isPublished()
     {
         return !empty($this->status) && $this->status == 'published';
     }
 
-    function &getPart($name)
+    public function &getPart($name)
     {
         if(empty($this->parts)){
             $this->part->load();
         }
-        $IndexedPart =& $this->_getPartIndexedAs($name);
+        $IndexedPart = $this->_getPartIndexedAs($name);
         return $IndexedPart;
     }
 
-    function &getInheritedPart($name)
+    public function &getInheritedPart($name)
     {
-        if(!$Part =& $this->getPart($name)){
-            if(!$ParentPages =& $this->getParentPages()){
+        if(!$Part = $this->getPart($name)){
+            if(!$ParentPages = $this->getParentPages()){
                 $false = false;
                 return $false;
             }
             foreach (array_reverse(array_keys($ParentPages)) as $k){
-                if($Part =& $ParentPages[$k]->getPart($name)){
-                    $this->__indexed_parts[$name] =& $Part;
+                if($Part = $ParentPages[$k]->getPart($name)){
+                    $this->__indexed_parts[$name] = $Part;
                     break;
                 }
             }
@@ -223,28 +188,28 @@ class Page extends ActiveRecord
         return $Part;
     }
 
-    function &getParentPages()
+    public function &getParentPages()
     {
         if(!isset($this->ParentPages)){
-            $this->ParentPages =& $this->nested_set->getAncestors();
+            $this->ParentPages = $this->nested_set->getAncestors();
         }
         return $this->ParentPages;
     }
 
 
-    function getFilteredPart($name, $use_inherited_if_unavailable = false)
+    public function getFilteredPart($name, $use_inherited_if_unavailable = false)
     {
         $method = $use_inherited_if_unavailable ? 'getInheritedPart' : 'getPart';
-        $Part =& $this->$method($name);
+        $Part = $this->$method($name);
         return is_object($Part) ? EditamFilter::getFilteredContent($Part) : false;
     }
 
-    function &_findInheritedPart($name)
+    public function &_findInheritedPart($name)
     {
-        $Part =& $this->part->find('first', array('conditions'=>array('name = ?', $name)));
+        $Part = $this->part->find('first', array('conditions'=>array('name = ?', $name)));
     }
 
-    function &_getPartIndexedAs($name)
+    public function &_getPartIndexedAs($name)
     {
         empty($this->__indexed_parts[$name]) ? $this->_loadIndexedParts() : null;
         if(!isset($this->__indexed_parts[$name])){
@@ -254,15 +219,15 @@ class Page extends ActiveRecord
         return $this->__indexed_parts[$name];
     }
 
-    function _loadIndexedParts()
+    public function _loadIndexedParts()
     {
         foreach (array_keys($this->parts) as $k){
-            $this->__indexed_parts[$this->parts[$k]->get('name')] =& $this->parts[$k];
+            $this->__indexed_parts[$this->parts[$k]->get('name')] = $this->parts[$k];
         }
     }
 
 
-    function &getLayoutInstance()
+    public function &getLayoutInstance()
     {
         if($this->layout->getType() != 'ContentLayout'){
             $this->layout->load(true);
@@ -271,26 +236,26 @@ class Page extends ActiveRecord
                     $false = false;
                     return $false;
                 }
-                $Parent =& $this->nested_set->getParent();
-                $Layout =& $Parent->getLayoutInstance();
+                $Parent = $this->nested_set->getParent();
+                $Layout = $Parent->getLayoutInstance();
                 return $Layout;
             }
         }
         return $this->layout;
     }
 
-    function getLayout()
+    public function getLayout()
     {
-        $Layout =& $this->getLayoutInstance();
+        $Layout = $this->getLayoutInstance();
         return isset($Layout->content) ? $Layout->get('content') : false;
     }
 
-    function getLayoutName()
+    public function getLayoutName()
     {
         if(empty($this->layout->name)){
             $this->layout->load();
         }
-        if(empty($this->layout->name) && $parent =& $this->nested_set->getParent()){
+        if(empty($this->layout->name) && $parent = $this->nested_set->getParent()){
             return $parent->getLayoutName();
         }else{
             return false;
@@ -298,24 +263,24 @@ class Page extends ActiveRecord
         return $this->layout->name;
     }
 
-    function &findByUrl($url, $show_unpublished = false)
+    public function &findByUrl($url, $show_unpublished = false)
     {
-        $Page =& $this->_Behaviour->findPageByUrl($url, $show_unpublished);
+        $Page = $this->_Behavior->findPageByUrl($url, $show_unpublished);
         return $Page;
     }
 
-    function &_findByUrl($url_parts, $show_unpublished = false, $missing_page_mode = false)
+    public function &_findByUrl($url_parts, $show_unpublished = false, $missing_page_mode = false)
     {
-    	$sql = $this->_getSqlForUrlFinder($url_parts, $show_unpublished, $missing_page_mode);
-    	$this->_db->addLimitAndOffset($sql, array('limit' => 1, 'offset' => null));
-        if($result =& $this->findBySql($sql)){
+        $sql = $this->_getSqlForUrlFinder($url_parts, $show_unpublished, $missing_page_mode);
+        $this->_db->addLimitAndOffset($sql, array('limit' => 1, 'offset' => null));
+        if($result = $this->findBySql($sql)){
             return $result[0];
         }
         $false = false;
         return $false; // Trick for avoiding pass by reference notices on PHP4
     }
 
-    function _getSqlForUrlFinder($url_parts, $show_unpublished = false, $missing_page_mode = false)
+    public function _getSqlForUrlFinder($url_parts, $show_unpublished = false, $missing_page_mode = false)
     {
         $url_parts = is_array($url_parts) ? $url_parts : explode('/',$url_parts.'/');
         $url_parts = array_diff($url_parts,array(''));
@@ -334,7 +299,7 @@ class Page extends ActiveRecord
             $previous_table_alias = $table_alias;
             $table_alias = 'pages'.$position;
             $position = $position +1;
-            $condition = $missing_page_mode && $position ==  1 ? ' '.$table_alias.'.behaviour = "page_missing" ' :
+            $condition = $missing_page_mode && $position ==  1 ? ' '.$table_alias.'.behavior = "page_missing" ' :
             $table_alias.'.slug = '.$this->castAttributeForDatabase('slug',$url_part);
             $condition .= ' AND '.$table_alias.'.locale = '.$this->castAttributeForDatabase('locale',$locale).' ';
             if($position == 1){
@@ -351,63 +316,62 @@ class Page extends ActiveRecord
         return $select.$joins.$conditions;
     }
 
-    function &findMissingPageForUrl($url)
+    public function &findMissingPageForUrl($url)
     {
-        $Page =& $this->_Behaviour->findMissingPageForUrl($url);
+        $Page = $this->_Behavior->findMissingPageForUrl($url);
         return $Page;
     }
 
     /**
      * Callbacks
      */
-    function _updatePublishedAt()
+    public function _updatePublishedAt()
     {
         if(empty($this->published_at) && $this->status == 'published'){
             $this->published_at = Ak::getDate();
         }
     }
-    function _updateVirtual()
+    public function _updateVirtual()
     {
         $this->set('is_virtual', $this->isVirtual());
     }
 
-    function _updateLocale()
+    public function _updateLocale()
     {
         empty($this->locale) ? $this->set('locale',Ak::lang()) : null;
     }
 
     /**
-     * Page behaviours
+     * Page behaviors
      */
 
-    function loadBehaviour($behaviour = null)
+    public function loadBehavior($behavior = null)
     {
-        $behaviour = empty($behaviour) ? $this->behaviour : $behaviour;
-        $this->behaviour = !empty($behaviour) && in_array($behaviour, array_keys($this->getAvailableBehaviours())) ? $behaviour : '';
+        $behavior = empty($behavior) ? $this->behavior : $behavior;
+        $this->behavior = !empty($behavior) && in_array($behavior, array_keys($this->getAvailableBehaviors())) ? $behavior : '';
 
-        $this->_Behaviour =& $this->getBehaviourInstance();
+        $this->_Behavior = $this->getBehaviorInstance();
     }
 
-    function initiateBehaviour(&$controller)
+    public function initiateBehavior(&$controller)
     {
-        $this->loadBehaviour($this->get('behaviour'));
-        $this->_Behaviour->init($controller);
+        $this->loadBehavior($this->get('behavior'));
+        $this->_Behavior->init($controller);
     }
 
-    function &getBehaviourInstance()
+    public function &getBehaviorInstance()
     {
-        $behaviour_class = empty($this->behaviour) ? 'BaseBehaviour' : AkInflector::camelize($this->behaviour).'Behaviour';
-        require_once(AK_APP_DIR.DS.'behaviours'.DS.AkInflector::underscore($behaviour_class).'.php');
-        $Instance =& new $behaviour_class();
+        $behavior_class = empty($this->behavior) ? 'BaseBehavior' : AkInflector::camelize($this->behavior).'Behavior';
+        $Instance = new $behavior_class();
         return $Instance;
     }
 
-    function getUrl()
+    public function getUrl()
     {
-        return $this->_Behaviour->getPageUrl();
+        return $this->_Behavior->getPageUrl();
     }
 
-    function getInheritedSlug($force = false, $include_locale = EDITAM_IS_MULTILINGUAL)
+    public function getInheritedSlug($force = false, $include_locale = EDITAM_IS_MULTILINGUAL)
     {
         if($force || empty($this->_inherited_slug)){
             if(!empty($this->nested_set) && !empty($this->lft) && !empty($this->rgt)){
@@ -418,63 +382,63 @@ class Page extends ActiveRecord
         return $this->_inherited_slug;
     }
 
-    function hasCache()
+    public function hasCache()
     {
-        return $this->_Behaviour->hasPageCache();
+        return $this->_Behavior->hasPageCache();
     }
 
-    function canUsePageCache()
+    public function canUsePageCache()
     {
-        return $this->_Behaviour->canUsePageCache();
+        return $this->_Behavior->canUsePageCache();
     }
 
-    function render()
+    public function render()
     {
-        return $this->_Behaviour->renderPage();
+        return $this->_Behavior->renderPage();
     }
 
-    function isVirtual()
+    public function isVirtual()
     {
-        return $this->_Behaviour->isPageVirtual();
+        return $this->_Behavior->isPageVirtual();
     }
 
-    function process()
+    public function process()
     {
-        return $this->_Behaviour->process();
+        return $this->_Behavior->process();
     }
 
-    function getChildUrl()
+    public function getChildUrl()
     {
-        return $this->_Behaviour->getChildUrl();
+        return $this->_Behavior->getChildUrl();
     }
 
     /**
      * Page elements discovery functions
      */
-    function getAvailableBehaviours()
+    public function getAvailableBehaviors()
     {
-        static $behaviours = array();
-        if(empty($behaviours)){
-            if(defined('EDITAM_AVAILABLE_BEHAVIOURS')){
-                foreach (Ak::toArray(EDITAM_AVAILABLE_BEHAVIOURS) as $behaviour){
-                    $behaviours[$behaviour] = $this->t($behaviour);
+        static $behaviors = array();
+        if(empty($behaviors)){
+            if(defined('EDITAM_AVAILABLE_BEHAVIORS')){
+                foreach (Ak::toArray(EDITAM_AVAILABLE_BEHAVIORS) as $behavior){
+                    $behaviors[$behavior] = $this->t($behavior);
                 }
             }else{
-                foreach (AkFileSystem::dir(AK_APP_DIR.DS.'behaviours', array('dirs'=>false)) as $file){
-                    if(substr($file,-14) == '_behaviour.php'){
-                        $behaviour = substr($file,0,-14);
-                        if($behaviour != 'base'){
-                            $behaviours[$behaviour] = $this->t($behaviour);
+                foreach (AkFileSystem::dir(AK_APP_DIR.DS.'behaviors', array('dirs'=>false)) as $file){
+                    if(substr($file,-14) == '_behavior.php'){
+                        $behavior = substr($file,0,-14);
+                        if($behavior != 'base'){
+                            $behaviors[$behavior] = $this->t($behavior);
                         }
                     }
                 }
             }
-            $behaviours = array_map(array('AkInflector','humanize'), $behaviours);
+            $behaviors = array_map(array('AkInflector','humanize'), $behaviors);
         }
-        return $behaviours;
+        return $behaviors;
     }
 
-    function getAvailableStatuses()
+    public function getAvailableStatuses()
     {
         return array(
         'published' => $this->t('Published'),
@@ -484,7 +448,7 @@ class Page extends ActiveRecord
         );
     }
 
-    function moveBeside(&$Page, $position = 'left')
+    public function moveBeside(&$Page, $position = 'left')
     {
         $method = $position == 'left' ? 'moveToRightOf' : 'moveToLeftOf';
         $this->_validateSlug($Page->parent_id);
@@ -496,22 +460,18 @@ class Page extends ActiveRecord
     }
 
 
-    function clearCachedPages()
+    public function clearCachedPages()
     {
-        $Cache =& Ak::cache();
+        $Cache = Ak::cache();
         $Cache->init(EDITAM_CACHE_LIFE);
         $Cache->clean(AK_HOST);
 
     }
 
-    function clearOldPagesFromCache()
+    public function clearOldPagesFromCache()
     {
-        $Cache =& Ak::cache();
+        $Cache = Ak::cache();
         $Cache->init(EDITAM_CACHE_LIFE);
         $Cache->clean(AK_HOST, 'old');
     }
 }
-
-
-
-?>

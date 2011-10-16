@@ -8,8 +8,8 @@
         <p><?=$text_helper->translate('If you have made changes to the filesystem or web server, <a href="%ftp_url">click here to continue</a> or 
 <a href="%url_skip">here to skip the filesystem setting</a></p>',
 array(
-	'%ftp_url'=>$url_helper->url_for(array('controller'=>'editam_setup','action'=>'configure_ftp_details','check'=>true)),
-	'%url_skip'=>$url_helper->url_for(array('controller'=>'editam_setup','action'=>'configure_ftp_details','skip'=>true))
+    '%ftp_url'=>$url_helper->url_for(array('controller'=>'editam_setup','action'=>'configure_ftp_details','check'=>true)),
+    '%url_skip'=>$url_helper->url_for(array('controller'=>'editam_setup','action'=>'configure_ftp_details','skip'=>true))
 )); ?>
 
 

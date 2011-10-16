@@ -5,11 +5,11 @@
 
 <div id="content_menu">
     <ul class="menu">
-	    <li class="primary"><%= link_to _('Edit Page'), {:action => 'edit', :id => Page.id} %></li>
-	    {?Page.parent_id}
+        <li class="primary"><%= link_to _('Edit Page'), {:action => 'edit', :id => Page.id} %></li>
+        {?Page.parent_id}
         <li class="active"><%= link_to _('Deleting Page'), :action => 'destroy', :id => Page.id %></li>
         {end}
-	    <li><%= link_to _('Show available Page'), :action => 'listing', :id => Page.id %></li>
+        <li><%= link_to _('Show available Page'), :action => 'listing', :id => Page.id %></li>
     </ul>
     <p class="information">_{.}</p>
 </div>

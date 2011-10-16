@@ -1,16 +1,13 @@
 <?php
 
-require_once(AK_MODELS_DIR.DS.'editam.php');
-require_once(AK_LIB_DIR.DS.'AkActionController.php');
-
 class EditamController extends ApplicationController
 {
-    var $app_models = array('user','role','permission','extension');
-    var $protect_all_actions = true;
-    var $layout = 'admin';
-    var $app_helpers = 'admin,layout,editags';
+    public $app_models = array('user','role','permission','extension');
+    public $protect_all_actions = true;
+    public $layout = 'admin';
+    public $app_helpers = 'admin,layout,editags';
 
-    var $_admin_menu_options = array(
+    public $_admin_menu_options = array(
     'Dashboard'   => array('id' => 'dashboard', 'url'=>array('controller'=>'dashboard', 'module' => 'admin'), 'link_options'=>array(
             'accesskey'=>'h',
             'title' => 'general status and information'
@@ -25,9 +22,9 @@ class EditamController extends ApplicationController
     ))
     );
     
-    var $admin_menu_options = array();
-	
-	function __construct()
+    public $admin_menu_options = array();
+    
+    function __construct()
     {
         $this->site_url = $this->base = rtrim(AK_URL,'/');
         $this->is_multilingual = Editam::isMultilingual();
@@ -44,29 +41,28 @@ class EditamController extends ApplicationController
 
         $this->_engageHooks();
 
-		/*
-    	 * admin_plugin parts -------------------------------------------------
-    	 */
-		$this->beforeFilter('authenticate');
-		/*---------------------------------------------------------------*/
+        /*
+         * admin_plugin parts -------------------------------------------------
+         */
+        $this->beforeFilter('authenticate');
+        /*---------------------------------------------------------------*/
     }
     
-    function _loadSettings()
+    public function _loadSettings()
     {
-        require_once(AK_MODELS_DIR.DS.'site_preference.php');
         $Preference = new SitePreference();
         Editam::settings_for($Preference->_loadPreferences(), null, true);
-		
-		/*
-    	 * admin_plugin parts -------------------------------------------------
-    	 */
-		$this->admin_settings = Ak::getSettings('admin');
+        
+        /*
+         * admin_plugin parts -------------------------------------------------
+         */
+        $this->admin_settings = Ak::getSettings('admin');
         return true;
-		/*---------------------------------------------------------------*/
-		
+        /*---------------------------------------------------------------*/
+        
     }
 
-    function _initAdminOptions()
+    public function _initAdminOptions()
     {
         $this->selected_tab = empty($this->selected_tab) ?
         AkInflector::pluralize($this->getControllerName()) : $this->selected_tab;
@@ -80,14 +76,13 @@ class EditamController extends ApplicationController
         empty($this->credentials->id) ? null : $this->_loadSystemMessages();
     }
 
-    function _instantiateCredentials()
+    public function _instantiateCredentials()
     {
-        require_once(AK_MODELS_DIR.DS.'credentials.php');
         $this->credentials = new Credentials();
         return true;
     }
 
-    function _authenticate()
+    public function _authenticate()
     {
         if($this->credentials->hasCredentials()){
             if($this->admin_only && empty($this->credentials->is_admin)){
@@ -115,7 +110,7 @@ class EditamController extends ApplicationController
      * behind that “delete” link, Google ignores it and 
      * performs the action anyway
      */
-    function _disableLinkPrefetching()
+    public function _disableLinkPrefetching()
     {
         if(isset($this->Request->env["HTTP_X_MOZ"]) && $this->Request->env["HTTP_X_MOZ"] == 'prefetch'){
             $this->renderNothing(403);
@@ -124,20 +119,20 @@ class EditamController extends ApplicationController
         return true;
     }
 
-    function getUrlizedControllerName()
+    public function getUrlizedControllerName()
     {
         return AkInflector::urlize($this->getControllerName());
     }
 
-    function defaultUrlOptions()
+    public function defaultUrlOptions()
     {
         return $this->is_multilingual ? array('lang'=> Ak::lang()) : null;
     }
 
-    function _enableCache()
+    public function _enableCache()
     {
         if(EDITAM_CACHE_ENABLED && empty($_POST) && empty($_SESSION['__credentials'])){
-            $this->Cache =& Ak::cache();
+            $this->Cache = Ak::cache();
             $this->Response->addHeader(array(
             'Cache-Control' => "max-age=".$this->Cache->_driverInstance->_lifeTime.", must-revalidate",
             'Pragma' => "max-age=".$this->Cache->_driverInstance->_lifeTime.", must-revalidate",
@@ -147,7 +142,7 @@ class EditamController extends ApplicationController
         }
     }
 
-    function _saveCache()
+    public function _saveCache()
     {
         if(EDITAM_CACHE_ENABLED && isset($this->Cache->_driverInstance) &&
         empty($_POST) && empty($_SESSION['__credentials'])){
@@ -187,7 +182,7 @@ class EditamController extends ApplicationController
      * 
      *      if(!class_exists('GzOutputFilter')){
      *          class GzOutputFilter{
-     *              function filter(&$Controller)
+     *              function filter($Controller)
      *              {
      *                  if(function_exists('ob_gzhandler') &&
      *                  preg_match('/gzip|deflate/', @$_SERVER['HTTP_ACCEPT_ENCODING'])){
@@ -205,7 +200,7 @@ class EditamController extends ApplicationController
      *  
      *  You can modify the controller in many different ways, as it is a default Akelos Framework controller.
      */
-    function _engageHooks()
+    public function _engageHooks()
     {
         $hook_dir = AK_CONTROLLERS_DIR.DS.'hooks'.DS.AkInflector::underscore($this->getControllerName()).'_controller';
         if(is_dir($hook_dir)){
@@ -247,7 +242,7 @@ class EditamController extends ApplicationController
      * 
      * For post-view-hooks, simply add your hooks into an "after" forlder intead of "before"
      */
-    function render($options = null, $status = 200)
+    public function render($options = null, $status = 200)
     {
         $hook_dir = $this->_getTemplateHookBasePath($options);
         $pre_rendered = $hook_dir ? $this->renderBeforeHooks($hook_dir) : '';
@@ -256,7 +251,7 @@ class EditamController extends ApplicationController
         return str_replace(array('\{','\}'),array('{','}'), $pre_rendered.$rendered.$post_rendered);
     }
 
-    function _renderHooks($type, $hook_dir)
+    public function _renderHooks($type, $hook_dir)
     {
         $result = '';
         if(is_dir($hook_dir.DS.$type)){
@@ -271,17 +266,17 @@ class EditamController extends ApplicationController
         return $result;
     }
 
-    function renderBeforeHooks($hook_dir)
+    public function renderBeforeHooks($hook_dir)
     {
         return $this->_renderHooks('before', $hook_dir);
     }
 
-    function renderAfterHooks($hook_dir)
+    public function renderAfterHooks($hook_dir)
     {
         return $this->_renderHooks('after', $hook_dir);
     }
 
-    function _getTemplateHookBasePath($options = array())
+    public function _getTemplateHookBasePath($options = array())
     {
         if(empty($options['partial'])){
             return false;
@@ -306,7 +301,7 @@ class EditamController extends ApplicationController
      * If an update is found a persistent flash message is set for the administrator to take 
      * action.
      */
-    function _checkForUpdates()
+    public function _checkForUpdates()
     {
         Ak::import('EditamUpdate');
         $Update = new EditamUpdate();
@@ -327,25 +322,23 @@ class EditamController extends ApplicationController
      * Retrieves IMPORTANT flash messages from the database, that are not 
      * related to current action. This only happens on the admin.
      */
-    function _loadSystemMessages()
+    public function _loadSystemMessages()
     {
         Ak::import('SystemMessage');
-        $SystemMessage =& new SystemMessage();
+        $SystemMessage = new SystemMessage();
         $SystemMessage->addMessagesToController($this);
     }
 
-	/*
+    /*
      * admin_plugin parts -------------------------------------------------
      */
-	function authenticate()
+    function authenticate()
     {
         Ak::import('sentinel');
-        $Sentinel =& new Sentinel();
+        $Sentinel = new Sentinel();
         $Sentinel->init($this);
         return $Sentinel->authenticate();
     }
 
-	/*---------------------------------------------------------------*/
+    /*---------------------------------------------------------------*/
 }
-
-?>

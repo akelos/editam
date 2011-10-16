@@ -1,61 +1,30 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
+# Author Bermi Ferrer - MIT LICENSE
 
 class Editam_PageController extends EditamController
 {
-    var $models = 'page,page_part,content_layout,snippet,editam_filter';
+    public $models = 'page,page_part,content_layout,snippet,editam_filter';
     
-    var $controller_menu_options = array(
+    public $controller_menu_options = array(
     'Pages'   => array('id' => 'page', 'url'=>array('controller'=>'page', 'action'=>'listing', 'module'=>'editam')),
     'Layouts'   => array('id' => 'content_layout', 'url'=>array('controller'=>'content_layout', 'module'=>'editam')),
     'Snippets'   => array('id' => 'snippet', 'url'=>array('controller'=>'snippet', 'action'=>'manage', 'module'=>'editam')),
     'Preferences'   => array('id' => 'preferences', 'url'=>array('controller'=>'preferences', 'action'=>'setup', 'module'=>'editam'))
     );
-    var $controller_selected_tab = 'Pages';
+    public $controller_selected_tab = 'Pages';
     
-    function __construct(){
-    	parent::__construct();
-    	$this->editam_public_site_url_suffix = AK_EDITAM_PUBLIC_SITE_URL_SUFFIX;
+    public function __construct(){
+        parent::__construct();
+        $this->editam_public_site_url_suffix = AK_EDITAM_PUBLIC_SITE_URL_SUFFIX;
     }
     
-    function index()
+    public function index()
     {
         $this->redirectToAction('listing');
     }
 
-    function listing()
+    public function listing()
     {
         if($this->Page){
             $this->Roots = $this->Page->nested_set->getRoots();
@@ -66,7 +35,7 @@ class Editam_PageController extends EditamController
                 $this->Pages = $this->Page->nested_set->getSelfAndAncestors();
                 $this->params['expand'] = count($this->Pages) == 1 && $this->Page->nested_set->isRoot() ? $this->Page->id : null;
             }
-            if(!empty($this->params['expand']) && $Expand =& $this->Page->find($this->params['expand']) && $Expand->nested_set->countChildren()>0){
+            if(!empty($this->params['expand']) && $Expand = $this->Page->find($this->params['expand']) && $Expand->nested_set->countChildren()>0){
                 $_child = $Expand->nested_set->getChildren();
                 if(!empty($_child)){
                     $Child = array_shift($_child);
@@ -81,11 +50,11 @@ class Editam_PageController extends EditamController
         }
     }
 
-    function list_children()
+    public function list_children()
     {
         $this->layout = false;
         if($this->Request->isAjax()){
-            if($this->ParentPage =& $this->Page->find(@$this->params['id'])){
+            if($this->ParentPage = $this->Page->find(@$this->params['id'])){
                 $this->ParentPage->expanded = true;
                 $this->Pages = $this->ParentPage->nested_set->getChildren();
             }else{
@@ -94,11 +63,11 @@ class Editam_PageController extends EditamController
         }
     }
 
-    function move()
+    public function move()
     {
         if($this->Request->isAjax()){
 
-            if($this->from =& $this->Page->find(@$this->params['from']) && $this->to =& $this->Page->find(@$this->params['to']) ){
+            if($this->from = $this->Page->find(@$this->params['from']) && $this->to = $this->Page->find(@$this->params['to']) ){
                 $this->renderNothing($this->to->moveBeside($this->from, @$this->params['pos']) ? 200 : 400);
             }else{
                 $this->renderNothing(400);
@@ -106,23 +75,23 @@ class Editam_PageController extends EditamController
         }
     }
 
-    function missing_page()
+    public function missing_page()
     {
     }
 
-    function missing_home_page()
+    public function missing_home_page()
     {
 
     }
 
-    function add()
+    public function add()
     {
     }
 
-    function add_child()
+    public function add_child()
     {
         $parent_id = empty($this->params['page']['parent_id']) ? @$this->params['parent_id'] : $this->params['page']['parent_id'];
-        if(!$this->ParentPage =& $this->Page->find($parent_id)){
+        if(!$this->ParentPage = $this->Page->find($parent_id)){
             $this->flash['error'] = $this->t('Could not find the parent page for that will hold your new page.');
             $this->redirectToAction('listing');
             return ;
@@ -133,7 +102,7 @@ class Editam_PageController extends EditamController
         $this->renderAction('add');
     }
 
-    function edit()
+    public function edit()
     {
         if (empty($this->params['id']) || empty($this->Page) || $this->Page->isNewRecord()){
             $this->flash_options = array('seconds_to_close' => 10);
@@ -146,10 +115,10 @@ class Editam_PageController extends EditamController
     }
 
 
-    function destroy()
+    public function destroy()
     {
         if(!empty($this->params['id']) && $this->Page){
-            $this->page =& $this->Page->find($this->params['id']);
+            $this->page = $this->Page->find($this->params['id']);
             $this->Pages = array($this->page);
             if($this->Request->isPost()){
                 $parent_id = $this->page->parent_id;
@@ -164,7 +133,7 @@ class Editam_PageController extends EditamController
         }
     }
 
-    function _save()
+    public function _save()
     {
         $is_new_page = !(!empty($this->params['id']) && $this->Page->id == $this->params['id']);
         $this->is_homepage = !empty($this->params['is_first']) || !$is_new_page && $this->Page->isHomepage();
@@ -183,7 +152,7 @@ class Editam_PageController extends EditamController
                 }
 
                 $this->Page->created_by = $this->CurrentUser->get('id');
-                $this->Page->_controller =& $this;
+                $this->Page->_controller = $this;
                 $method = $is_new_page ? 'saveWithParts' : 'updateWithParts';
                 if($this->Page->{$method}($this->params['part'], empty($this->ParentPage) ? null : $this->ParentPage->getId())){
                     $this->flash_options = array('seconds_to_close'=>5);
@@ -203,7 +172,7 @@ class Editam_PageController extends EditamController
         }
     }
 
-    function _getReadyForPageForm()
+    public function _getReadyForPageForm()
     {
         //$this->include_wysiwym = true;
 
@@ -215,8 +184,8 @@ class Editam_PageController extends EditamController
             $this->Layouts = array_merge(array($this->t(' -- inherit -- ')=>''), $this->Layouts);
         }
 
-        $this->Behaviours = array_merge(array($this->t(' -- none -- ')=>''),
-        array_flip($this->page->getAvailableBehaviours()));
+        $this->Behaviors = array_merge(array($this->t(' -- none -- ')=>''),
+        array_flip($this->page->getAvailableBehaviors()));
 
         $this->Statuses = array_flip($this->page->getAvailableStatuses());
 
@@ -226,13 +195,13 @@ class Editam_PageController extends EditamController
         }else{
             $this->Page->part->load();
             if(!empty($this->Page->parent_id)){
-                $this->ParentPage =& $this->Page->find($this->Page->parent_id);
+                $this->ParentPage = $this->Page->find($this->Page->parent_id);
             }
 
         }
     }
 
-    function convert_content()
+    public function convert_content()
     {
         $this->layout = false;
 
@@ -262,29 +231,27 @@ class Editam_PageController extends EditamController
 
     }
 
-    function switch_behaviour()
+    public function switch_behavior()
     {
         $this->layout = false;
         $to = @$this->params['to'];
         $from = @$this->params['from'];
-        $available_behaviours = $this->Page->getAvailableBehaviours();
+        $available_behaviors = $this->Page->getAvailableBehaviors();
 
-        $to = !empty($to) && !empty($available_behaviours[$to]) ? $to : '';
-        $from = !empty($from) && !empty($available_behaviours[$from]) ? $from : '';
+        $to = !empty($to) && !empty($available_behaviors[$to]) ? $to : '';
+        $from = !empty($from) && !empty($available_behaviors[$from]) ? $from : '';
 
         $result = '';
         if($to != $from){
             if(!empty($from)){
-                $from_class_name = AkInflector::camelize($from).'Behaviour';
-                require_once(AK_APP_DIR.DS.'behaviours'.DS.AkInflector::underscore($from_class_name).'.php');
-                $FromBehaviour =& new $from_class_name();
-                $result .= $FromBehaviour->disable_behaviour_html($this);
+                $from_class_name = AkInflector::camelize($from).'Behavior';
+                $FromBehavior = new $from_class_name();
+                $result .= $FromBehavior->disable_behavior_html($this);
             }
             if(!empty($to)){
-                $to_class = AkInflector::camelize($to).'Behaviour';
-                require_once(AK_APP_DIR.DS.'behaviours'.DS.AkInflector::underscore($to_class).'.php');
-                $ToBehaviour =& new $to_class();
-                $result .= $ToBehaviour->enable_behaviour_html($this);
+                $to_class = AkInflector::camelize($to).'Behavior';
+                $ToBehavior = new $to_class();
+                $result .= $ToBehavior->enable_behavior_html($this);
             }
             $this->renderText($result, 200);
             return;
@@ -292,14 +259,12 @@ class Editam_PageController extends EditamController
         $this->renderNothing();
     }
 
-    function clear_cache()
+    public function clear_cache()
     {
         $this->Page->clearCachedPages();
         $this->flash_options = array('seconds_to_close' => 10);
         $this->flash['message'] = $this->t('Cache has been cleared successfully.');
         $this->redirectToAction('listing');
     }
-
 }
 
-?>

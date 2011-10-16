@@ -1,34 +1,29 @@
 <?php
-	$search_replace = array(
-    		array(
-    			"searched" => "/(\<\?php\s*)/",
-    			"detect_modified" => "/require_once\s*\(AK_MODELS_DIR\.DS\.'editam\.php'\);/",
-    			"replaced" => "$1require_once(AK_MODELS_DIR.DS.'editam.php');\n\n"
-    		),
-    		array(
-    			"searched" => "/(var\W*\\\$_admin_menu_options[\w\s\(\)\=\>',]*\)\s*\))(\s*\);)/",
-    			"detect_modified" => "/'CMS'[\w\s\W]*manage Editam CMS'\s*\){2}\s*/",
-    			"replaced" => "$1,
+    $search_replace = array(
+            array(
+                "searched" => "/(var\W*\\\$_admin_menu_options[\w\s\(\)\=\>',]*\)\s*\))(\s*\);)/",
+                "detect_modified" => "/'CMS'[\w\s\W]*manage Editam CMS'\s*\){2}\s*/",
+                "replaced" => "$1,
     'CMS'   => array('id' => 'page', 'url'=>array('controller'=>'page', 'module' => 'editam'), 'link_options'=>array(
             'accesskey' => 'p',
             'title' => 'manage Editam CMS'
     ))$2"
-    		),
-    		array(
-    			"searched" => "/('Dashboard'[\W|\w]{20,100}'dashboard')/",
-    			"detect_modified" => "/'Dashboard'[\W|\w]{20,100}'dashboard',\W'module'\W*admin'\W/",
-    			"replaced" => "$1, 'module' => 'admin'"
-    		),
-    		array(
-    			"searched" => "/('Manage Users'[\W|\w]{20,100}'users')/",
-    			"detect_modified" => "/'Manage Users'[\W|\w]{20,100}'users',\W'module'\W*admin'\W/",
-    			"replaced" => "$1, 'module' => 'admin'"
-    		),
-    		array(
-    			"searched" => "/(function\W*__construct\(\)\s*\{\s*)/",
-    			"detect_modified" => "/\\\$this-\>site_url\s*=\s*\\\$this-\>base\s*=\s*rtrim/",
-    			"replaced" => "$1\$this->site_url = \$this->base = rtrim(AK_URL,'/');
-    	\$this->is_multilingual = Editam::isMultilingual();
+            ),
+            array(
+                "searched" => "/('Dashboard'[\W|\w]{20,100}'dashboard')/",
+                "detect_modified" => "/'Dashboard'[\W|\w]{20,100}'dashboard',\W'module'\W*admin'\W/",
+                "replaced" => "$1, 'module' => 'admin'"
+            ),
+            array(
+                "searched" => "/('Manage Users'[\W|\w]{20,100}'users')/",
+                "detect_modified" => "/'Manage Users'[\W|\w]{20,100}'users',\W'module'\W*admin'\W/",
+                "replaced" => "$1, 'module' => 'admin'"
+            ),
+            array(
+                "searched" => "/(function\W*__construct\(\)\s*\{\s*)/",
+                "detect_modified" => "/\\\$this-\>site_url\s*=\s*\\\$this-\>base\s*=\s*rtrim/",
+                "replaced" => "$1\$this->site_url = \$this->base = rtrim(AK_URL,'/');
+        \$this->is_multilingual = Editam::isMultilingual();
         \$this->title = empty(\$this->title) ? Editam::settings_for('core','site_title') : \$this->title;
         \$this->host = AK_HOST;
         \$this->lang = Ak::lang();
@@ -43,23 +38,22 @@
         \$this->beforeFilter(array('_initAdminOptions'=>array('except'=>array('show_page'))));
         
         \$this->_engageHooks();\n\n        "
-    		),
-    		array(
-    			"searched" => "/(function\s*_loadCurrentUserRoles\(\)[\w\W]*'role',\s*'action'\s*=\>\s*'add'\)\);\s*\}\s*\})/",
-    			"detect_modified" => "/function\s*getUrlizedControllerName[\w\W]*function\s*_loadSettings[\w\W]*function\s*_initAdminOptions[\w\W]*function\s*_instantiateCredentials[\w\W]*function\s*_loadSystemMessages/",
-    			"replaced" => "$1\n\n    function getUrlizedControllerName()
+            ),
+            array(
+                "searched" => "/(function\s*_loadCurrentUserRoles\(\)[\w\W]*'role',\s*'action'\s*=\>\s*'add'\)\);\s*\}\s*\})/",
+                "detect_modified" => "/function\s*getUrlizedControllerName[\w\W]*function\s*_loadSettings[\w\W]*function\s*_initAdminOptions[\w\W]*function\s*_instantiateCredentials[\w\W]*function\s*_loadSystemMessages/",
+                "replaced" => "$1\n\n    function getUrlizedControllerName()
     {
-    	return AkInflector::urlize(\$this->getControllerName());
+        return AkInflector::urlize(\$this->getControllerName());
     }
     
-	function _loadSettings()
+    public function _loadSettings()
     {
-        require_once(AK_MODELS_DIR.DS.'site_preference.php');
         \$Preference = new SitePreference();
         Editam::settings_for(\$Preference->_loadPreferences(), null, true);
     }
     
-	function _initAdminOptions()
+    public function _initAdminOptions()
     {
         \$this->selected_tab = empty(\$this->selected_tab) ?
         AkInflector::pluralize(\$this->getControllerName()) : \$this->selected_tab;
@@ -73,14 +67,13 @@
         empty(\$this->credentials->id) ? null : \$this->_loadSystemMessages();
     }
 
-    function _instantiateCredentials()
+    public function _instantiateCredentials()
     {
-        require_once(AK_MODELS_DIR.DS.'credentials.php');
         \$this->credentials = new Credentials();
         return true;
     }
     
-	/**
+    /**
      * Avoids link prefectching
      * 
      * Google is essentially clicking every link on the page - including 
@@ -90,7 +83,7 @@
      * behind that “delete” link, Google ignores it and 
      * performs the action anyway
      */
-    function _disableLinkPrefetching()
+    public function _disableLinkPrefetching()
     {
         if(isset(\$this->Request->env[\"HTTP_X_MOZ\"]) && \$this->Request->env[\"HTTP_X_MOZ\"] == 'prefetch'){
             \$this->renderNothing(403);
@@ -147,7 +140,7 @@
      *  
      *  You can modify the controller in many different ways, as it is a default Akelos Framework controller.
      */
-    function _engageHooks()
+    public function _engageHooks()
     {
         \$hook_dir = AK_CONTROLLERS_DIR.DS.'hooks'.DS.AkInflector::underscore(\$this->getControllerName()).'_controller';
         if(is_dir(\$hook_dir)){
@@ -161,12 +154,12 @@
         }
     }
     
-	function defaultUrlOptions()
+    function defaultUrlOptions()
     {
         return \$this->is_multilingual ? array('lang'=> Ak::lang()) : null;
     }
 
-    function _enableCache()
+    public function _enableCache()
     {
         if(EDITAM_CACHE_ENABLED && empty(\$_POST) && empty(\$_SESSION['__credentials'])){
             \$this->Cache =& Ak::cache();
@@ -179,7 +172,7 @@
         }
     }
 
-    function _saveCache()
+    public function _saveCache()
     {
         if(EDITAM_CACHE_ENABLED && isset(\$this->Cache->_driverInstance) &&
         empty(\$_POST) && empty(\$_SESSION['__credentials'])){
@@ -215,7 +208,7 @@
      * 
      * For post-view-hooks, simply add your hooks into an \"after\" forlder intead of \"before\"
      */
-    function render(\$options = null, \$status = 200)
+    public function render(\$options = null, \$status = 200)
     {
         \$hook_dir = \$this->_getTemplateHookBasePath(\$options);
         \$pre_rendered = \$hook_dir ? \$this->renderBeforeHooks(\$hook_dir) : '';
@@ -224,7 +217,7 @@
         return str_replace(array('\{','\}'),array('{','}'), \$pre_rendered.\$rendered.\$post_rendered);
     }
 
-    function _renderHooks(\$type, \$hook_dir)
+    public function _renderHooks(\$type, \$hook_dir)
     {
         \$result = '';
         if(is_dir(\$hook_dir.DS.\$type)){
@@ -239,17 +232,17 @@
         return \$result;
     }
 
-    function renderBeforeHooks(\$hook_dir)
+    public function renderBeforeHooks(\$hook_dir)
     {
         return \$this->_renderHooks('before', \$hook_dir);
     }
 
-    function renderAfterHooks(\$hook_dir)
+    public function renderAfterHooks(\$hook_dir)
     {
         return \$this->_renderHooks('after', \$hook_dir);
     }
 
-    function _getTemplateHookBasePath(\$options = array())
+    public function _getTemplateHookBasePath(\$options = array())
     {
         if(empty(\$options['partial'])){
             return false;
@@ -274,7 +267,7 @@
      * If an update is found a persistent flash message is set for the administrator to take 
      * action.
      */
-    function _checkForUpdates()
+    public function _checkForUpdates()
     {
         Ak::import('EditamUpdate');
         \$Update = new EditamUpdate();
@@ -295,12 +288,12 @@
      * Retrieves IMPORTANT flash messages from the database, that are not 
      * related to current action. This only happens on the admin.
      */
-    function _loadSystemMessages()
+    public function _loadSystemMessages()
     {
         Ak::import('SystemMessage');
-        \$SystemMessage =& new SystemMessage();
+        \$SystemMessage = new SystemMessage();
         \$SystemMessage->addMessagesToController(\$this);
     }"
-    		)
-    	);
-?>
+            )
+        );
+

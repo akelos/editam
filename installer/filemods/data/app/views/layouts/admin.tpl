@@ -1,11 +1,11 @@
 <?php
-	$search_replace = array(
-    		array(
-    			"searched" => "/(\<\W*stylesheet_link_tag\W*module_name\W*admin.css\W*media\W*print\W*screen'\s*\%\>)/",
-    			"detect_modified" => "/\<\W*stylesheet_link_tag\W*admin\W*admin.css\W*media\W*print\W*screen'\s*\%\>/",
-    			"replaced" => '<%= stylesheet_link_tag "admin/admin.css", :media=>"print,screen" %>'
-    		),
-    		array(
+    $search_replace = array(
+            array(
+                "searched" => "/(\<\W*stylesheet_link_tag\W*module_name\W*admin.css\W*media\W*print\W*screen'\s*\%\>)/",
+                "detect_modified" => "/\<\W*stylesheet_link_tag\W*admin\W*admin.css\W*media\W*print\W*screen'\s*\%\>/",
+                "replaced" => '<%= stylesheet_link_tag "admin/admin.css", :media=>"print,screen" %>'
+            ),
+            array(
                 "searched" => "/(\<\W*stylesheet_link_tag\W*module_name\W*menu.css\W\s*\%\>)/",
                 "detect_modified" => "/\<\W*stylesheet_link_tag\W*admin\W*menu.css\W\s*\%\>/",
                 "replaced" => '<%= stylesheet_link_tag "admin/menu.css" %>'
@@ -27,5 +27,5 @@
         <%= javascript_include_tag %>
     <? endif; ?>"
             )
-    	);
-?>
+        );
+

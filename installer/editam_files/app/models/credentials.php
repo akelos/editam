@@ -1,49 +1,14 @@
 <?php
 
-// +----------------------------------------------------------------------+
-// Editam is a content management platform developed by Akelos Media, S.L.|
-// Copyright (C) 2006 - 2007 Akelos Media, S.L.                           |
-//                                                                        |
-// This program is free software; you can redistribute it and/or modify   |
-// it under the terms of the GNU General Public License version 3 as      |
-// published by the Free Software Foundation.                             |
-//                                                                        |
-// This program is distributed in the hope that it will be useful, but    |
-// WITHOUT ANY WARRANTY; without even the implied warranty of             |
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   |
-// See the GNU General Public License for more details.                   |
-//                                                                        |
-// You should have received a copy of the GNU General Public License      |
-// along with this program; if not, see http://www.gnu.org/licenses or    |
-// write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth |
-// Floor, Boston, MA 02110-1301 USA.                                      |
-//                                                                        |
-// You can contact Akelos Media, S.L. headquarters at                     |
-// C/ Pasodoble Amparito Roca, 6, 46240 - Carlet (Valencia) - Spain       |
-// or at email address contact@akelos.com.                                |
-//                                                                        |
-// The interactive user interfaces in modified source and object code     |
-// versions of this program must display Appropriate Legal Notices, as    |
-// required under Section 5 of the GNU General Public License version 3.  |
-//                                                                        |
-// In accordance with Section 7(b) of the GNU General Public License      |
-// version 3, these Appropriate Legal Notices must retain the display of  |
-// the "Powered by Editam" logo. If the display of the logo is not        |
-// reasonably feasible for technical reasons, the Appropriate Legal       |
-// Notices must display the words "Powered by Editam".                    |
-// +----------------------------------------------------------------------+
-
-Ak::import('editam');
+# Author Bermi Ferrer - MIT LICENSE
 
 defined('EDITAM_CACHE_PERMISSIONS_ON_SESSION') ? null : define('EDITAM_CACHE_PERMISSIONS_ON_SESSION', false);
 
-require_once(AK_MODELS_DIR.DS.'user.php');
-
 class Credentials
 {
-    var $_credentials_key = '__credentials';
+    public $_credentials_key = '__credentials';
 
-    function Credentials()
+    public function Credentials()
     {
         if($this->hasCredentials()){
             $this->credentials = $this->getCredentials();
@@ -53,12 +18,12 @@ class Credentials
         }
     }
 
-    function authenticate($username, $password)
+    public function authenticate($username, $password)
     {
-        $User =& new User();
+        $User = new User();
         $User->set('password', @$password);
         $User->encryptPassword();
-        if ($User =& $User->findFirstBy('login AND password AND is_enabled', @$username, $User->get('password'), true)){
+        if ($User = $User->findFirstBy('login AND password AND is_enabled', @$username, $User->get('password'), true)){
             $User->set('last_login_at', Ak::getDate());
             $User->save();
 
@@ -70,42 +35,42 @@ class Credentials
         return false;
     }
 
-    function setCredentials($user_details)
+    public function setCredentials($user_details)
     {
         $_SESSION[$this->_credentials_key] = $user_details;
     }
 
-    function getCredentials()
+    public function getCredentials()
     {
         return $_SESSION[$this->_credentials_key];
     }
 
-    function getAttribute($attribute)
+    public function getAttribute($attribute)
     {
         return isset($_SESSION[$this->_credentials_key][$attribute]) ? $_SESSION[$this->_credentials_key][$attribute] : null;
     }
 
-    function get($attribute)
+    public function get($attribute)
     {
         return $this->getAttribute($attribute);
     }
 
-    function setAttribute($attribute, $value)
+    public function setAttribute($attribute, $value)
     {
         $_SESSION[$this->_credentials_key][$attribute] = $value;
     }
 
-    function set($attribute, $value)
+    public function set($attribute, $value)
     {
         $this->setAttribute($attribute, $value);
     }
 
-    function hasCredentials()
+    public function hasCredentials()
     {
         return !empty($_SESSION[$this->_credentials_key]);
     }
 
-    function revokeCredentials()
+    public function revokeCredentials()
     {
         if($this->hasCredentials()){
             $this->credentials = $this->getCredentials();
@@ -124,21 +89,20 @@ class Credentials
      * can('Delete posts', $Blog);
      * can('Delete posts', 12);
      */
-    function can($action, $Extension)
+    public function can($action, $Extension)
     {
         return Editam::can($action, $Extension);
     }
 
-    function _loadPermissions()
+    public function _loadPermissions()
     {
         if(EDITAM_CACHE_PERMISSIONS_ON_SESSION && isset($_SESSION[$this->_credentials_key]['__permissions'])){
             $this->_permissions = $_SESSION[$this->_credentials_key]['__permissions'];
         }else{
             $this->_permissions = array();
             if (!empty($this->role_id)) {
-                require_once(AK_MODELS_DIR.DS.'permission.php');
-                $Permission =& new Permission();
-                if ($Permissions =& $Permission->findAllBy('role_id', $this->role_id)){
+                $Permission = new Permission();
+                if ($Permissions = $Permission->findAllBy('role_id', $this->role_id)){
                     foreach (array_keys($Permissions) as $k) {
                         $this->_permissions[$Permissions[$k]->extension_id][] = $Permissions[$k]->get('name');
                     }
@@ -152,5 +116,3 @@ class Credentials
     }
 }
 
-
-?>

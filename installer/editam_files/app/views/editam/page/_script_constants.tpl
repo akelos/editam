@@ -2,8 +2,8 @@
 
 var PAGE_SWITCHING_FILTER = '_{Switching filter}';
 var PAGE_CANT_APPLY_FILTER = '_{Could not apply filter}';
-var PAGE_SWITCHING_BEHAVIOUR = '_{Switching Behaviour}';
-var PAGE_CANT_CHANGE_BEHAVIOUR = '_{Could not change behaviour}';
+var PAGE_SWITCHING_BEHAVIOR = '_{Switching Behavior}';
+var PAGE_CANT_CHANGE_BEHAVIOR = '_{Could not change behavior}';
 var PAGE_NEW_PART_PROMPT = '_{Please insert the new part name}';
 var PAGE_PART_ADD_ERROR = '_{Could not create a part named}';
 var PAGE_PART_BECAUSE = '_{because}';
@@ -20,7 +20,7 @@ var PAGE_UNSAVED_CHANGES_WARNING = '_{Your page has modifications and has not be
 var PAGE_LIST_CHILDREN_URL = '<%= url_for :controller => 'page', :action => 'list_children' %>';
 var PAGE_MOVE_NODE = '<%= url_for :controller => 'page', :action => 'move' %>';
 var PAGE_CONVERT_CONTENT = '<%= url_for :controller => 'page', :action => 'convert_content' %>';
-var PAGE_SWITCH_BEHAVIOUR = '<%= url_for :controller => 'page', :action => 'switch_behaviour', :id => Page.id %>';
+var PAGE_SWITCH_BEHAVIOR = '<%= url_for :controller => 'page', :action => 'switch_behavior', :id => Page.id %>';
 var PAGE_IS_VIRTUAL = {?Page.is_virtual}true{else}false{end};
 var USER_ID = {CurrentUser.id};
 var LANG = '{lang}';

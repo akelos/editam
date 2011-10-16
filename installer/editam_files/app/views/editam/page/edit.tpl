@@ -40,12 +40,12 @@
       <p><label for="page_layout_id">_{Layout}</label>
         <%= select "page", "layout_id", Layouts %></p>
     {end}
-      <p><label for="page_behaviour">_{Behaviour}</label>
-        <%= select "page", "behaviour", Behaviours %></p>
+      <p><label for="page_behavior">_{Behavior}</label>
+        <%= select "page", "behavior", Behaviors %></p>
       <p><label for="page_status">_{Status}</label>
         <%= select "page", "status", Statuses %></p>
     </div>
-    <div id="behaviour_options" class="cls"></div>
+    <div id="behavior_options" class="cls"></div>
   </div>
 
   <div id="operations">
