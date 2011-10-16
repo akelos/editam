@@ -177,8 +177,6 @@ class EditamPluginInstaller extends AkInstaller
     }
     
     public function createCMSRoles(){
-        Ak::import('User', 'Role', 'Permission', 'Extension');
-        
         $Role = new Role();
         $Administrator = $Role->findFirstBy('name','Administrator');
         $Administrator->addChildrenRole('Contributor');
@@ -186,7 +184,6 @@ class EditamPluginInstaller extends AkInstaller
     }
     
     public function removeCMSRoles(){
-        Ak::import('User', 'Role', 'Permission', 'Extension');
         
         $Role = new Role();
         $CMSRole = $Role->findFirstBy('name','Contributor');
@@ -240,7 +237,6 @@ class EditamPluginInstaller extends AkInstaller
 
     public function addBatchRecords($model, $record_details)
     {
-        Ak::import($model);
         foreach($record_details as $record_detail){
             $Element = new $model();
             $Element->setAttributes($record_detail);

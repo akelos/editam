@@ -270,16 +270,14 @@
      */
     public function _checkForUpdates()
     {
-        Ak::import('EditamUpdate');
         \$Update = new EditamUpdate();
         \$this->credentials->set('has_checked_for_updates', true);
         if(\$message = \$Update->getUpdateMessageIfNewVersionIsAvailable()){
-            Ak::import('SystemMessage');
             \$SystemMessage = new SystemMessage();
             \$SystemMessage->registerMessageForAdmins(array(
             'value' => \$message,
             'message_key' => 'editam_update_pending',
-            'can_be_hidded' => true,
+            'can_be_hidden' => true,
             'seconds_to_expire' => 432000 // 5 days
             ));
         }
@@ -291,7 +289,6 @@
      */
     public function _loadSystemMessages()
     {
-        Ak::import('SystemMessage');
         \$SystemMessage = new SystemMessage();
         \$SystemMessage->addMessagesToController(\$this);
     }"

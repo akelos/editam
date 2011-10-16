@@ -130,8 +130,7 @@ class EditamInstaller extends AkInstaller
     }
     
     public function suggestSiteDetails(){
-        Ak::import('User', 'Role', 'Permission', 'Extension');
-        
+
         $ApplicationOwner = $this->getApplicationOwner();
         
         $this->site_details['site_name'] = AkConsole::promptUserVar("\n Site Name", array('default' => $this->getApplicationName()));

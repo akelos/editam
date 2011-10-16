@@ -24,8 +24,6 @@ class SampleWebsiteProfile
 
     public function _createDefaultHomePage()
     {
-        Ak::import(array('page', 'page_part', 'user', 'content_layout'));
-        
         $User = new User();
         $ContentLayout = new ContentLayout();
         

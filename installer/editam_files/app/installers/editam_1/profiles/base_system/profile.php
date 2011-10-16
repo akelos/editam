@@ -51,7 +51,6 @@ class BaseSystemProfile
 
     public function _createDefaultPreferences()
     {
-        Ak::import('site_preference');
         $SitePreference = new SitePreference();
         
         if(AK_ENVIRONMENT == 'testing'){
@@ -109,7 +108,6 @@ class BaseSystemProfile
 
         $Preference->save();
         
-        Ak::import('role');
         $Role = new Role();
         if ($Role = $Role->findFirstBy('name', 'user')){
             $Preference = new SitePreference(array(

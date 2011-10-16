@@ -48,7 +48,6 @@ class Editam_EditamUpdateController extends EditamController
             $this->flash['error'] = $this->t('There were problems during the update process. Please try again');
             $this->redirectToAction('index');
         }else{
-            Ak::import('SystemMessage');
             $SystemMessage = new SystemMessage(array('message_key' => 'editam_update_pending'));
             $SystemMessage->unregisterMessageForAdmins();
         }
