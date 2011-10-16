@@ -8,4 +8,3 @@
 \$Map->connect('/'.AK_EDITAM_PUBLIC_SITE_URL_SUFFIX.'/*url', array('controller' => 'site', 'action' => 'show_page', 'module' => 'editam'));\n"
             )
     );
-?>
