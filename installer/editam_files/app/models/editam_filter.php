@@ -74,7 +74,7 @@ class EditamFilter
                     $filters[$filter] = Ak::t($filter, null , 'editam_filter');
                 }
             }else{
-                foreach (Ak::dir(AK_APP_DIR.DS.'filters') as $file){
+                foreach (AkFileSystem::dir(AK_APP_DIR.DS.'filters') as $file){
                     if(substr($file,-11) == '_filter.php'){
                         $filter = substr($file,0,-11);
                         $filters[$filter] = Ak::t($filter, null, 'editam_filter');

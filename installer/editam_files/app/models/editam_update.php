@@ -135,7 +135,7 @@ class EditamUpdate extends ActiveRecord
 
     function getCurrentVersion()
     {
-        return file_exists(AK_APP_DIR.DS.'version.txt') ? Ak::file_get_contents(AK_APP_DIR.DS.'version.txt') : false;
+        return file_exists(AK_APP_DIR.DS.'version.txt') ? AkFileSystem::file_get_contents(AK_APP_DIR.DS.'version.txt') : false;
     }
 
     function getUpdateDetails($options = array())
@@ -145,8 +145,8 @@ class EditamUpdate extends ActiveRecord
             if(!empty($default_timeout)){
                 @ini_set('default_socket_timeout', 5); 
             }
-            $update_details = @file_get_contents('http://updates.akelos.com/?'.$params);
-            $update_details = empty($update_details) ? @Ak::url_get_contents('http://updates.akelos.com/?'.$params) : $update_details;
+            $update_details = @file_get_contents('http://updates.editam.com/?'.$params);
+            $update_details = empty($update_details) ? @Ak::url_get_contents('http://updates.editam.com/?'.$params) : $update_details;
             if(!empty($default_timeout)){
                 @ini_set('default_socket_timeout', $default_timeout); 
             }
@@ -207,13 +207,13 @@ class EditamUpdate extends ActiveRecord
                         $action = 'C';
                         if(!empty($item['from_checksum'])){
                             $action = 'M';
-                            Ak::file_put_contents($backup_path.DS.$item['path'], Ak::file_get_contents($item['path']));
+                            AkFileSystem::file_put_contents($backup_path.DS.$item['path'], AkFileSystem::file_get_contents($item['path']));
                         }
                         if(!empty($item['remove'])){
                             $action = 'D';
-                            Ak::file_delete($item['path']);
+                            AkFileSystem::file_delete($item['path']);
                         }else{
-                            Ak::file_put_contents($item['path'], base64_decode($item['content']));
+                            AkFileSystem::file_put_contents($item['path'], base64_decode($item['content']));
                         }
 
                         $this->modifications[] = $action.' '.$item['path'];
@@ -224,7 +224,7 @@ class EditamUpdate extends ActiveRecord
                     if(!empty($item['remove'])){
                         $this->modifications[] = 'D '.$item['path'].DS;
                         Ak::copy($item['path'], $backup_path.DS.$item['path']);
-                        Ak::directory_delete($item['path']);
+                        AkFileSystem::directory_delete($item['path']);
                     }else{
                         $this->modifications[] = 'A '.$item['path'].DS;
                         Ak::make_dir($item['path']);

@@ -138,7 +138,7 @@ class EditagsHelper extends AkActionViewHelper
         if(file_exists(AK_PUBLIC_DIR.DS.$theme_path.DS.$theme_name.'.css')){
             $result .= $this->_controller->asset_tag_helper->stylesheet_link_tag($this->_computePublicPath($theme_name, $theme_path, 'css'));
         }else{
-            $stylesheets = Ak::dir(AK_PUBLIC_DIR.DS.$theme_path);
+            $stylesheets = AkFileSystem::dir(AK_PUBLIC_DIR.DS.$theme_path);
             foreach ($stylesheets as $stylesheet){
                 if(preg_match('/^('.EDITAM_CSS_MEDIA_TYPES.')\.css$/',$stylesheet)){
 
@@ -157,7 +157,7 @@ class EditagsHelper extends AkActionViewHelper
         if(file_exists(AK_PUBLIC_DIR.DS.$js_path.DS.$js_name.'.js')){
             $result .= $this->_controller->asset_tag_helper->javascript_include_tag($this->_computePublicPath($js_name, $js_path, 'js'));
         }else{
-            $javascripts = Ak::dir(AK_PUBLIC_DIR.DS.$js_path);
+            $javascripts = AkFileSystem::dir(AK_PUBLIC_DIR.DS.$js_path);
             foreach ($javascripts as $javascript){
                 $result .= $this->_controller->asset_tag_helper->javascript_include_tag($this->_computePublicPath($javascript, $js_path, 'js'));
             }
@@ -182,7 +182,7 @@ class EditagsHelper extends AkActionViewHelper
         if(empty($set_classes) && is_null($classes)){
             $classes_file = AK_PUBLIC_DIR.DS.'themes'.DS.$this->theme().DS.'stylesheets'.DS.'classes.txt';
             if(file_exists($classes_file)){
-                $classes = Ak::convert('yaml','array', Ak::file_get_contents($classes_file));
+                $classes = Ak::convert('yaml','array', AkFileSystem::file_get_contents($classes_file));
             }else{
                 $classes = false;
             }
@@ -214,7 +214,7 @@ class EditagsHelper extends AkActionViewHelper
     {
         $available_helpers = array();
         EditagsHelper::_addAkelosHelperMethods_($available_helpers);
-        $helper_files = Ak::dir(EDITAGS_HELPERS_DIR, array('dirs'=>false));
+        $helper_files = AkFileSystem::dir(EDITAGS_HELPERS_DIR, array('dirs'=>false));
         foreach ($helper_files as $helper_file){
             $underscored_helper_name = substr($helper_file,0,-4);
             include_once(EDITAGS_HELPERS_DIR.DS.$helper_file);

@@ -48,9 +48,9 @@ class CorePreferences
         if(!$Preference->hasErrors()){
             if($value != Editam::settings_for('core','editam_admin_color')){
                 $css_path = AK_PUBLIC_DIR.DS.'stylesheets'.DS.'editam.css';
-                $css = Ak::file_get_contents($css_path);
+                $css = AkFileSystem::file_get_contents($css_path);
                 $css = preg_replace('/(background-color:\s*)(#[a-f0-9]{3,6};)(\s*\/\*\s*Editam theme switcher)/','$1'.$value.';$3',$css);
-                $css = Ak::file_put_contents($css_path, $css);
+                $css = AkFileSystem::file_put_contents($css_path, $css);
             }
         }
     }
@@ -61,7 +61,7 @@ class CorePreferences
         $Preference->validatesPresenceOf('value');
         if(!$Preference->hasErrors()){
             $new_langs = $value;
-            $config_file = $new_config_file = Ak::file_get_contents(AK_CONFIG_DIR.DS.'config.php');
+            $config_file = $new_config_file = AkFileSystem::file_get_contents(AK_CONFIG_DIR.DS.'config.php');
 
             if(preg_match_all('/define[\r\n\s\t]*\([\r\n\s\t]*(\'|")AK_([A-Z_]+)_LOCALES(\'|")[\r\n\s\t]*,[\r\n\s\t]*(\'|")([a-zA-Z_\- ,;:\|]+)(\'|")[\r\n\s\t]*\)[\r\n\s\t]*;/', $config_file, $matches)){
                 foreach ($matches[0] as $k => $setting){
@@ -70,14 +70,14 @@ class CorePreferences
                 }
             }
             if($config_file != $new_config_file){
-                Ak::file_put_contents(AK_CONFIG_DIR.DS.'config.php', $new_config_file);
+                AkFileSystem::file_put_contents(AK_CONFIG_DIR.DS.'config.php', $new_config_file);
                 
                 foreach (Ak::toArray($new_langs) as $lang){
                     $lang = Ak::sanitize_include($lang,'paranoid');
                     $locale_file = AK_CONFIG_DIR.DS.'locales'.DS.$lang.'.php';
                     if(!file_exists($locale_file) && !empty($base_locale_file)){
-                        $base_locale = preg_replace('/(\$locale\[[\r\n\s\t]*[\'"]description[\'"][\r\n\s\t]*][\r\n\s\t]*=[\r\n\s\t]*[\'"])(.+)([\'"][\r\n\s\t]*;)/','$1'.$lang.'$3', Ak::file_get_contents($base_locale_file));
-                        Ak::file_put_contents($locale_file, $base_locale);
+                        $base_locale = preg_replace('/(\$locale\[[\r\n\s\t]*[\'"]description[\'"][\r\n\s\t]*][\r\n\s\t]*=[\r\n\s\t]*[\'"])(.+)([\'"][\r\n\s\t]*;)/','$1'.$lang.'$3', AkFileSystem::file_get_contents($base_locale_file));
+                        AkFileSystem::file_put_contents($locale_file, $base_locale);
                     }elseif (empty($base_locale_file)){
                         $base_locale_file = $locale_file;
                     }
@@ -149,7 +149,7 @@ class CorePreferences
         if (!$this->_hasLogo($Preference)) {
             return true;
         }
-        return (@Ak::file_delete(AK_PUBLIC_DIR.$this->_getLogoUploadPath().DS.Ak::sanitize_include($Preference->value))) ? true : false;
+        return (@AkFileSystem::file_delete(AK_PUBLIC_DIR.$this->_getLogoUploadPath().DS.Ak::sanitize_include($Preference->value))) ? true : false;
     }
 
     function getNewUserRolesFormView(&$Preference)

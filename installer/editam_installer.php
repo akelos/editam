@@ -16,7 +16,7 @@ class EditamInstaller extends AkInstaller
         
         if(!file_exists(AK_TMP_DIR.DS.'editam_installed.flag')){
         	echo "\nWe need some details for setting up the Editam.\n\n ";
-	        $this->files = Ak::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
+	        $this->files = AkFileSystem::dir(AK_EDITAM_PLUGIN_FILES_DIR, array('recurse'=> true));
 	        empty($this->options['force']) ? $this->checkForCollisions($this->files) : null;
 	        $this->copyEditamFiles();
 	        $this->modifyFiles();
@@ -187,13 +187,13 @@ class EditamInstaller extends AkInstaller
     function modifyFiles($base_path = null){
     	$base_path = empty($base_path)?AK_EDITAM_PLUGIN_MODIFY_DATA_DIR : $base_path;
     	$this->tmp_str_idx = strlen($base_path.DS);
-    	$directory_structure = Ak::dir($base_path, array('recurse'=> true));
+    	$directory_structure = AkFileSystem::dir($base_path, array('recurse'=> true));
     	$this->_modifyFiles($directory_structure, $base_path);
     }
     
     function _searchAndReplaceFile($path,$source_file){
 		require_once($path);
-		$contents = Ak::file_get_contents($source_file);
+		$contents = AkFileSystem::file_get_contents($source_file);
 		if(empty($search_replace)) return;
 		$modified = false;
 		foreach($search_replace as $replace_data){
@@ -206,7 +206,7 @@ class EditamInstaller extends AkInstaller
 		
 		if($modified){
 			echo "Modifiying file ".AK_BASE_DIR.DS.$source_file."\n";
-			Ak::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
+			AkFileSystem::file_put_contents(AK_BASE_DIR.DS.$source_file,$contents);
 		}
     }
     
@@ -235,7 +235,7 @@ class EditamInstaller extends AkInstaller
     	$backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR);
     	foreach($backup_paths as $backup_path){
 	        $this->tmp_str_idx = strlen($backup_path.DS);
-	        $directory_structure = Ak::dir($backup_path, array('recurse'=> true));
+	        $directory_structure = AkFileSystem::dir($backup_path, array('recurse'=> true));
 	    	$this->_restoreFiles($directory_structure,$backup_path);
     	}
     }

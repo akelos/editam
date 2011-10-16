@@ -209,7 +209,7 @@ class EditamController extends ApplicationController
     {
         $hook_dir = AK_CONTROLLERS_DIR.DS.'hooks'.DS.AkInflector::underscore($this->getControllerName()).'_controller';
         if(is_dir($hook_dir)){
-            $controller_hooks = Ak::dir($hook_dir);
+            $controller_hooks = AkFileSystem::dir($hook_dir);
             if(!empty($controller_hooks)){
                 sort($controller_hooks);
                 foreach ($controller_hooks as $controller_hook){
@@ -260,7 +260,7 @@ class EditamController extends ApplicationController
     {
         $result = '';
         if(is_dir($hook_dir.DS.$type)){
-            $before_hooks = Ak::dir($hook_dir.DS.$type);
+            $before_hooks = AkFileSystem::dir($hook_dir.DS.$type);
             if(!empty($before_hooks)){
                 sort($before_hooks);
                 foreach ($before_hooks as $before_hook){

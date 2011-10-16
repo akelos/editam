@@ -100,7 +100,7 @@ class File extends ActiveRecord
             $content = file_get_contents($this->uploaded_file_path );
             if (!empty($content)) {
                 $path = $this->getFilePath();
-                if ($path && Ak::file_put_contents($path, $content, $options)) {
+                if ($path && AkFileSystem::file_put_contents($path, $content, $options)) {
                     return true;
                 }elseif (!$path){
                     $this->addErrorToBase($this->t('You need to set a valid path for the file.

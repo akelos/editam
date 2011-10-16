@@ -43,10 +43,10 @@ class PageTestCase extends AkUnitTest
 
             $installer->install();
 
-            $Pages = Ak::convert('yaml','array', Ak::file_get_contents(AK_TEST_DIR.DS.'fixtures'.DS.'db'.DS.'pages.yaml'));
+            $Pages = Ak::convert('yaml','array', AkFileSystem::file_get_contents(AK_TEST_DIR.DS.'fixtures'.DS.'db'.DS.'pages.yaml'));
             $this->_loadPage();
 
-            $Layouts = Ak::convert('yaml','array', Ak::file_get_contents(AK_TEST_DIR.DS.'fixtures'.DS.'db'.DS.'content_layouts.yaml'));
+            $Layouts = Ak::convert('yaml','array', AkFileSystem::file_get_contents(AK_TEST_DIR.DS.'fixtures'.DS.'db'.DS.'content_layouts.yaml'));
             $this->Layout =& new ContentLayout();
             foreach ($Layouts as $Layout){
                 $this->Layout->create($Layout);
@@ -58,7 +58,7 @@ class PageTestCase extends AkUnitTest
                 $Page->save();
             }
 
-            $PageParts = Ak::convert('yaml','array', Ak::file_get_contents(AK_TEST_DIR.DS.'fixtures'.DS.'db'.DS.'page_parts.yaml'));
+            $PageParts = Ak::convert('yaml','array', AkFileSystem::file_get_contents(AK_TEST_DIR.DS.'fixtures'.DS.'db'.DS.'page_parts.yaml'));
             $this->PagePart =& new PagePart();
             foreach ($PageParts as $PagePart){
                 $this->PagePart->create($PagePart);

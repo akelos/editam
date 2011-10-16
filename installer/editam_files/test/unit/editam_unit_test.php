@@ -1,8 +1,7 @@
 <?php
+
 defined('AK_TEST_DATABASE_ON') ? null : define('AK_TEST_DATABASE_ON', true);
 require_once(dirname(__FILE__).'/../fixtures/config/config.php');
-require_once(AK_LIB_DIR.DS.'AkActiveRecord.php');
-require_once(AK_APP_DIR.DS.'shared_model.php');
 
 class EditamUnitTest extends AkUnitTest
 {
@@ -16,4 +15,3 @@ class EditamUnitTest extends AkUnitTest
     
 }
 
-?>

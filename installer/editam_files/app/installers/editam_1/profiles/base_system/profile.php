@@ -98,7 +98,7 @@ class BaseSystemProfile
         'is_core' => true));
         $Preference->save();
 
-        $version = @Ak::file_get_contents(AK_APP_DIR.DS.'version.txt');
+        $version = @AkFileSystem::file_get_contents(AK_APP_DIR.DS.'version.txt');
 
         $Preference = new SitePreference(array(
         'name'=>'editam_version',
@@ -190,7 +190,7 @@ class BaseSystemProfile
     {
         if(!is_file(AK_PUBLIC_DIR.DS.'.htaccess')){
             $htaccess = file_get_contents(AK_APP_DIR.DS.'installers'.DS.'editam_1'.DS.'data'.DS.'htaccess');
-            Ak::file_put_contents(AK_PUBLIC_DIR.DS.'.htaccess', $htaccess);
+            AkFileSystem::file_put_contents(AK_PUBLIC_DIR.DS.'.htaccess', $htaccess);
         }
     }
 

@@ -141,7 +141,7 @@ class FormBehaviour extends BaseBehaviour
     {
         $Controller->FormBehaviour =& $this;
         $this->init($Controller);
-        return $Controller->renderTemplate(Ak::file_get_contents(AK_APP_DIR.DS.'behaviours'.DS.'form'.DS.'edit.tpl'));
+        return $Controller->renderTemplate(AkFileSystem::file_get_contents(AK_APP_DIR.DS.'behaviours'.DS.'form'.DS.'edit.tpl'));
     }
     
     function disable_behaviour_html()

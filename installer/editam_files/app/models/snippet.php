@@ -66,7 +66,7 @@ class Snippet extends ActiveRecord
             $this->addError('content', $this->t('has non secure PHP code'));
             return false;
         }
-        Ak::file_put_contents($this->getPath(), $this->_editags_php);
+        AkFileSystem::file_put_contents($this->getPath(), $this->_editags_php);
         return true;
     }
 

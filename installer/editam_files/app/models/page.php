@@ -460,7 +460,7 @@ class Page extends ActiveRecord
                     $behaviours[$behaviour] = $this->t($behaviour);
                 }
             }else{
-                foreach (Ak::dir(AK_APP_DIR.DS.'behaviours', array('dirs'=>false)) as $file){
+                foreach (AkFileSystem::dir(AK_APP_DIR.DS.'behaviours', array('dirs'=>false)) as $file){
                     if(substr($file,-14) == '_behaviour.php'){
                         $behaviour = substr($file,0,-14);
                         if($behaviour != 'base'){

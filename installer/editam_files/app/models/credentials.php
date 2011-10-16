@@ -37,8 +37,6 @@ Ak::import('editam');
 
 defined('EDITAM_CACHE_PERMISSIONS_ON_SESSION') ? null : define('EDITAM_CACHE_PERMISSIONS_ON_SESSION', false);
 
-require_once(AK_LIB_DIR.DS.'AkActiveRecord.php');
-require_once(AK_APP_DIR.DS.'shared_model.php');
 require_once(AK_MODELS_DIR.DS.'user.php');
 
 class Credentials

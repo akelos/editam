@@ -255,7 +255,7 @@ class EditamPluginInstaller extends AkInstaller
 
     function installDataFiles($version)
     {
-        $files = Ak::dir(AK_APP_DIR.DS.'installers'.DS.'editam_'.$version.DS.'data');
+        $files = AkFileSystem::dir(AK_APP_DIR.DS.'installers'.DS.'editam_'.$version.DS.'data');
         sort($files);
         foreach ($files as $file){
             if($file[0] == '_' || !strstr($file,'yaml')){
@@ -289,7 +289,7 @@ class EditamPluginInstaller extends AkInstaller
         $backup_paths = array(AK_EDITAM_PLUGIN_MODIFY_DATA_DIR);
         foreach($backup_paths as $backup_path){
             $this->tmp_str_idx = strlen($backup_path.DS);
-            $directory_structure = Ak::dir($backup_path, array('recurse'=> true));
+            $directory_structure = AkFileSystem::dir($backup_path, array('recurse'=> true));
             $this->_restoreFiles($directory_structure,$backup_path);
         }
     }
