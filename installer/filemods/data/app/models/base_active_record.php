@@ -1,12 +1,7 @@
 <?php
     $search_replace = array(
             array(
-                "searched" => "/(\*\s*@subpackage\s*Base\s*\*\/)/",
-                "detect_modified" => "/Ak::import\('editags'\);[\w\W]*class\s*ActiveRecord/",
-                "replaced" => "$1\n\nAk::import('editags');\n\n"
-            ),
-            array(
-                "searched" => "/(class\s*ActiveRecord\s*extends\s*BaseActiveRecord\s*{)/",
+                "searched" => "/(class\s*BaseActiveRecord\s*extends\s*AkActiveRecord\s*{)/",
                 "detect_modified" => "/function\s*init[\w\W]*function\s*validatesEditagsField[\w\W]*function\s*_engageHooks[\w\W]*'\<\?php '\);\s*\}\s*\}/",
                 "replaced" => "$1\n    function init(\$attributes)
     {
@@ -14,9 +9,9 @@
         return parent::init(\$attributes);
     }
 
-    function validatesEditagsField(\$column = 'content', \$can_have_php = true)
+    public function validatesEditagsField(\$column = 'content', \$can_have_php = true)
     {
-        \$Editags =& new Editags();
+        \$Editags = new Editags();
         
         require_once(AK_HELPERS_DIR.DS.'editags_helper.php');
         \$Editags->Parser->available_helpers = EditagsHelper::_getEditagsHelperMethods();
@@ -44,15 +39,14 @@
         return true;
     }
 
-    function validatesPhpContent(\$php_content)
+    public function validatesPhpContent(\$php_content)
     {
-        require_once(AK_LIB_DIR.DS.'AkActionView'.DS.'AkPhpCodeSanitizer.php');
         \$this->PhpSanitizer = new AkPhpCodeSanitizer();
         \$this->PhpSanitizer->secure_active_record_method_calls = true;
         return \$this->PhpSanitizer->isCodeSecure(\$php_content, false);
     }
 
-    function _engageHooks(\$attributes)
+    public function _engageHooks(\$attributes)
     {
         \$hook_file = AK_MODELS_DIR.DS.'hooks'.DS.AkInflector::underscore(\$this->getModelName()).'.php';
         if(file_exists(\$hook_file)){
@@ -61,4 +55,3 @@
     }\n"
             )
     );
-?>
