@@ -160,7 +160,7 @@ class EditamInstaller extends AkInstaller
     function getApplicationOwner()
     {
         $Role = new Role();
-        $ApplicationOwnerRole = $Role->findFirstBy('name','Application owner');
+        $ApplicationOwnerRole = $Role->findFirstBy('name','Application owner', array('default'=>false));
         $ApplicationOwnerRole->user->load();
         return $ApplicationOwnerRole->users[0];
     }

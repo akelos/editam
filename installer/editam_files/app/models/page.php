@@ -206,7 +206,7 @@ class Page extends ActiveRecord
 
     public function &_findInheritedPart($name)
     {
-        $Part = $this->part->find('first', array('conditions'=>array('name = ?', $name)));
+        $Part = $this->part->find('first', array('default'=>false, 'conditions'=>array('name = ?', $name)));
     }
 
     public function &_getPartIndexedAs($name)
@@ -273,7 +273,7 @@ class Page extends ActiveRecord
     {
         $sql = $this->_getSqlForUrlFinder($url_parts, $show_unpublished, $missing_page_mode);
         $this->_db->addLimitAndOffset($sql, array('limit' => 1, 'offset' => null));
-        if($result = $this->findBySql($sql)){
+        if($result = $this->findBySql($sql, array('default'=>false))){
             return $result[0];
         }
         $false = false;

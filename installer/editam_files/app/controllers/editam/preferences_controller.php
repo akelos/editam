@@ -31,7 +31,7 @@ class Editam_PreferencesController extends EditamController
 
         if($this->Request->isPost() && !empty($this->params['preferences'])){
             $sucess = true;
-            $this->SitePreferences = $this->SitePreference->find('all', array('conditions' => 'id = '.join(' OR id=',array_keys($this->params['preferences']))));
+            $this->SitePreferences = $this->SitePreference->find('all', array('default' => array(), 'conditions' => 'id = '.join(' OR id=',array_keys($this->params['preferences']))));
             foreach ($this->SitePreferences as $Preference){
                 if ($Preference->get('is_editable') && isset($this->params['preferences'][$Preference->id])) {
                     $Preference->set('value', $this->params['preferences'][$Preference->id]);
@@ -48,8 +48,8 @@ class Editam_PreferencesController extends EditamController
             }
             $this->redirectTo(array('action' => 'setup'));
         }else{
-            $this->SitePreferences = $this->SitePreference->findAllBy('is_core', true);
-            $this->Roles = $this->Role->find('all');
+            $this->SitePreferences = $this->SitePreference->findAllBy('is_core', true, array('default'=>array()));
+            $this->Roles = $this->Role->find('all', array('default'=>array()));
         }
     }
 }

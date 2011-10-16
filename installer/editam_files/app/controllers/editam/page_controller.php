@@ -35,7 +35,7 @@ class Editam_PageController extends EditamController
                 $this->Pages = $this->Page->nested_set->getSelfAndAncestors();
                 $this->params['expand'] = count($this->Pages) == 1 && $this->Page->nested_set->isRoot() ? $this->Page->id : null;
             }
-            if(!empty($this->params['expand']) && $Expand = $this->Page->find($this->params['expand']) && $Expand->nested_set->countChildren()>0){
+            if(!empty($this->params['expand']) && $Expand = $this->Page->find($this->params['expand'], array('default'=>false)) && $Expand->nested_set->countChildren()>0){
                 $_child = $Expand->nested_set->getChildren();
                 if(!empty($_child)){
                     $Child = array_shift($_child);
@@ -54,7 +54,7 @@ class Editam_PageController extends EditamController
     {
         $this->layout = false;
         if($this->Request->isAjax()){
-            if($this->ParentPage = $this->Page->find(@$this->params['id'])){
+            if($this->ParentPage = $this->Page->find(@$this->params['id'], array('default'=>false))){
                 $this->ParentPage->expanded = true;
                 $this->Pages = $this->ParentPage->nested_set->getChildren();
             }else{
@@ -67,7 +67,7 @@ class Editam_PageController extends EditamController
     {
         if($this->Request->isAjax()){
 
-            if($this->from = $this->Page->find(@$this->params['from']) && $this->to = $this->Page->find(@$this->params['to']) ){
+            if($this->from = $this->Page->find(@$this->params['from'], array('default'=>false)) && $this->to = $this->Page->find(@$this->params['to'], array('default'=>false)) ){
                 $this->renderNothing($this->to->moveBeside($this->from, @$this->params['pos']) ? 200 : 400);
             }else{
                 $this->renderNothing(400);
@@ -91,7 +91,7 @@ class Editam_PageController extends EditamController
     public function add_child()
     {
         $parent_id = empty($this->params['page']['parent_id']) ? @$this->params['parent_id'] : $this->params['page']['parent_id'];
-        if(!$this->ParentPage = $this->Page->find($parent_id)){
+        if(!$this->ParentPage = $this->Page->find($parent_id, array('default'=>false))){
             $this->flash['error'] = $this->t('Could not find the parent page for that will hold your new page.');
             $this->redirectToAction('listing');
             return ;
@@ -118,7 +118,7 @@ class Editam_PageController extends EditamController
     public function destroy()
     {
         if(!empty($this->params['id']) && $this->Page){
-            $this->page = $this->Page->find($this->params['id']);
+            $this->page = $this->Page->find($this->params['id'], array('default'=>false));
             $this->Pages = array($this->page);
             if($this->Request->isPost()){
                 $parent_id = $this->page->parent_id;
@@ -179,7 +179,7 @@ class Editam_PageController extends EditamController
         $this->Filters = array_merge(array($this->t(' -- none -- ')=>''),
         array_flip(EditamFilter::getAvailableFilters()));
 
-        $this->Layouts = $this->ContentLayout->collect($this->ContentLayout->find(),'name','id');
+        $this->Layouts = $this->ContentLayout->collect($this->ContentLayout->find(array('default'=>array())),'name','id');
         if(!empty($this->Layouts) && empty($this->is_homepage)){
             $this->Layouts = array_merge(array($this->t(' -- inherit -- ')=>''), $this->Layouts);
         }
@@ -195,7 +195,7 @@ class Editam_PageController extends EditamController
         }else{
             $this->Page->part->load();
             if(!empty($this->Page->parent_id)){
-                $this->ParentPage = $this->Page->find($this->Page->parent_id);
+                $this->ParentPage = $this->Page->find($this->Page->parent_id, array('default'=>false));
             }
 
         }

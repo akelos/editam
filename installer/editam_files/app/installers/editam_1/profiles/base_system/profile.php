@@ -109,7 +109,7 @@ class BaseSystemProfile
         $Preference->save();
         
         $Role = new Role();
-        if ($Role = $Role->findFirstBy('name', 'user')){
+        if ($Role = $Role->findFirstBy('name', 'user', array('default'=>false))){
             $Preference = new SitePreference(array(
             'name' => 'new_user_roles',
             'title' => 'Default roles for newly created users',

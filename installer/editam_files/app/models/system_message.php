@@ -19,7 +19,7 @@ class SystemMessage extends ActiveRecord
 
     public function addMessagesToController(&$Controller)
     {
-        if($UserMessages = $this->findAllBy('user_id AND has_been_readed', $Controller->credentials->id, 0, array('order'=>'created_at DESC'))){
+        if($UserMessages = $this->findAllBy('user_id AND has_been_read', $Controller->credentials->id, 0, array('order'=>'created_at DESC', 'default'=>false))){
 
             foreach (array_keys($UserMessages) as $k){
                 if(!$UserMessages[$k]->hasExpired($Controller)){
@@ -62,7 +62,7 @@ class SystemMessage extends ActiveRecord
     {
         $User = new User();
         $this->transactionStart();
-        if($Admins = $User->findAllBy('is_admin AND is_enabled', true, true, array('include'=>'system_messages'))){
+        if($Admins = $User->findAllBy('is_admin AND is_enabled', true, true, array('default'=>false, 'include'=>'system_messages'))){
             foreach (array_keys($Admins) as $k) {
                 if(empty($attributes['allow_repeated']) && 
                 !$this->isUserAwareOfMessage($Admins[$k], @$attributes['message_key'])){
@@ -83,7 +83,7 @@ class SystemMessage extends ActiveRecord
 
     public function unregisterMessageForAdmins()
     {
-        if($Messages = $this->findAllBy('message_key', $this->message_key)){
+        if($Messages = $this->findAllBy('message_key', $this->message_key, array('default'=>array()))){
             foreach (array_keys($Messages) as $k) {
                 $Messages[$k]->destroy();
             }

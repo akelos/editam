@@ -178,17 +178,16 @@ class EditamPluginInstaller extends AkInstaller
     
     public function createCMSRoles(){
         $Role = new Role();
-        $Administrator = $Role->findFirstBy('name','Administrator');
+        $Administrator = $Role->findFirstBy('name','Administrator', array('default'=>false));
         $Administrator->addChildrenRole('Contributor');
         $Administrator->addChildrenRole('Visitor');
     }
     
-    public function removeCMSRoles(){
-        
+    public function removeCMSRoles() {
         $Role = new Role();
-        $CMSRole = $Role->findFirstBy('name','Contributor');
+        $CMSRole = $Role->findFirstBy('name','Contributor', array('default'=>false));
         $CMSRole->destroy();
-        $CMSRole = $Role->findFirstBy('name','Visitor');
+        $CMSRole = $Role->findFirstBy('name','Visitor', array('default'=>false));
         $CMSRole->destroy();
     }
 

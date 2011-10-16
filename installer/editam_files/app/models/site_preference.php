@@ -38,7 +38,7 @@ class SitePreference extends ActiveRecord
         }else{
             $this->_preferences = array();
 
-            if($Preferences = $this->find('all')){
+            if($Preferences = $this->find('all', array('default'=>array()))){
                 foreach (array_keys($Preferences) as $k){
                     $id = !empty($Preferences[$k]->is_core) ? 'core' : $Preferences[$k]->extension_id;
                     $this->_preferences[$id][$Preferences[$k]->name] = $Preferences[$k]->get('value');

@@ -68,7 +68,7 @@ class EditagsHelper extends AkActionViewHelper
 
     public function snippet($name, $local_assigns = array())
     {
-        if($Snippet = $this->_controller->Snippet->findFirstBy('name',$name)){
+        if($Snippet = $this->_controller->Snippet->findFirstBy('name',$name, array('default'=>false))){
             return $Snippet->render($this->_controller, $local_assigns);
         }
     }

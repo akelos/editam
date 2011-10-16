@@ -28,11 +28,14 @@ class Editam_SnippetController extends EditamController
     public function listing()
     {
         $this->snippet_pages = $this->pagination_helper->getPaginator($this->Snippet, array('items_per_page' => 10));
-        
-        if (!$this->snippets = $this->Snippet->find('all', $this->pagination_helper->getFindOptions($this->Snippet))){
+        try{
+            $this->snippets = $this->Snippet->find('all', $this->pagination_helper->getFindOptions($this->Snippet));
+        }catch (RecordNotFoundException $e){
             $this->flash_options = array('seconds_to_close' => 10);
             $this->flash['notice'] = $this->t('It seems like you don\'t have Snippets on your site. Please fill in the form below in order to create your first snippet.');
             $this->redirectTo(array('action' => 'add'));
+        }catch (Exception $e){
+            throw $e;
         }
     }
 

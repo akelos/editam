@@ -14,7 +14,15 @@ class Editam_FileController extends EditamController
     public function listing()
     {
         $this->file_pages = $this->pagination_helper->getPaginator($this->File, array('items_per_page' => 10));
-        $this->files = $this->File->find('all', $this->pagination_helper->getFindOptions($this->File));
+        try{
+            $this->files = $this->File->find('all', $this->pagination_helper->getFindOptions($this->File));
+        }catch (RecordNotFoundException $e){
+            $this->flash_options = array('seconds_to_close' => 10);
+            $this->flash['notice'] = $this->t('It seems like you don\'t have Files on your site. Please fill in the form below in order to create your first file.');
+            $this->redirectTo(array('action' => 'add'));
+        }catch (Exception $e){
+            throw $e;
+        }
     }
 
     public function show()

@@ -59,7 +59,7 @@ class Editam_LoginController extends EditamController
                 $this->flash['message'] = $this->t('Please fill at least one field');
                 $this->redirectTo(array('controller'=>'login', 'action' => 'user'));
 
-            }elseif ($User = $this->User->findFirstBy('login OR email', @$this->params['user']['login'], @$this->params['user']['email'])){
+            }elseif ($User = $this->User->findFirstBy('login OR email', @$this->params['user']['login'], @$this->params['user']['email'], array('default'=>false))){
 
                 if (!empty($User->email) && Credentials::sendAccountRecoveryMail($User)) {
                     $this->flash['message'] = $this->t('We\'ve sent you the instructions to restore your account to your email address');

@@ -27,7 +27,7 @@ class SampleWebsiteProfile
         $User = new User();
         $ContentLayout = new ContentLayout();
         
-        if (!$Admin =& $User->find(1) || !$Layout =& $ContentLayout->findFirstBy('name', 'Default')){
+        if (!$Admin = $User->find(1, array('default'=>false)) || !$Layout = $ContentLayout->findFirstBy('name', 'Default', array('default'=>false))){
             return;
         }
         

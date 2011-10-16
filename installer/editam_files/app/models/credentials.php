@@ -23,7 +23,7 @@ class Credentials
         $User = new User();
         $User->set('password', @$password);
         $User->encryptPassword();
-        if ($User = $User->findFirstBy('login AND password AND is_enabled', @$username, $User->get('password'), true)){
+        if ($User = $User->findFirstBy('login AND password AND is_enabled', @$username, $User->get('password'), true, array('default'=>false))){
             $User->set('last_login_at', Ak::getDate());
             $User->save();
 
@@ -102,7 +102,7 @@ class Credentials
             $this->_permissions = array();
             if (!empty($this->role_id)) {
                 $Permission = new Permission();
-                if ($Permissions = $Permission->findAllBy('role_id', $this->role_id)){
+                if ($Permissions = $Permission->findAllBy('role_id', $this->role_id, array('default'=>false))){
                     foreach (array_keys($Permissions) as $k) {
                         $this->_permissions[$Permissions[$k]->extension_id][] = $Permissions[$k]->get('name');
                     }
