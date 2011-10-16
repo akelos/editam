@@ -32,7 +32,7 @@
         
         \$this->menu_options = \$this->_admin_menu_options;
         
-        \$this->beforeFilter('_loadSettings');
+        \$this->beforeFilter('_loadEditamSettings');
         \$this->beforeFilter(array('_instantiateCredentials'=>array('except'=>array('show_page'))));
         \$this->beforeFilter(array('_disableLinkPrefetching'=>array('except'=>array('show_page'))));
         \$this->beforeFilter(array('_initAdminOptions'=>array('except'=>array('show_page'))));
@@ -42,12 +42,12 @@
             array(
                 "searched" => "/(function\s*_loadCurrentUserRoles\(\)[\w\W]*'role',\s*'action'\s*=\>\s*'add'\)\);\s*\}\s*\})/",
                 "detect_modified" => "/function\s*getUrlizedControllerName[\w\W]*function\s*_loadSettings[\w\W]*function\s*_initAdminOptions[\w\W]*function\s*_instantiateCredentials[\w\W]*function\s*_loadSystemMessages/",
-                "replaced" => "$1\n\n    function getUrlizedControllerName()
+                "replaced" => "$1\n\n    public function getUrlizedControllerName()
     {
         return AkInflector::urlize(\$this->getControllerName());
     }
     
-    public function _loadSettings()
+    public function _loadEditamSettings()
     {
         \$Preference = new SitePreference();
         Editam::settings_for(\$Preference->_loadPreferences(), null, true);
@@ -72,7 +72,7 @@
         \$this->credentials = new Credentials();
         return true;
     }
-    
+
     /**
      * Avoids link prefectching
      * 
@@ -91,7 +91,8 @@
         }
         return true;
     }
-/**
+
+    /**
      * Editam Controller Hooks
      *
      * Controller hooks allows you to add filters to a controllers.

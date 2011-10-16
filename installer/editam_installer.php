@@ -51,7 +51,7 @@ class EditamInstaller extends AkInstaller
             $path = str_replace(AK_EDITAM_PLUGIN_FILES_DIR, AK_BASE_DIR, $base_path.DS.$node);
             if(is_file($path)){
                 $message = Ak::t('File %file exists.', array('%file'=>$path));
-                $user_response = AkInstaller::promptUserVar($message."\n d (overwrite mine), i (keep mine), a (abort), O (overwrite all), K (keep all)", array('default'=>'i'));
+                $user_response = AkConsole::promptUserVar($message."\n d (overwrite mine), i (keep mine), a (abort), O (overwrite all), K (keep all)", array('default'=>'i'));
                 if($user_response == 'i'){
                     unset($directory_structure[$k]);
                 }    elseif($user_response == 'O'){
@@ -134,9 +134,9 @@ class EditamInstaller extends AkInstaller
         
         $ApplicationOwner = $this->getApplicationOwner();
         
-        $this->site_details['site_name'] = AkInstaller::promptUserVar("\n Site Name", array('default' => $this->getApplicationName()));
+        $this->site_details['site_name'] = AkConsole::promptUserVar("\n Site Name", array('default' => $this->getApplicationName()));
         $this->site_details['administrator_login'] = $ApplicationOwner->get('login');        
-        $this->site_details['administrator_email'] = AkInstaller::promptUserVar(" Administrator Email", array('default' => $ApplicationOwner->get('login').'@'.AK_HOST));
+        $this->site_details['administrator_email'] = AkConsole::promptUserVar(" Administrator Email", array('default' => $ApplicationOwner->get('login').'@'.AK_HOST));
     }
     
     function getApplicationName()

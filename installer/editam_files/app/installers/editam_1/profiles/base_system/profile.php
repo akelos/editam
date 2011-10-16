@@ -5,7 +5,7 @@
 /**
 * Editam setup allows users to decide how their system will look like
 * when installing their system. This is carried by the default installer
-* instantiating this class and making current installer instace available
+* instantiating this class and making current installer instance available
 * BaseSystemSetup::Installer for you to perform specific actions.
 */
 class BaseSystemProfile
@@ -19,12 +19,12 @@ class BaseSystemProfile
          */
         if(empty($this->Installer->site_details)){
             echo "\n\n---------------------------------------------------------------------------\n";
-            echo "   Todo: \$this->Installer->site_details -> must be filled from setup wizzard\n";
+            echo "   Todo: \$this->Installer->site_details -> must be filled from setup wizard\n";
             echo "\n\n---------------------------------------------------------------------------\n\n";
 
             $this->Installer->site_details = array();
             
-            $this->Installer->site_details['site_name'] = 'Site Name should be filled from Application Setup Wizzard';
+            $this->Installer->site_details['site_name'] = 'Site Name should be filled from Application Setup Wizard';
             $this->Installer->site_details['administrator_email'] = 'todo@administrator.email.example.com';
             $this->Installer->site_details['administrator_login'] = 'admin';
             $this->Installer->site_details['administrator_password'] = 'admin';
@@ -40,7 +40,6 @@ class BaseSystemProfile
     {
         $this->_createDefaultPreferences();
         $this->Installer->installDataFiles(1);
-//        $this->_createDefaultAdministratorAccount();
         $this->_addHtaccessIfRemoved();
         $this->_fixThemeStylesheet();
     }
@@ -67,12 +66,12 @@ class BaseSystemProfile
         'is_core' => true));
         $Preference->save();
 
-        $version = @AkFileSystem::file_get_contents(AK_APP_DIR.DS.'version.txt');
+        $version = file_exists(AK_APP_DIR.DS.'version.txt') ? AkFileSystem::file_get_contents(AK_APP_DIR.DS.'version.txt') : false;
 
         $Preference = new SitePreference(array(
         'name'=>'editam_version',
         'title'=>'Editam Version',
-        'value' => empty($version) ? 'svn-1.0' : $version,
+        'value' => empty($version) ? '2.0' : $version,
         'is_editable' => false,
         'is_core' => true));
         $Preference->save();
