@@ -11,6 +11,8 @@ class BaseBehavior extends AkObserver
     public $Controller;
     public $Request;
     public $Response;
+    private $_edit_mode = false;
+    private $_editor_js_included = false;
 
     public function init($Controller)
     {
@@ -54,14 +56,16 @@ class BaseBehavior extends AkObserver
         return $Page;
     }
 
-
-
     public function renderPart($name, $use_inherited_if_unavailable = false)
     {
+        $result = '';
         if($part = $this->Page->getFilteredPart($name, $use_inherited_if_unavailable)){
-            return $this->render($part);
+            $result = $this->render($part);
+            if($this->isInPlaceEditorEnabled()){
+                $this->injectInPlaceEditorCode($result, $name, $use_inherited_if_unavailable);
+            }
         }
-        return '';
+        return $result;
     }
 
     public function isPageVirtual()
@@ -129,7 +133,7 @@ class BaseBehavior extends AkObserver
 
     public function getPageHeaders()
     {
-        return array('Status' => 200 );
+        return array('Status' => 200, 'Content-Type' => 'text/html; charset='.AK_CHARSET);
     }
 
 
@@ -150,6 +154,57 @@ class BaseBehavior extends AkObserver
     
     public function disable_behavior_html()
     {
+    }
+
+    public function enableInPlaceEditor()
+    {
+        $this->_edit_mode = true;
+    }
+    
+    public function isInPlaceEditorEnabled()
+    {
+        return $this->_edit_mode;
+    }
+    
+    public function injectInPlaceEditorCode(&$result, $name, $use_inherited_if_unavailable = false)
+    {
+        $PartInstance = $this->Page->getPartToRender($name, $use_inherited_if_unavailable);
+        $page_id = empty($PartInstance->inherited) ? $this->Controller->Page->getId() : $PartInstance->Page->getId();
+
+        $url_options = array(
+        'controller' => 'page',
+        'module' => 'editam',
+        'action' => 'edit',
+        'id' => $page_id,
+        'anchor' => 'part-id-'.$PartInstance->getId()
+        );
+        
+        if($PartInstance->get('name') == 'body'){
+            unset($url_options['anchor']);
+        }
+        
+        $url = $this->Controller->urlFor($url_options);
+
+        $result = '<span class="hoverable editable" id="editable-part-'.$PartInstance->id.'">'.
+
+        '<span class="editam-part-menu">'.
+        ( empty($PartInstance->inherited) ?
+        '<a href="'.$url.'" class="edit-button" id="edit-part-'.$PartInstance->id.'">'.$this->Controller->t('edit').'</a>' :
+        '<a href="'.$url.'" class="edit-button" id="edit-part-'.$PartInstance->id.'">'.$this->Controller->t('edit on %page', array(
+        '%page' => $PartInstance->Page->get('slug')
+        )).'</a>'
+        ).'</span><div id="editam-editor-area"></div>'.
+        $result."</span>";
+        if(empty($this->_editor_js_included)){
+            $this->_editor_js_included = true;
+            $result .= $this->Controller->asset_tag_helper->javascript_include_tag('editam/editor');
+            $result .= $this->Controller->asset_tag_helper->stylesheet_link_tag('editam/editor');
+            $result .= '<span id="editam-editor-header-template" style="display:none">
+                    <div id="editam-editor-header">'.
+                    '<a href="#" id="editam-editor-enable">'.$this->Controller->t('enable website editor').'</a>'.
+                    '<a href="#" id="editam-editor-disable">'.$this->Controller->t('disable website editor').'</a>'.
+                    '</div></span>';
+        }
     }
 }
 
