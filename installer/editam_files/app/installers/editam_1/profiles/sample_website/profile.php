@@ -26,9 +26,14 @@ class SampleWebsiteProfile
     {
         $User = new User();
         $ContentLayout = new ContentLayout();
-        
-        if (!$Admin = $User->find(1, array('default'=>false)) || !$Layout = $ContentLayout->findFirstBy('name', 'Default', array('default'=>false))){
+
+        try{
+            $Admin = $User->find(1);
+            $Layout = $ContentLayout->findFirstBy('name', 'Default');
+        }catch (RecordNotFoundException $e){
             return;
+        }catch (Exception $e){
+            throw $e;
         }
         
         $Page = new Page(array(
