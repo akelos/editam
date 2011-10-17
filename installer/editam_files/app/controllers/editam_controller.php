@@ -101,7 +101,7 @@ class EditamController extends ApplicationController
     }
 
     /**
-     * Avoids link pre-fectching
+     * Avoids link pre-fetching
      * 
      * Google is essentially clicking every link on the page - including 
      * links like “delete this” or “cancel that.” And to make matters worse, 
@@ -124,7 +124,7 @@ class EditamController extends ApplicationController
         return AkInflector::urlize($this->getControllerName());
     }
 
-    public function defaultUrlOptions()
+    public function defaultUrlOptions($options = array())
     {
         return $this->is_multilingual ? array('lang'=> Ak::lang()) : null;
     }

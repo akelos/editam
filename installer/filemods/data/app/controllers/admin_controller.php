@@ -155,7 +155,7 @@
         }
     }
     
-    function defaultUrlOptions()
+    function defaultUrlOptions(\$options = array())
     {
         return \$this->is_multilingual ? array('lang'=> Ak::lang()) : null;
     }
