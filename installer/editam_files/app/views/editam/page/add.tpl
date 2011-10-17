@@ -13,7 +13,11 @@
 <div id="content_menu">
     <ul class="menu">
         <li class="active">
-            <%= link_to _('Creating Page'), {:controller => 'page' , :action => 'add_child', :parent_id => ParentPage.id} %>
+            {?ParentPage}
+                <%= link_to _('Creating Page'), {:controller => 'page' , :action => 'add_child', :parent_id => ParentPage.id} %>
+            {else}
+                _{Creating main page}
+            {end}
         </li>
         <li>
         {?ParentPage}
