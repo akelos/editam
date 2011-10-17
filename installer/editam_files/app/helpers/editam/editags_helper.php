@@ -11,7 +11,7 @@ class EditagsHelper extends AkActionViewHelper
         return Editam::can($action, $Extension);
     }
 
-    public function settings_for($Extension, $preference_name)
+    public static function settings_for($Extension, $preference_name)
     {
         return Editam::settings_for($Extension, $preference_name);
     }

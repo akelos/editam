@@ -11,11 +11,11 @@ defined('EDITAM_IS_MULTILINGUAL') ? null : define('EDITAM_IS_MULTILINGUAL', coun
 
 class Editam
 {
-    public function can($action, $Extension, $__set_permissions_hack = false)
+    public static function can($action, $Extension, $__set_permissions_statically = false)
     {
         static $_permissions;
-        if($__set_permissions_hack && empty($_permissions)){
-            // Hack for storing statically the permissions to keep them available on runtime
+        if($__set_permissions_statically && empty($_permissions)){
+            // Storing statically the permissions to keep them available on runtime
             $_permissions = $action;
         }
         if(empty($_permissions)){
@@ -25,7 +25,7 @@ class Editam
         return empty($_permissions[$extension_id]) ? false : in_array($action, $_permissions[$extension_id]);
     }
 
-    public function settings_for($Extension, $preference_name, $__set_preferences_hack = false)
+    public static function settings_for($Extension, $preference_name, $__set_preferences_hack = false)
     {
         static $_preferences;
         if($__set_preferences_hack && empty($_preferences)){
@@ -40,7 +40,7 @@ class Editam
         return !isset($_preferences[$extension_id][$preference_name]) ? null : $_preferences[$extension_id][$preference_name];
     }
 
-    public function isMultilingual()
+    public static function isMultilingual()
     {
         return EDITAM_IS_MULTILINGUAL;
     }
