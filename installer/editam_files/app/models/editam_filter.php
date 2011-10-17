@@ -33,7 +33,7 @@ class EditamFilter
         return $filters[$filter_name];
     }
 
-    public function getAvailableFilters()
+    static public function getAvailableFilters()
     {
         static $filters = array();
         if(empty($filters)){

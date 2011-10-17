@@ -3,7 +3,7 @@
             array(
                 "searched" => "/(class\s*BaseActiveRecord\s*extends\s*AkActiveRecord\s*{)/",
                 "detect_modified" => "/function\s*init[\w\W]*function\s*validatesEditagsField[\w\W]*function\s*_engageHooks[\w\W]*'\<\?php '\);\s*\}\s*\}/",
-                "replaced" => "$1\n    function init(\$attributes)
+                "replaced" => "$1\n    public function init(\$attributes = array())
     {
         \$this->_engageHooks(\$attributes);
         return parent::init(\$attributes);
@@ -13,7 +13,7 @@
     {
         \$Editags = new Editags();
 
-        \$Editags->Parser->available_helpers = EditagsHelper::_getEditagsHelperMethods();
+        \$Editags->Parser->available_helpers = EditagsHelper::getEditagsHelperMethods();
 
         \$this->_editags_php = \$Editags->toPhp(\$this->get(\$column), \$can_have_php);
 

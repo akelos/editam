@@ -249,8 +249,8 @@
             return false;
         }
         if(is_string(\$options['partial'])){
-            \$path = \$this->Template->_partialPathPiece(\$options['partial']);
-            \$partial_name = \$this->Template->_partialPathName(\$options['partial']);
+            \$path = \$this->Template->partialPathPiece(\$options['partial']);
+            \$partial_name = \$this->Template->partialPathName(\$options['partial']);
             \$template_path = (empty(\$path) ? '' : \$path.DS).'_'.\$partial_name;
         }else{
             \$template_path = \$options['partial'];

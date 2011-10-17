@@ -6,7 +6,7 @@ defined('EDITAM_CACHE_PREFERENCES_ON_SESSION') ? null : define('EDITAM_CACHE_PRE
 
 class SitePreference extends ActiveRecord
 {
-    public function set($attribute, $value)
+    public function set($attribute, $value = null, $inspect_for_callback_child_method = true, $compose_after_set = true)
     {
         if($attribute == 'value' && !empty($this->is_core)) {
             $PreferenceHandler = new CorePreferences();
@@ -15,10 +15,10 @@ class SitePreference extends ActiveRecord
                 return $PreferenceHandler->$setter_method_name($this, $value);
             }
         }
-        return parent::set($attribute, $value);
+        return parent::set($attribute, $value, $inspect_for_callback_child_method, $compose_after_set);
     }
 
-    public function get($attribute)
+    public function get($attribute = null, $inspect_for_callback_child_method = true)
     {
         if($attribute == 'value' && !empty($this->is_core)) {
             $PreferenceHandler = new CorePreferences();
@@ -28,7 +28,7 @@ class SitePreference extends ActiveRecord
             }
         }
 
-        return parent::get($attribute);
+        return parent::get($attribute, $inspect_for_callback_child_method);
     }
 
     public function _loadPreferences()

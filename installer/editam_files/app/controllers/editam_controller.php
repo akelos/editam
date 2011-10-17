@@ -24,6 +24,8 @@ class EditamController extends ApplicationController
     
     public $admin_menu_options = array();
     
+    public $menu_options = array();
+    
     function __construct()
     {
         $this->site_url = $this->base = rtrim(AK_URL,'/');
@@ -282,8 +284,8 @@ class EditamController extends ApplicationController
             return false;
         }
         if(is_string($options['partial'])){
-            $path = $this->Template->_partialPathPiece($options['partial']);
-            $partial_name = $this->Template->_partialPathName($options['partial']);
+            $path = $this->Template->partialPathPiece($options['partial']);
+            $partial_name = $this->Template->partialPathName($options['partial']);
             $template_path = (empty($path) ? '' : $path.DS).'_'.$partial_name;
         }else{
             $template_path = $options['partial'];

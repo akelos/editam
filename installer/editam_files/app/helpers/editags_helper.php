@@ -157,7 +157,7 @@ class EditagsHelper extends AkActionViewHelper
 
     public function _instantiateEditagsHelpers()
     {
-        $available_helpers = $this->_getEditagsHelperMethods();
+        $available_helpers = $this->getEditagsHelperMethods();
         $helper_names = array_unique(array_values($available_helpers));
 
         foreach ($helper_names as $underscored_helper_name){
@@ -173,29 +173,29 @@ class EditagsHelper extends AkActionViewHelper
         $this->_registerEditagsHelperFuntions($available_helpers);
     }
 
-    public function _getEditagsHelperMethods()
+    static public function getEditagsHelperMethods()
     {
         $available_helpers = array();
-        EditagsHelper::_addAkelosHelperMethods_($available_helpers);
+        EditagsHelper::addAkelosHelperMethods_($available_helpers);
         $helper_files = AkFileSystem::dir(EDITAGS_HELPERS_DIR, array('dirs'=>false));
         foreach ($helper_files as $helper_file){
             $underscored_helper_name = substr($helper_file,0,-4);
             include_once(EDITAGS_HELPERS_DIR.DS.$helper_file);
-            EditagsHelper::_addHelperMethods_($underscored_helper_name, $available_helpers);
+            EditagsHelper::addHelperMethods_($underscored_helper_name, $available_helpers);
         }
         return $available_helpers;
     }
 
-    public function _addAkelosHelperMethods_(&$available_helpers)
+    static public function addAkelosHelperMethods_(&$available_helpers)
     {
         if($underscored_helper_names = AkHelperLoader::getInstantiatedHelperNames()){
             foreach($underscored_helper_names as $underscored_helper_name){
-                EditagsHelper::_addHelperMethods_($underscored_helper_name, $available_helpers);
+                EditagsHelper::addHelperMethods_($underscored_helper_name, $available_helpers);
             }
         }
     }
 
-    public function _addHelperMethods_($underscored_helper_name, &$available_helpers)
+    static public function addHelperMethods_($underscored_helper_name, &$available_helpers)
     {
         $helper_class_name = AkInflector::camelize($underscored_helper_name);
         if(class_exists($helper_class_name)){
@@ -209,7 +209,7 @@ class EditagsHelper extends AkActionViewHelper
 
     public function _registerEditagsHelperFuntions($available_helpers = array())
     {
-        $available_helpers = empty($available_helpers) ? $this->_getEditagsHelperMethods() : $available_helpers;
+        $available_helpers = empty($available_helpers) ? $this->getEditagsHelperMethods() : $available_helpers;
         defined('EDITAM_AVAILABLE_HELPERS') ? null : define('EDITAM_AVAILABLE_HELPERS', serialize($available_helpers));
     }
 
