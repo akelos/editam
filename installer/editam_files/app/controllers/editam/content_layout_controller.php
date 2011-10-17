@@ -21,10 +21,9 @@ class Editam_ContentLayoutController extends EditamController
 
     public function listing()
     {
-        $this->content_layout_pages = $this->pagination_helper->getPaginator($this->ContentLayout, array('items_per_page' => 10));
-
         try{
-            $this->content_layouts = $this->ContentLayout->find('all', $this->pagination_helper->getFindOptions($this->ContentLayout))
+            $this->content_layout_pages = $this->pagination_helper->getPaginator($this->ContentLayout, array('items_per_page' => 10));
+            $this->content_layouts = $this->ContentLayout->find('all', $this->pagination_helper->getFindOptions($this->ContentLayout));
         }catch (RecordNotFoundException $e){
             $this->flash_options = array('seconds_to_close' => 10);
             $this->flash['notice'] = $this->t('It seems like you don\'t have Layouts on your site. Please fill in the form below in order to create your first layout.');
