@@ -76,7 +76,7 @@ var Page = {
     },
     unloadPart: function (part_name){
         Page._removed_parts[Page.parts[part_name]] = Page.parts[part_name];
-        Page.parts.remove(part_name);
+        Page.parts.unset(part_name);
     },
     moreOptions: function(){
         new Effect.BlindDown('extra_fields', {duration: 0.3});
@@ -182,7 +182,7 @@ var Page = {
         '        <input id="part_'+id+'_name" name="part['+id+'][name]" value="'+name+'" type="hidden">' +
         '        <p><label for="part_'+id+'_filter">'+PAGE_PART_FILTER_CAPTION+'<\/label> <select id="part_'+id+'_filter" name="part['+id+'][filter]" tabindex="5" class="part_filter">' +
         Page._getPagePartHtmlForFilterOptions() +
-        '        <\/select><\/p><a href="\/admin\/page\/remove_part\/" class="action" onclick="Page.removePagePart('+id+');return false;">'+PAGE_PART_REMOVE+' '+name+'<\/a>' +
+        '        <\/select><\/p><a href="#" class="action" onclick="Page.removePagePart('+id+');return false;">'+PAGE_PART_REMOVE+' '+name+'<\/a>' +
         '    <\/div>' +
         '    <textarea cols="60" id="part_'+id+'_content" name="part['+id+'][content]" rows="10" tabindex="7" class="content">' +
         '<\/textarea>' +
@@ -257,15 +257,15 @@ var Page = {
         //function(e){console.log(event.element.value);console.log(e)}
     },
 
-    
-    
-    
+
+
+
 
     switchBehavior: function(event){
         Page.enableBehavior(Event.element(event))
     },
-    
-    
+
+
     enableBehavior: function(item){
         var from = item.lastValue || '';
         var to = item.value || '';
@@ -288,8 +288,8 @@ var Page = {
             item.lastValue = to;
         }
     },
-    
-    
+
+
 
 
     Tree : {
@@ -458,12 +458,20 @@ var OnloadPage = {
         Page.enableBehavior($('page_behavior'));
         Event.observe($('page_behavior'), 'change', Page.switchBehavior, true);
 
+        var current_location = document.location.href;
+        if(document.location.hash && document.location.hash.indexOf('part-id') != -1){
+            var current_location = $$('.part-id-'+(document.location.hash.match(
+            /#part-id-([0-9]+)/
+            ).last())).first().href;
+        }
+        var current_tab =
+        (
+        current_location.match(
+        /#([-_\w]+)$/
+        ) || []).last() || 'page_part-1';
+
         TabControl('tab_control', {
-            current:
-            (
-            document.location.href.match(
-            /#([-_\w]+)$/
-            ) || []).last() || 'page_part-1'
+            current: current_tab
         });
 
         $$('#page_form textarea').each(function(item){
